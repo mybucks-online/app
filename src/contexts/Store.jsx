@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect } from "react";
-import EvmAccount from "@mybucks/lib/account";
+import EvmAccount from "@mybucks/lib/account/evm";
 import {
   DEFAULT_CHAIN_ID,
   DEFAULT_NETWORK,
