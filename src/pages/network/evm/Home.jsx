@@ -1,15 +1,15 @@
 import React, { useContext, useState, useMemo } from "react";
-import { StoreContext } from "@mybucks/contexts/Store";
-import { EVM_NETWORKS } from "@mybucks/lib/conf";
-import TokenRow from "./TokenRow";
+import toFlexible from "toflexible";
 import copy from "clipboard-copy";
 import { ethers } from "ethers";
-import { truncate } from "@mybucks/lib/utils";
 import { toast } from "react-toastify";
 import styled from "styled-components";
-import toFlexible from "toflexible";
-import media from "@mybucks/styles/media";
 
+import { StoreContext } from "@mybucks/contexts/Store";
+import { EVM_NETWORKS } from "@mybucks/lib/conf";
+import TokenBalanceRow from "@mybucks/components/TokenBalanceRow";
+import { truncate } from "@mybucks/lib/utils";
+import media from "@mybucks/styles/media";
 import { Container, Box } from "@mybucks/components/Containers";
 import BaseButton from "@mybucks/components/Button";
 import Select from "@mybucks/components/Select";
@@ -248,7 +248,7 @@ const EvmHome = () => {
           .filter((t) => !!t.nativeToken)
           .concat(tokenBalances.filter((t) => !t.nativeToken))
           .map((t) => (
-            <TokenRow
+            <TokenBalanceRow
               key={t.contractAddress}
               token={{
                 symbol: t.contractTickerSymbol,

@@ -35,6 +35,10 @@ class EvmAccount {
     return this.account && this.account.address;
   }
 
+  isAddress(value) {
+    return ethers.isAddress(value);
+  }
+
   linkOfAddress(address) {
     return EVM_NETWORKS[this.chainId].scanner + "/address/" + address;
   }

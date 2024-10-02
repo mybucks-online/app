@@ -5,8 +5,8 @@ import { format } from "date-fns";
 import toFlexible from "toflexible";
 
 import { StoreContext } from "@mybucks/contexts/Store";
-import ConfirmTransaction from "@mybucks/pages/evm/ConfirmTransaction";
-import MinedTransaction from "@mybucks/pages/evm/MinedTransaction";
+import ConfirmTransaction from "@mybucks/pages/network/evm/ConfirmTransaction";
+import MinedTransaction from "@mybucks/pages/network/evm/MinedTransaction";
 import { truncate } from "@mybucks/lib/utils";
 import BackIcon from "@mybucks/assets/icons/back.svg";
 import RefreshIcon from "@mybucks/assets/icons/refresh.svg";
@@ -218,7 +218,7 @@ const Token = () => {
         return;
       }
 
-      if (!ethers.isAddress(recipient) || amount < 0 || !token) {
+      if (!account.isAddress(recipient) || amount < 0 || !token) {
         setHasErrorInput(true);
         setGasEstimation(0);
         return;

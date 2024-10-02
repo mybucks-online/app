@@ -1,4 +1,5 @@
 import TronWeb from "tronweb";
+import { Buffer } from "buffer";
 import { getEvmPrivateKey } from "../conf";
 
 const TRC20_USDT_ADDRESS = "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t";
@@ -29,6 +30,11 @@ class TronAccount {
 
     // fetch bandwidth and energy balances
     this.getNetworkStatus();
+  }
+
+  isAddress(value) {
+    // [TODO] confirm again
+    return this.account.address.isAddress(value);
   }
 
   linkOfAddress(address) {
@@ -66,6 +72,8 @@ class TronAccount {
     // energy is only obtained by staking TRX, not free
     this.energyBalance = (EnergyLimit || 0) - (EnergyUsed || 0);
 
+    // [TODO] get staked TRX balance
+
     if (!this.activated) {
       this.activated = await this.isActivated(this.address);
     }
@@ -74,6 +82,7 @@ class TronAccount {
   // [TODO] Now it only returns balance of TRX and USDT
   async queryBalances() {
     const nativeTokenName = "TRX";
+    // get TRX balance
     const trxRawBalance = await this.account.trx.getBalance(this.address);
     const nativeTokenBalance = this.account.fromSun(trxRawBalance);
     // [TODO] Replace by CG API
@@ -99,7 +108,7 @@ class TronAccount {
           contractTickerSymbol: "TRX",
           contractAddress: "",
           contractDecimals: 6,
-          balance: trxBalance,
+          balance: trxRawBalance,
           quote: nativeTokenBalance * nativeTokenPrice,
           logoURI:
             "https://assets.coingecko.com/coins/images/1094/standard/tron-logo.png?1696502193",
@@ -153,16 +162,55 @@ class TronAccount {
         },
         [
           { type: "address", value: to },
-          { type: "uint256", value: value },
+          { type: "uint256", value },
         ],
         this.hexAddress
       );
     return transaction;
   }
 
-  async estimateGas() {}
+  // it returns estimated consumption of [bandwidth, energy]
+  async estimateGas(token, to, value) {
+    const unsignedTxn = await this.populateTransferToken(token, to, value);
+    const { raw_data_hex, signature } = await this.account.trx.sign(
+      unsignedTxn,
+      this.account.defaultPrivateKey
+    );
+    const bandwidth =
+      9 +
+      60 +
+      Buffer.from(raw_data_hex, "hex").byteLength +
+      Buffer.from(signature[0], "hex").byteLength;
 
-  async execute() {}
+    if (!token) {
+      // TRX transfer consumes only bandwidth, no energy
+      return [bandwidth, 0];
+    }
+
+    // estimate energy for TRC20 transfer
+    const { energy_used } =
+      await this.account.transactionBuilder.triggerConstantContract(
+        this.account.address.toHex(token),
+        "transfer(address,uint256)",
+        {},
+        [
+          { type: "address", value: to },
+          { type: "uint256", value },
+        ],
+        this.hexAddress
+      );
+
+    return [bandwidth, energy_used];
+  }
+
+  async execute(rawTxn) {
+    const signedTxn = await this.account.trx.sign(
+      rawTxn,
+      this.account.defaultPrivateKey
+    );
+    const result = await this.account.trx.sendRawTransaction(signedTxn);
+    return result;
+  }
 }
 
 export default TronAccount;

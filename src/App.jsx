@@ -7,8 +7,8 @@ import { IDLE_DURATION, NETWORK_EVM } from "@mybucks/lib/conf";
 import { StoreContext } from "@mybucks/contexts/Store";
 import SignIn from "@mybucks/pages/Signin";
 import Menu from "@mybucks/pages/Menu";
-import EvmHome from "@mybucks/pages/evm/Home";
-import EvmToken from "@mybucks/pages/evm/Token";
+import EvmHome from "@mybucks/pages/network/evm/Home";
+import EvmToken from "@mybucks/pages/network/evm/Token";
 
 import "react-toastify/dist/ReactToastify.css";
 

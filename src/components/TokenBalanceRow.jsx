@@ -71,7 +71,7 @@ const Value = styled.p`
   min-height: 21px;
 `;
 
-const TokenRow = ({ token, balance, quote, onClick, balanceVisible }) => (
+const TokenBalanceRow = ({ token, balance, quote, onClick, balanceVisible }) => (
   <Wrap onClick={() => onClick(token)}>
     <Avatar
       uri={token.logoURI}
@@ -96,4 +96,4 @@ const TokenRow = ({ token, balance, quote, onClick, balanceVisible }) => (
   </Wrap>
 );
 
-export default TokenRow;
+export default TokenBalanceRow;
