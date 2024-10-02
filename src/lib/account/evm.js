@@ -4,7 +4,7 @@ import camelcaseKeys from "camelcase-keys";
 import { tokens as defaultTokensList } from "@sushiswap/default-token-list";
 
 import { EVM_NETWORKS, getEvmPrivateKey } from "@mybucks/lib/conf";
-import IERC20 from "./erc20.json";
+import IERC20 from "@mybucks/lib/erc20.json";
 
 class EvmAccount {
   static network = "ethereum";

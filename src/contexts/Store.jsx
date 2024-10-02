@@ -1,10 +1,12 @@
 import { createContext, useState, useEffect } from "react";
 import EvmAccount from "@mybucks/lib/account/evm";
+import TronAccount from "@mybucks/lib/account/tron";
 import {
   DEFAULT_CHAIN_ID,
   DEFAULT_NETWORK,
   DEFAULT_ASSET,
   NETWORK_EVM,
+  NETWORK_TRON,
   REFRESH_STATUS_DURATION,
 } from "@mybucks/lib/conf";
 
@@ -21,7 +23,7 @@ export const StoreContext = createContext({
   network: DEFAULT_NETWORK,
   chainId: DEFAULT_CHAIN_ID,
   account: null,
-  updateChain: (c) => {},
+  updateNetwork: (n, c) => {},
 
   loading: false,
   inMenu: false,
@@ -77,6 +79,8 @@ const StoreProvider = ({ children }) => {
     if (hash) {
       if (network === NETWORK_EVM) {
         setAccount(new EvmAccount(hash, chainId));
+      } else if (network === NETWORK_TRON) {
+        setAccount(new TronAccount(hash));
       }
     }
   }, [hash, chainId, network]);
@@ -136,7 +140,10 @@ const StoreProvider = ({ children }) => {
     setHash(h);
   };
 
-  const updateChain = (id) => setChainId(id);
+  const updateNetwork = (net, id) => {
+    setNetwork(net);
+    setChainId(id);
+  };
 
   const fetchBalances = async () => {
     setLoading(true);
@@ -169,7 +176,7 @@ const StoreProvider = ({ children }) => {
         network,
         chainId,
         account,
-        updateChain,
+        updateNetwork,
         loading,
         inMenu,
         openMenu,

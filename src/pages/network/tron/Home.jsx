@@ -144,7 +144,7 @@ const TokensList = styled.div`
   gap: ${({ theme }) => theme.sizes.lg};
 `;
 
-const EvmHome = () => {
+const TronHome = () => {
   const {
     loading,
     openMenu,
@@ -161,10 +161,8 @@ const EvmHome = () => {
     selectToken,
   } = useContext(StoreContext);
   const [balancesVisible, setBalancesVisible] = useState(false);
-  const gasPrice = useMemo(
-    () => toFlexible(parseFloat(ethers.formatUnits(account.gasPrice, 9)), 2),
-    [tick, account]
-  );
+  // [TODO] freeBandwidth, stakedBandwidth, energyBalance
+  const gasPrice = 10;
 
   const copyAddress = () => {
     copy(account.address);
@@ -262,4 +260,4 @@ const EvmHome = () => {
   );
 };
 
-export default EvmHome;
+export default TronHome;

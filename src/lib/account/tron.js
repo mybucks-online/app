@@ -1,6 +1,6 @@
-import TronWeb from "tronweb";
+import { TronWeb } from "tronweb";
 import { Buffer } from "buffer";
-import { getEvmPrivateKey } from "../conf";
+import { getEvmPrivateKey } from "@mybucks/lib/conf";
 
 const TRC20_USDT_ADDRESS = "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t";
 
@@ -71,11 +71,13 @@ class TronAccount {
     this.stakedBandwidth = (NetLimit || 0) - (NetUsed || 0);
     // energy is only obtained by staking TRX, not free
     this.energyBalance = (EnergyLimit || 0) - (EnergyUsed || 0);
+    console.log("free bandwidth: ", this.freeBandwidth);
 
     // [TODO] get staked TRX balance
 
     if (!this.activated) {
       this.activated = await this.isActivated(this.address);
+      console.log("activated: ", this.activated);
     }
   }
 
