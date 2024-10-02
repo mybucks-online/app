@@ -3,12 +3,14 @@ import styled from "styled-components";
 import { toast, ToastContainer } from "react-toastify";
 import { useIdleTimer } from "react-idle-timer";
 
-import { IDLE_DURATION, NETWORK_EVM } from "@mybucks/lib/conf";
+import { IDLE_DURATION, NETWORK } from "@mybucks/lib/conf";
 import { StoreContext } from "@mybucks/contexts/Store";
+
 import SignIn from "@mybucks/pages/Signin";
 import Menu from "@mybucks/pages/Menu";
 import EvmHome from "@mybucks/pages/network/evm/Home";
 import EvmToken from "@mybucks/pages/network/evm/Token";
+import TronHome from "@mybucks/pages/network/tron/Home";
 
 import "react-toastify/dist/ReactToastify.css";
 
@@ -35,11 +37,13 @@ function Content() {
   if (inMenu) {
     return <Menu />;
   }
-  if (network === NETWORK_EVM) {
+  if (network === NETWORK.EVM) {
     if (selectedTokenAddress) {
       return <EvmToken />;
     }
     return <EvmHome />;
+  } else if (network === NETWORK.TRON) {
+    return <TronHome />;
   }
 }
 

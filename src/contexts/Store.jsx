@@ -4,9 +4,7 @@ import TronAccount from "@mybucks/lib/account/tron";
 import {
   DEFAULT_CHAIN_ID,
   DEFAULT_NETWORK,
-  DEFAULT_ASSET,
-  NETWORK_EVM,
-  NETWORK_TRON,
+  NETWORK,
   REFRESH_STATUS_DURATION,
 } from "@mybucks/lib/conf";
 
@@ -29,7 +27,7 @@ export const StoreContext = createContext({
   inMenu: false,
   openMenu: (m) => {},
 
-  nativeTokenName: DEFAULT_ASSET,
+  nativeTokenName: "",
   nativeTokenBalance: 0,
   tokenBalances: [],
   nftBalances: [],
@@ -61,7 +59,7 @@ const StoreProvider = ({ children }) => {
   const [inMenu, openMenu] = useState(false);
 
   // balances related
-  const [nativeTokenName, setNativeTokenName] = useState(DEFAULT_ASSET);
+  const [nativeTokenName, setNativeTokenName] = useState("");
   const [nativeTokenBalance, setNativeTokenBalance] = useState(0);
   const [tokenBalances, setTokenBalances] = useState([]);
   const [nftBalances, setNftBalances] = useState([]);
@@ -77,9 +75,9 @@ const StoreProvider = ({ children }) => {
 
   useEffect(() => {
     if (hash) {
-      if (network === NETWORK_EVM) {
+      if (network === NETWORK.EVM) {
         setAccount(new EvmAccount(hash, chainId));
-      } else if (network === NETWORK_TRON) {
+      } else if (network === NETWORK.TRON) {
         setAccount(new TronAccount(hash));
       }
     }
@@ -125,7 +123,7 @@ const StoreProvider = ({ children }) => {
 
     setLoading(false);
 
-    setNativeTokenName(DEFAULT_ASSET);
+    setNativeTokenName("");
     setNativeTokenBalance(0);
     setTokenBalances([]);
     setNftBalances([]);

@@ -24,12 +24,13 @@ export const generateSalt = (password, passcode) =>
 export const getEvmPrivateKey = (h) =>
   ethers.keccak256(abi.encode(["string"], [h]));
 
-export const NETWORK_EVM = "evm";
-export const NETWORK_TRON = "tron";
+export const NETWORK = Object.freeze({
+  EVM: "evm",
+  TRON: "tron",
+});
 
-export const DEFAULT_NETWORK = NETWORK_EVM;
+export const DEFAULT_NETWORK = NETWORK.EVM;
 export const DEFAULT_CHAIN_ID = 1;
-export const DEFAULT_ASSET = "ETH";
 
 export const EVM_NETWORKS = {
   1: {
