@@ -58,6 +58,13 @@ class TronAccount {
   }
 
   async getNetworkStatus() {
+    if (!this.activated) {
+      this.activated = await this.isActivated(this.address);
+      if (!this.activated) {
+        return;
+      }
+    }
+
     const {
       freeNetLimit: freeBandwidthLimit,
       freeNetUsed: freeBandwidthUsed,
@@ -71,30 +78,26 @@ class TronAccount {
     this.stakedBandwidth = (NetLimit || 0) - (NetUsed || 0);
     // energy is only obtained by staking TRX, not free
     this.energyBalance = (EnergyLimit || 0) - (EnergyUsed || 0);
-    console.log("free bandwidth: ", this.freeBandwidth);
 
     // [TODO] get staked TRX balance
-
-    if (!this.activated) {
-      this.activated = await this.isActivated(this.address);
-      console.log("activated: ", this.activated);
-    }
   }
 
   // [TODO] Now it only returns balance of TRX and USDT
   async queryBalances() {
     const nativeTokenName = "TRX";
     // get TRX balance
-    const trxRawBalance = await this.account.trx.getBalance(this.address);
+    const trxRawBalance = !this.activated
+      ? 0
+      : await this.account.trx.getBalance(this.address);
     const nativeTokenBalance = this.account.fromSun(trxRawBalance);
     // [TODO] Replace by CG API
     const nativeTokenPrice = 0.155;
 
     // balance of TRC20 USDT
     const usdtContract = await this.account.contract().at(TRC20_USDT_ADDRESS);
-    const usdtRawBalance = await usdtContract.methods
-      .balanceOf(this.address)
-      .call();
+    const usdtRawBalance = !this.activated
+      ? 0
+      : await usdtContract.methods.balanceOf(this.address).call();
     const usdtBalance = usdtRawBalance / this.account.BigNumber("1000000");
     // [TODO] Replace by CG API
     const usdtPrice = 1.0;
