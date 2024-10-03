@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { BALANCE_PLACEHOLDER } from "@mybucks/lib/conf";
 import Avatar from "@mybucks/components/Avatar";
 
 /*
@@ -71,7 +72,7 @@ const Value = styled.p`
   min-height: 21px;
 `;
 
-const TokenBalanceRow = ({ token, balance, quote, onClick, balanceVisible }) => (
+const TokenBalanceRow = ({ token, balance, quote, onClick, showBalance }) => (
   <Wrap onClick={() => onClick(token)}>
     <Avatar
       uri={token.logoURI}
@@ -84,12 +85,14 @@ const TokenBalanceRow = ({ token, balance, quote, onClick, balanceVisible }) => 
     </SymbolAndNameWrap>
 
     <BalanceAndValueWrap>
-      <Balance>{balanceVisible ? Number(balance).toFixed(4) : "*****"}</Balance>
+      <Balance>
+        {showBalance ? Number(balance).toFixed(4) : BALANCE_PLACEHOLDER}
+      </Balance>
       <Value>
-        {!!quote && balanceVisible
+        {!!quote && showBalance
           ? `$${Number(quote).toFixed(2)}`
-          : !balanceVisible
-          ? "*****"
+          : !showBalance
+          ? BALANCE_PLACEHOLDER
           : ""}
       </Value>
     </BalanceAndValueWrap>

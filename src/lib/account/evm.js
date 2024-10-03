@@ -3,16 +3,20 @@ import { CovalentClient } from "@covalenthq/client-sdk";
 import camelcaseKeys from "camelcase-keys";
 import { tokens as defaultTokensList } from "@sushiswap/default-token-list";
 
-import { EVM_NETWORKS, getEvmPrivateKey } from "@mybucks/lib/conf";
+import { NETWORK, EVM_NETWORKS, getEvmPrivateKey } from "@mybucks/lib/conf";
 import IERC20 from "@mybucks/lib/erc20.json";
 
 class EvmAccount {
-  static network = "ethereum";
+  network = NETWORK.EVM;
   chainId = null;
 
   signer = null;
   account = null;
   provider = null;
+
+  address = null;
+
+  activated = true;
 
   // wei unit
   gasPrice = 0;
@@ -25,14 +29,11 @@ class EvmAccount {
 
     this.signer = getEvmPrivateKey(hashKey);
     this.account = new ethers.Wallet(this.signer, this.provider);
+    this.address = this.account.address;
 
     this.queryClient = new CovalentClient(
       import.meta.env.VITE_COVALENT_API_KEY
     );
-  }
-
-  get address() {
-    return this.account && this.account.address;
   }
 
   isAddress(value) {

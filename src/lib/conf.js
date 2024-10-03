@@ -104,12 +104,20 @@ export const EVM_NETWORKS = {
   },
 };
 
-// [TODO] Please do not forget dividing by 100n
+export const GAS_PRICE = Object.freeze({
+  HIGH: "high",
+  AVERAGE: "average",
+  LOW: "low",
+});
+// Do not forget dividing by 100n in gas price calculation
 export const gasMultiplier = (option) =>
-  option === "high" ? 175n : option === "average" ? 150n : 100n;
+  option === GAS_PRICE.HIGH ? 175n : option === GAS_PRICE.AVERAGE ? 150n : 100n;
 
 // 15 minutes, after this period, wallet will be locked.
 export const IDLE_DURATION = 900_000;
 
 // in every 15 seconds, it refreshes gas price or network status
 export const REFRESH_STATUS_DURATION = 15_000;
+
+// The hidden balances will be displayed as shown below
+export const BALANCE_PLACEHOLDER = "*****";

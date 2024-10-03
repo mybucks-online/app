@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useMemo } from "react";
 import EvmAccount from "@mybucks/lib/account/evm";
 import TronAccount from "@mybucks/lib/account/tron";
 import {
@@ -26,6 +26,8 @@ export const StoreContext = createContext({
   loading: false,
   inMenu: false,
   openMenu: (m) => {},
+  showBalances: false,
+  setShowBalances: (f) => {},
 
   nativeTokenName: "",
   nativeTokenBalance: 0,
@@ -50,13 +52,25 @@ const StoreProvider = ({ children }) => {
   const [hash, setHash] = useState("");
 
   // network related
-  const [account, setAccount] = useState(null);
   const [network, setNetwork] = useState(DEFAULT_NETWORK);
   const [chainId, setChainId] = useState(DEFAULT_CHAIN_ID);
+  const account = useMemo(
+    () =>
+      !hash
+        ? null
+        : network === NETWORK.EVM
+        ? new EvmAccount(hash, chainId)
+        : new TronAccount(hash),
+    [hash, network, chainId]
+  );
 
   // common
   const [loading, setLoading] = useState(false);
   const [inMenu, openMenu] = useState(false);
+  const [showBalances, setShowBalances] = useState(false);
+
+  // active token
+  const [selectedTokenAddress, selectToken] = useState("");
 
   // balances related
   const [nativeTokenName, setNativeTokenName] = useState("");
@@ -69,19 +83,6 @@ const StoreProvider = ({ children }) => {
 
   // unique counter that increments regularly
   const [tick, setTick] = useState(0);
-
-  // active token
-  const [selectedTokenAddress, selectToken] = useState("");
-
-  useEffect(() => {
-    if (hash) {
-      if (network === NETWORK.EVM) {
-        setAccount(new EvmAccount(hash, chainId));
-      } else if (network === NETWORK.TRON) {
-        setAccount(new TronAccount(hash));
-      }
-    }
-  }, [hash, chainId, network]);
 
   useEffect(() => {
     if (!account) {
@@ -117,11 +118,12 @@ const StoreProvider = ({ children }) => {
     setSalt("");
     setHash("");
 
-    setChainId(DEFAULT_CHAIN_ID);
     setNetwork(DEFAULT_NETWORK);
-    setAccount(null);
+    setChainId(DEFAULT_CHAIN_ID);
 
     setLoading(false);
+    openMenu(false);
+    setShowBalances(false);
 
     setNativeTokenName("");
     setNativeTokenBalance(0);
@@ -178,6 +180,8 @@ const StoreProvider = ({ children }) => {
         loading,
         inMenu,
         openMenu,
+        showBalances,
+        setShowBalances,
         nativeTokenName,
         nativeTokenBalance,
         tokenBalances,

@@ -13,6 +13,7 @@ import { Container, Box } from "@mybucks/components/Containers";
 import BaseButton from "@mybucks/components/Button";
 import Link from "@mybucks/components/Link";
 import NetworkSelector from "@mybucks/components/NetworkSelector";
+import { BALANCE_PLACEHOLDER } from "@mybucks/lib/conf";
 
 import RefreshIcon from "@mybucks/assets/icons/refresh.svg";
 import ShowIcon from "@mybucks/assets/icons/show.svg";
@@ -148,6 +149,8 @@ const EvmHome = () => {
   const {
     loading,
     openMenu,
+    showBalances,
+    setShowBalances,
     account,
     network,
     chainId,
@@ -160,7 +163,6 @@ const EvmHome = () => {
     fetchBalances,
     selectToken,
   } = useContext(StoreContext);
-  const [balancesVisible, setBalancesVisible] = useState(false);
   const gasPrice = useMemo(
     () => toFlexible(parseFloat(ethers.formatUnits(account.gasPrice, 9)), 2),
     [tick, account]
@@ -171,7 +173,7 @@ const EvmHome = () => {
     toast("Address copied into clipboard.");
   };
   const toggleBalancesVisible = () => {
-    setBalancesVisible(!balancesVisible);
+    setShowBalances(!showBalances);
   };
   const close = () => {
     reset();
@@ -222,7 +224,7 @@ const EvmHome = () => {
               <img src={RefreshIcon} />
             </button>
             <button onClick={toggleBalancesVisible}>
-              <img src={balancesVisible ? HideIcon : ShowIcon} />
+              <img src={showBalances ? HideIcon : ShowIcon} />
             </button>
           </RefreshAndEyeballs>
         </AddressWrapper>
@@ -230,8 +232,8 @@ const EvmHome = () => {
         <NativeBalance>
           {loading
             ? "-----"
-            : !balancesVisible
-            ? "*****"
+            : !showBalances
+            ? BALANCE_PLACEHOLDER
             : Number(nativeTokenBalance).toFixed(4)}
           &nbsp;
           {nativeTokenName}
@@ -252,7 +254,7 @@ const EvmHome = () => {
                 contract: t.contractAddress,
               }}
               balance={ethers.formatUnits(t.balance, t.contractDecimals)}
-              balanceVisible={balancesVisible}
+              showBalance={showBalances}
               quote={t.quote}
               onClick={() => selectToken(t.contractAddress)}
             />

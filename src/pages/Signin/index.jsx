@@ -271,16 +271,16 @@ const SignIn = () => {
               Password length: {PASSWORD_MIN_LENGTH}~{PASSWORD_MAX_LENGTH}
             </Checkbox>
             <Checkbox id="uppercase" value={hasUppercase}>
-              Uppercase (A~Z)
+              Uppercase
             </Checkbox>
             <Checkbox id="lowercase" value={hasLowercase}>
-              Lowercase (a~z)
+              Lowercase
             </Checkbox>
             <Checkbox id="number" value={hasNumbers}>
-              Number (012~9)
+              Number
             </Checkbox>
             <Checkbox id="special" value={hasSpecialChars}>
-              Special characters(!@#..)
+              Symbol
             </Checkbox>
             <Checkbox id="match-password" value={hasMatchedPassword}>
               Match password

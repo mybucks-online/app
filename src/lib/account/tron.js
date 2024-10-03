@@ -1,19 +1,23 @@
 import { TronWeb } from "tronweb";
 import { Buffer } from "buffer";
-import { getEvmPrivateKey } from "@mybucks/lib/conf";
+import { NETWORK, getEvmPrivateKey } from "@mybucks/lib/conf";
 
 const TRC20_USDT_ADDRESS = "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t";
 
 class TronAccount {
-  static network = "tron";
+  network = NETWORK.TRON;
+  chainId = null;
 
   signer = null;
   account = null;
 
   address = null;
+  // tron specific
   hexAddress = null;
 
   activated = false;
+
+  // tron specific
   freeBandwidth = null;
   stakedBandwidth = null;
   energyBalance = null;
@@ -28,13 +32,14 @@ class TronAccount {
     this.address = this.account.address.fromPrivateKey(this.signer.slice(2));
     this.hexAddress = this.account.address.toHex(this.address);
 
-    // fetch bandwidth and energy balances
+    this.isActivated(this.address).then((result) => {
+      this.activated = result;
+    });
     this.getNetworkStatus();
   }
 
   isAddress(value) {
-    // [TODO] confirm again
-    return this.account.address.isAddress(value);
+    return this.account.isAddress(value);
   }
 
   linkOfAddress(address) {

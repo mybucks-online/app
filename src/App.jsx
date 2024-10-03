@@ -18,10 +18,10 @@ const AppWrapper = styled.div`
   position: relative;
 `;
 
-const ConnectionIssue = styled.div`
+const Warning = styled.div`
   text-align: center;
   padding: 0.5rem;
-  background-color: ${({ theme }) => theme.colors.gray200};
+  background-color: ${({ theme }) => theme.colors.error};
   color: ${({ theme }) => theme.colors.gray25};
   font-size: ${({ theme }) => theme.sizes.base};
   font-weight: ${({ theme }) => theme.weights.regular};
@@ -48,7 +48,7 @@ function Content() {
 }
 
 function App() {
-  const { connectivity, hash, reset } = useContext(StoreContext);
+  const { account, connectivity, hash, reset } = useContext(StoreContext);
 
   useIdleTimer({
     onIdle: () => {
@@ -63,10 +63,12 @@ function App() {
 
   return (
     <AppWrapper>
-      {!connectivity && (
-        <ConnectionIssue>
-          Please check your internet connection!
-        </ConnectionIssue>
+      {!connectivity ? (
+        <Warning>Please check your internet connection!</Warning>
+      ) : !!account && !account.activated ? (
+        <Warning>Please activate your account!</Warning>
+      ) : (
+        ""
       )}
       <Content />
       <ToastContainer
