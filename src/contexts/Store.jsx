@@ -88,6 +88,7 @@ const StoreProvider = ({ children }) => {
     if (!account) {
       return;
     }
+    setNativeTokenName("")
     setTokenBalances([]);
     account.getNetworkStatus().then(() => {
       setTick((_tick) => _tick + 1);
