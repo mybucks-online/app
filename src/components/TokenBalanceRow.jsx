@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import toFlexible from "toflexible";
 import { BALANCE_PLACEHOLDER } from "@mybucks/lib/conf";
 import Avatar from "@mybucks/components/Avatar";
 
@@ -86,13 +87,18 @@ const TokenBalanceRow = ({ token, balance, quote, onClick, showBalance }) => (
 
     <BalanceAndValueWrap>
       <Balance>
-        {showBalance ? Number(balance).toFixed(4) : BALANCE_PLACEHOLDER}
-      </Balance>
-      <Value>
-        {!!quote && showBalance
-          ? `$${Number(quote).toFixed(2)}`
-          : !showBalance
+        {!showBalance
           ? BALANCE_PLACEHOLDER
+          : balance > 0
+          ? toFlexible(balance, 2)
+          : "0.00"}
+      </Balance>
+
+      <Value>
+        {!showBalance
+          ? BALANCE_PLACEHOLDER
+          : quote > 0
+          ? `$${toFlexible(quote, 2)}`
           : ""}
       </Value>
     </BalanceAndValueWrap>

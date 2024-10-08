@@ -234,7 +234,9 @@ const EvmHome = () => {
             ? "-----"
             : !showBalances
             ? BALANCE_PLACEHOLDER
-            : Number(nativeTokenBalance).toFixed(4)}
+            : nativeTokenBalance > 0
+            ? toFlexible(nativeTokenBalance, 2)
+            : "0"}
           &nbsp;
           {nativeTokenName}
         </NativeBalance>

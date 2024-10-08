@@ -18,9 +18,9 @@ class TronAccount {
   activated = false;
 
   // tron specific
-  freeBandwidth = null;
-  stakedBandwidth = null;
-  energyBalance = null;
+  freeBandwidth = 0;
+  stakedBandwidth = 0;
+  energyBalance = 0;
 
   constructor(hashKey) {
     this.signer = getEvmPrivateKey(hashKey);
@@ -32,9 +32,6 @@ class TronAccount {
     this.address = this.account.address.fromPrivateKey(this.signer.slice(2));
     this.hexAddress = this.account.address.toHex(this.address);
 
-    this.isActivated(this.address).then((result) => {
-      this.activated = result;
-    });
     this.getNetworkStatus();
   }
 
@@ -91,19 +88,17 @@ class TronAccount {
   async queryBalances() {
     const nativeTokenName = "TRX";
     // get TRX balance
-    const trxRawBalance = !this.activated
-      ? 0
-      : await this.account.trx.getBalance(this.address);
+    const trxRawBalance = await this.account.trx.getBalance(this.address);
     const nativeTokenBalance = this.account.fromSun(trxRawBalance);
     // [TODO] Replace by CG API
     const nativeTokenPrice = 0.155;
 
     // balance of TRC20 USDT
     const usdtContract = await this.account.contract().at(TRC20_USDT_ADDRESS);
-    const usdtRawBalance = !this.activated
-      ? 0
-      : await usdtContract.methods.balanceOf(this.address).call();
-    const usdtBalance = usdtRawBalance / this.account.BigNumber("1000000");
+    const usdtRawBalance = await usdtContract.methods
+      .balanceOf(this.address)
+      .call();
+    const usdtBalance = this.account.fromSun(usdtRawBalance);
     // [TODO] Replace by CG API
     const usdtPrice = 1.0;
 

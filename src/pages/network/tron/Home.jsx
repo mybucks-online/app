@@ -11,6 +11,7 @@ import { truncate } from "@mybucks/lib/utils";
 import media from "@mybucks/styles/media";
 import { Container, Box } from "@mybucks/components/Containers";
 import BaseButton from "@mybucks/components/Button";
+import { Label } from "@mybucks/components/Label";
 import Link from "@mybucks/components/Link";
 import NetworkSelector from "@mybucks/components/NetworkSelector";
 import { BALANCE_PLACEHOLDER } from "@mybucks/lib/conf";
@@ -133,10 +134,41 @@ const NativeBalance = styled.h3`
   text-align: center;
   font-weight: ${({ theme }) => theme.weights.highlight};
   font-size: ${({ theme }) => theme.sizes.x2l};
+  margin-bottom: ${({ theme }) => theme.sizes.xl};
 
   ${media.sm`
     font-size: ${({ theme }) => theme.sizes.xl};
   `}
+`;
+
+const BandwidthAndEnergy = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.sizes.base};
+  padding-top: ${({ theme }) => theme.sizes.xs};
+  border-top: 1px solid ${({ theme }) => theme.colors.gray200};
+  ${media.sm`
+    flex-direction: column;
+    gap: ${({ theme }) => theme.sizes.x3s};
+  `}
+`;
+
+const Bandwidth = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: ${({ theme }) => theme.sizes.x2l};
+  flex: 1;
+`;
+
+const BandwidthLabel = styled(Label)`
+  display: inline;
+  margin-bottom: 0;
+  color: ${({ theme }) => theme.colors.gray200};
+`;
+
+const BandwidthValue = styled(BandwidthLabel)`
+  color: ${({ theme }) => theme.colors.gray400};
 `;
 
 const TokensList = styled.div`
@@ -232,10 +264,29 @@ const TronHome = () => {
             ? "-----"
             : !showBalances
             ? BALANCE_PLACEHOLDER
-            : Number(nativeTokenBalance).toFixed(4)}
+            : nativeTokenBalance > 0
+            ? toFlexible(nativeTokenBalance, 2)
+            : "0"}
           &nbsp;
           {nativeTokenName}
         </NativeBalance>
+
+        <BandwidthAndEnergy>
+          <Bandwidth>
+            <BandwidthLabel>Bandwidth:</BandwidthLabel>
+            <BandwidthValue>
+              {loading ? "-----" : account.freeBandwidth.toLocaleString()} /{" "}
+              {loading ? "-----" : account.stakedBandwidth.toLocaleString()}
+            </BandwidthValue>
+          </Bandwidth>
+
+          <Bandwidth>
+            <BandwidthLabel>Energy:</BandwidthLabel>
+            <BandwidthValue>
+              {loading ? "-----" : account.energyBalance.toLocaleString()}
+            </BandwidthValue>
+          </Bandwidth>
+        </BandwidthAndEnergy>
       </PrimaryBox>
 
       <TokensList>
