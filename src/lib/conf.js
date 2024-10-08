@@ -121,3 +121,4 @@ export const REFRESH_STATUS_DURATION = 15_000;
 
 // The hidden balances will be displayed as shown below
 export const BALANCE_PLACEHOLDER = "*****";
+export const LOADING_PLACEHOLDER = "-----";

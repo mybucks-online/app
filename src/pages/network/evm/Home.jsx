@@ -1,4 +1,4 @@
-import React, { useContext, useState, useMemo } from "react";
+import React, { useContext, useMemo } from "react";
 import toFlexible from "toflexible";
 import copy from "clipboard-copy";
 import { ethers } from "ethers";
@@ -13,7 +13,7 @@ import { Container, Box } from "@mybucks/components/Containers";
 import BaseButton from "@mybucks/components/Button";
 import Link from "@mybucks/components/Link";
 import NetworkSelector from "@mybucks/components/NetworkSelector";
-import { BALANCE_PLACEHOLDER } from "@mybucks/lib/conf";
+import { BALANCE_PLACEHOLDER, LOADING_PLACEHOLDER } from "@mybucks/lib/conf";
 
 import RefreshIcon from "@mybucks/assets/icons/refresh.svg";
 import ShowIcon from "@mybucks/assets/icons/show.svg";
@@ -231,7 +231,7 @@ const EvmHome = () => {
 
         <NativeBalance>
           {loading
-            ? "-----"
+            ? LOADING_PLACEHOLDER
             : !showBalances
             ? BALANCE_PLACEHOLDER
             : nativeTokenBalance > 0

@@ -111,7 +111,7 @@ class TronAccount {
           nativeToken: true,
           contractName: "TRON",
           contractTickerSymbol: "TRX",
-          contractAddress: "",
+          contractAddress: "41eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
           contractDecimals: 6,
           balance: trxRawBalance,
           quote: nativeTokenBalance * nativeTokenPrice,

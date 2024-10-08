@@ -179,8 +179,11 @@ const Token = () => {
 
   const [recipient, setRecipient] = useState("");
   const [amount, setAmount] = useState(0);
-  const [gasEstimation, setGasEstimation] = useState(0);
-  const [gasEstimationValue, setGasEstimationValue] = useState(0);
+
+  const [bandwidthEstimation, setBandwidthEstimation] = useState(0);
+  const [energyEstimation, setEnergyEstimation] = useState(0);
+  const [trxBurntEstimation, setTrxBurntEstimation] = useState(0);
+
   const [history, setHistory] = useState([]);
 
   const {
@@ -212,8 +215,8 @@ const Token = () => {
 
   useEffect(() => {
     const estimateGas = async () => {
-      setGasEstimation(0);
-      setGasEstimationValue(0);
+      setBandwidthEstimation(0);
+      setEnergyEstimation(0);
       setTransaction(null);
       setHasErrorInput(false);
 
@@ -232,18 +235,21 @@ const Token = () => {
           recipient,
           ethers.parseUnits(
             amount.toString(),
-            token.nativeToken ? 18 : token.contractDecimals
+            token.nativeToken ? 6 : token.contractDecimals
           )
         );
         setTransaction(txData);
 
-        const gasAmount = await account.estimateGas(txData);
-        const gas = Number(
-          ethers.formatUnits(account.gasPrice * gasAmount, 18)
+        const [bandwidth, energy] = await account.estimateGas(
+          token.nativeToken ? "" : selectedTokenAddress,
+          recipient,
+          ethers.parseUnits(
+            amount.toString(),
+            token.nativeToken ? 6 : token.contractDecimals
+          )
         );
-        const value = gas * nativeTokenPrice;
-        setGasEstimation(gas.toFixed(6));
-        setGasEstimationValue(value.toFixed(6));
+        setBandwidthEstimation(bandwidth);
+        setEnergyEstimation(energy);
       } catch (e) {
         setHasErrorInput(true);
       }
@@ -363,12 +369,12 @@ const Token = () => {
             <img src={InfoRedIcon} />
             <span>Invalid transfer</span>
           </InvalidTransfer>
-        ) : gasEstimation > 0 ? (
+        ) : bandwidthEstimation || energyEstimation ? (
           <EstimatedGasFee>
             <img src={InfoGreenIcon} />
             <span>
-              Estimated gas fee: {gasEstimation}&nbsp; {nativeTokenName} / $
-              {gasEstimationValue}
+              Estimated consumption: {bandwidthEstimation} Bandwidth{" "}
+              {energyEstimation > 0 ? `+ ${energyEstimation} Energy` : ""}
             </span>
           </EstimatedGasFee>
         ) : (
@@ -377,7 +383,7 @@ const Token = () => {
 
         <Submit
           onClick={() => setConfirming(true)}
-          disabled={hasErrorInput || gasEstimation === 0}
+          disabled={hasErrorInput || bandwidthEstimation === 0}
         >
           Submit
         </Submit>

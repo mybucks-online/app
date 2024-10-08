@@ -11,6 +11,7 @@ import Menu from "@mybucks/pages/Menu";
 import EvmHome from "@mybucks/pages/network/evm/Home";
 import EvmToken from "@mybucks/pages/network/evm/Token";
 import TronHome from "@mybucks/pages/network/tron/Home";
+import TronToken from "@mybucks/pages/network/tron/Token";
 
 import "react-toastify/dist/ReactToastify.css";
 
@@ -25,6 +26,11 @@ const Warning = styled.div`
   color: ${({ theme }) => theme.colors.gray25};
   font-size: ${({ theme }) => theme.sizes.base};
   font-weight: ${({ theme }) => theme.weights.regular};
+`;
+
+const WarningLink = styled.a`
+  text-decoration: underline;
+  font-weight: ${({ theme }) => theme.weights.highlight};
 `;
 
 function Content() {
@@ -43,12 +49,15 @@ function Content() {
     }
     return <EvmHome />;
   } else if (network === NETWORK.TRON) {
+    if (selectedTokenAddress) {
+      return <TronToken />;
+    }
     return <TronHome />;
   }
 }
 
 function App() {
-  const { account, connectivity, hash, reset } = useContext(StoreContext);
+  const { account, connectivity, hash, loading, reset } = useContext(StoreContext);
 
   useIdleTimer({
     onIdle: () => {
@@ -65,8 +74,13 @@ function App() {
     <AppWrapper>
       {!connectivity ? (
         <Warning>Please check your internet connection!</Warning>
-      ) : !!account && !account.activated ? (
-        <Warning>Please activate your account!</Warning>
+      ) : !loading && !!account && !account.activated ? (
+        <Warning>
+          Please activate your account!{"  "}
+          <WarningLink href="https://developers.tron.network/docs/account#account-activation">
+            Learn more
+          </WarningLink>
+        </Warning>
       ) : (
         ""
       )}

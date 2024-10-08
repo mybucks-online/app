@@ -1,4 +1,4 @@
-import React, { useContext, useState, useMemo } from "react";
+import React, { useContext } from "react";
 import toFlexible from "toflexible";
 import copy from "clipboard-copy";
 import { ethers } from "ethers";
@@ -14,13 +14,12 @@ import BaseButton from "@mybucks/components/Button";
 import { Label } from "@mybucks/components/Label";
 import Link from "@mybucks/components/Link";
 import NetworkSelector from "@mybucks/components/NetworkSelector";
-import { BALANCE_PLACEHOLDER } from "@mybucks/lib/conf";
+import { BALANCE_PLACEHOLDER, LOADING_PLACEHOLDER } from "@mybucks/lib/conf";
 
 import RefreshIcon from "@mybucks/assets/icons/refresh.svg";
 import ShowIcon from "@mybucks/assets/icons/show.svg";
 import HideIcon from "@mybucks/assets/icons/hide.svg";
 import CopyIcon from "@mybucks/assets/icons/copy.svg";
-import GasIcon from "@mybucks/assets/icons/gas.svg";
 import LockIcon from "@mybucks/assets/icons/lock.svg";
 import ArrowUpIcon from "@mybucks/assets/icons/arrow-up.svg";
 
@@ -43,16 +42,6 @@ const NetworkWrapper = styled.div`
   ${media.md`
     gap: ${({ theme }) => theme.sizes.base};
   `}
-`;
-
-const GasPriceWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  width: 6rem;
-  visibility: ${({ $show }) => ($show ? "visible" : "hidden")};
-  font-weight: ${({ theme }) => theme.weights.regular};
-  font-size: ${({ theme }) => theme.sizes.sm};
 `;
 
 const MenuButton = styled(BaseButton).attrs({ $size: "small" })`
@@ -191,12 +180,9 @@ const TronHome = () => {
     nativeTokenName,
     nativeTokenBalance,
     tokenBalances,
-    tick,
     fetchBalances,
     selectToken,
   } = useContext(StoreContext);
-  // [TODO] freeBandwidth, stakedBandwidth, energyBalance
-  const gasPrice = 10;
 
   const copyAddress = () => {
     copy(account.address);
@@ -219,9 +205,6 @@ const TronHome = () => {
             chainId={chainId}
             updateNetwork={updateNetwork}
           />
-          <GasPriceWrapper $show={gasPrice > 0}>
-            <img src={GasIcon} /> <span>{gasPrice} GWei</span>
-          </GasPriceWrapper>
         </NetworkWrapper>
 
         <MenuButton onClick={() => openMenu(true)}>
@@ -261,7 +244,7 @@ const TronHome = () => {
 
         <NativeBalance>
           {loading
-            ? "-----"
+            ? LOADING_PLACEHOLDER
             : !showBalances
             ? BALANCE_PLACEHOLDER
             : nativeTokenBalance > 0
@@ -275,15 +258,22 @@ const TronHome = () => {
           <Bandwidth>
             <BandwidthLabel>Bandwidth:</BandwidthLabel>
             <BandwidthValue>
-              {loading ? "-----" : account.freeBandwidth.toLocaleString()} /{" "}
-              {loading ? "-----" : account.stakedBandwidth.toLocaleString()}
+              {loading
+                ? LOADING_PLACEHOLDER
+                : account.freeBandwidth.toLocaleString()}{" "}
+              /{" "}
+              {loading
+                ? LOADING_PLACEHOLDER
+                : account.stakedBandwidth.toLocaleString()}
             </BandwidthValue>
           </Bandwidth>
 
           <Bandwidth>
             <BandwidthLabel>Energy:</BandwidthLabel>
             <BandwidthValue>
-              {loading ? "-----" : account.energyBalance.toLocaleString()}
+              {loading
+                ? LOADING_PLACEHOLDER
+                : account.energyBalance.toLocaleString()}
             </BandwidthValue>
           </Bandwidth>
         </BandwidthAndEnergy>

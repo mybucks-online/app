@@ -16,6 +16,7 @@ class EvmAccount {
 
   address = null;
 
+  // evm account is activated as default
   activated = true;
 
   // wei unit
