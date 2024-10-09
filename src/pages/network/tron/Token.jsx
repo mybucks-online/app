@@ -5,15 +5,10 @@ import { format } from "date-fns";
 import toFlexible from "toflexible";
 
 import { StoreContext } from "@mybucks/contexts/Store";
-import ConfirmTransaction from "@mybucks/pages/evm/ConfirmTransaction";
-import MinedTransaction from "@mybucks/pages/evm/MinedTransaction";
+import ConfirmTransaction from "./ConfirmTransaction";
+import MinedTransaction from "./MinedTransaction";
 import { truncate } from "@mybucks/lib/utils";
-import BackIcon from "@mybucks/assets/icons/back.svg";
-import RefreshIcon from "@mybucks/assets/icons/refresh.svg";
-import ArrowUpRightIcon from "@mybucks/assets/icons/arrow-up-right.svg";
-import InfoRedIcon from "@mybucks/assets/icons/info-red.svg";
-import InfoGreenIcon from "@mybucks/assets/icons/info-green.svg";
-
+import { LOADING_PLACEHOLDER } from "@mybucks/lib/conf";
 import {
   Container as BaseContainer,
   Box as BaseBox,
@@ -25,6 +20,12 @@ import { Label } from "@mybucks/components/Label";
 import Link from "@mybucks/components/Link";
 import { H3 } from "@mybucks/components/Texts";
 import media from "@mybucks/styles/media";
+
+import BackIcon from "@mybucks/assets/icons/back.svg";
+import RefreshIcon from "@mybucks/assets/icons/refresh.svg";
+import ArrowUpRightIcon from "@mybucks/assets/icons/arrow-up-right.svg";
+import InfoRedIcon from "@mybucks/assets/icons/info-red.svg";
+import InfoGreenIcon from "@mybucks/assets/icons/info-green.svg";
 
 const Container = styled(BaseContainer)`
   display: flex;
@@ -179,8 +180,12 @@ const Token = () => {
 
   const [recipient, setRecipient] = useState("");
   const [amount, setAmount] = useState(0);
-  const [gasEstimation, setGasEstimation] = useState(0);
-  const [gasEstimationValue, setGasEstimationValue] = useState(0);
+
+  const [recipientActivated, setRecipientActivated] = useState(false);
+
+  const [bandwidthEstimation, setBandwidthEstimation] = useState(0);
+  const [energyEstimation, setEnergyEstimation] = useState(0);
+
   const [history, setHistory] = useState([]);
 
   const {
@@ -212,40 +217,51 @@ const Token = () => {
 
   useEffect(() => {
     const estimateGas = async () => {
-      if (!recipient || !amount) {
-        setHasErrorInput(false);
-        setGasEstimation(0);
-        return;
-      }
-
-      if (!ethers.isAddress(recipient) || amount < 0 || !token) {
-        setHasErrorInput(true);
-        setGasEstimation(0);
-        return;
-      }
-
+      setBandwidthEstimation(0);
+      setEnergyEstimation(0);
+      setTransaction(null);
       setHasErrorInput(false);
-      const txData = await account.populateTransferToken(
-        token.nativeToken ? "" : selectedTokenAddress,
-        recipient,
-        ethers.parseUnits(
-          amount.toString(),
-          token.nativeToken ? 18 : token.contractDecimals
-        )
-      );
-      setTransaction(txData);
+      setRecipientActivated(true);
+
+      if (!recipient || !amount) {
+        return;
+      }
+
+      if (!account.isAddress(recipient) || amount < 0 || !token) {
+        setHasErrorInput(true);
+        return;
+      }
 
       try {
-        const gasAmount = await account.estimateGas(txData);
-        const gas = Number(
-          ethers.formatUnits(account.gasPrice * gasAmount, 18)
+        const isActivated = await account.isActivated(recipient);
+        setRecipientActivated(isActivated);
+        // trc20 can't be transferred to inactivated account
+        if (!token.nativeToken && !isActivated) {
+          setHasErrorInput(true);
+          return;
+        }
+
+        const txData = await account.populateTransferToken(
+          token.nativeToken ? "" : selectedTokenAddress,
+          recipient,
+          ethers.parseUnits(
+            amount.toString(),
+            token.nativeToken ? 6 : token.contractDecimals
+          )
         );
-        const value = gas * nativeTokenPrice;
-        setGasEstimation(gas.toFixed(6));
-        setGasEstimationValue(value.toFixed(6));
+        setTransaction(txData);
+
+        const [bandwidth, energy] = await account.estimateGas(
+          token.nativeToken ? "" : selectedTokenAddress,
+          recipient,
+          ethers.parseUnits(
+            amount.toString(),
+            token.nativeToken ? 6 : token.contractDecimals
+          )
+        );
+        setBandwidthEstimation(bandwidth);
+        setEnergyEstimation(energy);
       } catch (e) {
-        setGasEstimation("");
-        setGasEstimationValue("");
         setHasErrorInput(true);
       }
     };
@@ -264,7 +280,12 @@ const Token = () => {
   if (confirming) {
     return (
       <ConfirmTransaction
-        {...transaction}
+        token={token}
+        recipient={recipient}
+        amount={amount}
+        bandwidth={bandwidthEstimation}
+        energy={energyEstimation}
+        transaction={transaction}
         onReject={() => setConfirming(false)}
         onSuccess={onSuccess}
       />
@@ -325,7 +346,7 @@ const Token = () => {
         </LogoAndLink>
 
         <TokenBalance>
-          {loading ? "---" : Number(balance).toFixed(4)}
+          {loading ? LOADING_PLACEHOLDER : Number(balance).toFixed(4)}
           &nbsp;
           {token.contractTickerSymbol}
         </TokenBalance>
@@ -359,17 +380,22 @@ const Token = () => {
           <MaxButton onClick={() => setAmount(balance)}>Max</MaxButton>
         </AmountWrapper>
 
-        {hasErrorInput ? (
+        {hasErrorInput && !recipientActivated ? (
+          <InvalidTransfer>
+            <img src={InfoRedIcon} />
+            <span>Recipient is not activated</span>
+          </InvalidTransfer>
+        ) : hasErrorInput ? (
           <InvalidTransfer>
             <img src={InfoRedIcon} />
             <span>Invalid transfer</span>
           </InvalidTransfer>
-        ) : gasEstimation > 0 ? (
+        ) : bandwidthEstimation || energyEstimation ? (
           <EstimatedGasFee>
             <img src={InfoGreenIcon} />
             <span>
-              Estimated gas fee: {gasEstimation}&nbsp; {nativeTokenName} / $
-              {gasEstimationValue}
+              Estimated consumption: {bandwidthEstimation} Bandwidth{" "}
+              {energyEstimation > 0 ? `+ ${energyEstimation} Energy` : ""}
             </span>
           </EstimatedGasFee>
         ) : (
@@ -378,7 +404,7 @@ const Token = () => {
 
         <Submit
           onClick={() => setConfirming(true)}
-          disabled={hasErrorInput || gasEstimation === 0}
+          disabled={hasErrorInput || bandwidthEstimation === 0}
         >
           Submit
         </Submit>

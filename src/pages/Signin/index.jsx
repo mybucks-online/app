@@ -21,8 +21,14 @@ import { H1 } from "@mybucks/components/Texts";
 import Modal from "@mybucks/components/Modal";
 import media from "@mybucks/styles/media";
 
+/*
 const TEST_PASSWORD = "randommPassword82^";
 const TEST_PASSCODE = "223356";
+*/
+
+const TEST_PASSWORD = "TexamplePassword34%";
+const TEST_PASSCODE = "22346b";
+
 
 const Container = styled.div`
   max-width: 40.5rem;
@@ -271,16 +277,16 @@ const SignIn = () => {
               Password length: {PASSWORD_MIN_LENGTH}~{PASSWORD_MAX_LENGTH}
             </Checkbox>
             <Checkbox id="uppercase" value={hasUppercase}>
-              Uppercase (A~Z)
+              Uppercase
             </Checkbox>
             <Checkbox id="lowercase" value={hasLowercase}>
-              Lowercase (a~z)
+              Lowercase
             </Checkbox>
             <Checkbox id="number" value={hasNumbers}>
-              Number (012~9)
+              Number
             </Checkbox>
             <Checkbox id="special" value={hasSpecialChars}>
-              Special characters(!@#..)
+              Symbol
             </Checkbox>
             <Checkbox id="match-password" value={hasMatchedPassword}>
               Match password
