@@ -3,7 +3,6 @@ import { StoreContext } from "@mybucks/contexts/Store";
 import { ethers } from "ethers";
 import styled from "styled-components";
 
-import { GAS_PRICE, gasMultiplier } from "@mybucks/lib/conf";
 import { Container, Box } from "@mybucks/components/Containers";
 import BaseButton from "@mybucks/components/Button";
 import { H3 } from "@mybucks/components/Texts";
@@ -11,6 +10,7 @@ import media from "@mybucks/styles/media";
 
 import BackIcon from "@mybucks/assets/icons/back.svg";
 import InfoRedIcon from "@mybucks/assets/icons/info-red.svg";
+import InfoWhiteIcon from "@mybucks/assets/icons/info-white.svg";
 import InfoGreenIcon from "@mybucks/assets/icons/info-green.svg";
 
 const NavsWrapper = styled.div`
@@ -33,18 +33,16 @@ const TransactionItem = styled.span`
   color: ${({ theme }) => theme.colors.gray400};
 `;
 
-const OptionsWrapper = styled.fieldset`
-  font-size: ${({ theme }) => theme.sizes.sm};
-  font-weight: ${({ theme }) => theme.weights.regular};
-  line-height: 130%;
+const ResourcesWarning = styled.div`
+  word-break: break-word;
+  padding: ${({ theme }) => theme.sizes.xs};
+  border-radius: ${({ theme }) => theme.sizes.x3s};
   margin-bottom: ${({ theme }) => theme.sizes.xl};
-`;
-
-const OptionItem = styled.div`
-  display: flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.sizes.base};
-  padding: ${({ theme }) => theme.sizes.x3s};
+  font-size: ${({ theme }) => theme.sizes.sm};
+  font-weight: ${({ theme }) => theme.weights.base};
+  line-height: 140%;
+  background-color: ${({ theme }) => theme.colors.gray200};
+  color: ${({ theme }) => theme.colors.gray25};
 `;
 
 const InvalidTransfer = styled.div`
@@ -63,11 +61,6 @@ const InvalidTransfer = styled.div`
   ${media.sm`
     margin-bottom: ${({ theme }) => theme.sizes.xl};
   `}
-`;
-
-const EstimatedGasFee = styled(InvalidTransfer)`
-  color: ${({ theme }) => theme.colors.success};
-  border: 1px solid ${({ theme }) => theme.colors.success};
 `;
 
 const ButtonsWrapper = styled.div`
@@ -89,45 +82,32 @@ const Button = styled(BaseButton)`
   `}
 `;
 
-const ConfirmTransaction = ({ to, value = 0, data, onSuccess, onReject }) => {
+const ConfirmTransaction = ({
+  token,
+  recipient,
+  amount,
+  transaction,
+  bandwidth,
+  energy,
+  onSuccess,
+  onReject,
+}) => {
   const { account, fetchBalances, nativeTokenName, nativeTokenPrice } =
     useContext(StoreContext);
-  const [gasOption, setGasOption] = useState(GAS_PRICE.LOW);
 
-  const [gasEstimation, setGasEstimation] = useState(0);
-  const [gasEstimationValue, setGasEstimationValue] = useState(0);
+  const [bandwidthEstimation, setBandwidthEstimation] = useState(0);
+  const [energyEstimation, setEnergyEstimation] = useState(0);
+  const [trxBurntEstimation, setTrxBurntEstimation] = useState(0);
+
   const [hasError, setHasError] = useState(false);
   const [pending, setPending] = useState(false);
-
-  useEffect(() => {
-    const estimateGas = async () => {
-      const gasAmount = await account.estimateGas({ to, data, value });
-      const gas = Number(
-        ethers.formatUnits(
-          (account.gasPrice * gasMultiplier(gasOption) * gasAmount) / 100n,
-          18
-        )
-      );
-
-      const gasInUsd = gas * nativeTokenPrice;
-      setGasEstimation(gas.toFixed(6));
-      setGasEstimationValue(gasInUsd.toFixed(6));
-    };
-
-    estimateGas();
-  }, [gasOption]);
 
   const confirm = async () => {
     setPending(true);
     setHasError(false);
 
     try {
-      const txn = await account.execute({
-        to,
-        value,
-        data,
-        gasPrice: (account.gasPrice * gasMultiplier(gasOption)) / 100n,
-      });
+      const txn = await account.execute(transaction);
 
       // update balances
       fetchBalances();
@@ -152,61 +132,26 @@ const ConfirmTransaction = ({ to, value = 0, data, onSuccess, onReject }) => {
 
         <TransactionDetails>
           <p>
-            <TransactionItem>To:</TransactionItem> {to}
+            <TransactionItem>To:</TransactionItem> {recipient}
           </p>
-          {!!value && (
-            <p>
-              <TransactionItem>Value:</TransactionItem>{" "}
-              {ethers.formatEther(value)}
-            </p>
-          )}
-          {!!data && (
-            <p>
-              <TransactionItem>Data:</TransactionItem> {data}
-            </p>
-          )}
+
+          <p>
+            <TransactionItem>Value:</TransactionItem> {amount}{" "}
+            {token.contractTickerSymbol}
+          </p>
         </TransactionDetails>
 
-        <OptionsWrapper disabled={pending}>
-          <legend>Select gas price:</legend>
-          <OptionItem>
-            <input
-              type="radio"
-              name={GAS_PRICE.LOW}
-              id={GAS_PRICE.LOW}
-              value={GAS_PRICE.LOW}
-              checked={gasOption === GAS_PRICE.LOW}
-              onChange={() => setGasOption(GAS_PRICE.LOW)}
-            />
-            <label htmlFor={GAS_PRICE.LOW}>
-              Low / {ethers.formatUnits(account.gasPrice, 9)} GWei
-            </label>
-          </OptionItem>
+        <TransactionDetails>
+          <p>
+            <TransactionItem>Consumption:</TransactionItem> {bandwidth} Bandwidth
+            + {energy} Energy
+          </p>
+        </TransactionDetails>
 
-          <OptionItem>
-            <input
-              type="radio"
-              name={GAS_PRICE.AVERAGE}
-              id={GAS_PRICE.AVERAGE}
-              value={GAS_PRICE.AVERAGE}
-              checked={gasOption === GAS_PRICE.AVERAGE}
-              onChange={() => setGasOption(GAS_PRICE.AVERAGE)}
-            />
-            <label htmlFor={GAS_PRICE.AVERAGE}>Average (*1.5)</label>
-          </OptionItem>
-
-          <OptionItem>
-            <input
-              type="radio"
-              name={GAS_PRICE.HIGH}
-              id={GAS_PRICE.HIGH}
-              value={GAS_PRICE.HIGH}
-              checked={gasOption === GAS_PRICE.HIGH}
-              onChange={() => setGasOption(GAS_PRICE.HIGH)}
-            />
-            <label htmlFor={GAS_PRICE.HIGH}>High (*1.75)</label>
-          </OptionItem>
-        </OptionsWrapper>
+        <ResourcesWarning>
+          If your bandwidth or energy is insufficient, the remaining fee should
+          be paid in TRX.
+        </ResourcesWarning>
 
         {hasError ? (
           <InvalidTransfer>
@@ -214,13 +159,7 @@ const ConfirmTransaction = ({ to, value = 0, data, onSuccess, onReject }) => {
             <span>Failed to execute! Please check balances.</span>
           </InvalidTransfer>
         ) : (
-          <EstimatedGasFee>
-            <img src={InfoGreenIcon} />
-            <span>
-              Estimated gas fee: {gasEstimation}&nbsp; {nativeTokenName} / $
-              {gasEstimationValue}
-            </span>
-          </EstimatedGasFee>
+          ""
         )}
 
         <ButtonsWrapper>

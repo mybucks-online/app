@@ -8,12 +8,7 @@ import { StoreContext } from "@mybucks/contexts/Store";
 import ConfirmTransaction from "./ConfirmTransaction";
 import MinedTransaction from "./MinedTransaction";
 import { truncate } from "@mybucks/lib/utils";
-import BackIcon from "@mybucks/assets/icons/back.svg";
-import RefreshIcon from "@mybucks/assets/icons/refresh.svg";
-import ArrowUpRightIcon from "@mybucks/assets/icons/arrow-up-right.svg";
-import InfoRedIcon from "@mybucks/assets/icons/info-red.svg";
-import InfoGreenIcon from "@mybucks/assets/icons/info-green.svg";
-
+import { LOADING_PLACEHOLDER } from "@mybucks/lib/conf";
 import {
   Container as BaseContainer,
   Box as BaseBox,
@@ -25,6 +20,12 @@ import { Label } from "@mybucks/components/Label";
 import Link from "@mybucks/components/Link";
 import { H3 } from "@mybucks/components/Texts";
 import media from "@mybucks/styles/media";
+
+import BackIcon from "@mybucks/assets/icons/back.svg";
+import RefreshIcon from "@mybucks/assets/icons/refresh.svg";
+import ArrowUpRightIcon from "@mybucks/assets/icons/arrow-up-right.svg";
+import InfoRedIcon from "@mybucks/assets/icons/info-red.svg";
+import InfoGreenIcon from "@mybucks/assets/icons/info-green.svg";
 
 const Container = styled(BaseContainer)`
   display: flex;
@@ -324,7 +325,7 @@ const Token = () => {
         </LogoAndLink>
 
         <TokenBalance>
-          {loading ? "---" : Number(balance).toFixed(4)}
+          {loading ? LOADING_PLACEHOLDER : Number(balance).toFixed(4)}
           &nbsp;
           {token.contractTickerSymbol}
         </TokenBalance>

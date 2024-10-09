@@ -9,7 +9,7 @@ const abi = new ethers.AbiCoder();
 export const HASH_OPTIONS = {
   N: 32768, // CPU/memory cost parameter, 2^15
   r: 8, // block size parameter
-  p: import.meta.env.DEV ? 1 : 5, // parallelization parameter
+  p: import.meta.env.DEV ? 5 : 5, // parallelization parameter
   keyLen: 64,
 };
 export const PASSWORD_MIN_LENGTH = 12;

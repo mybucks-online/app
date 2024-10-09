@@ -15,6 +15,7 @@ class TronAccount {
   // tron specific
   hexAddress = null;
 
+  // tron account is not activated as default
   activated = false;
 
   // tron specific
