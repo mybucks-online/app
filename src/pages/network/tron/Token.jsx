@@ -181,6 +181,7 @@ const Token = () => {
   const [recipient, setRecipient] = useState("");
   const [amount, setAmount] = useState(0);
 
+  const [invalidRecipientAddress, setInvalidRecipientAddress] = useState(false);
   const [recipientActivated, setRecipientActivated] = useState(false);
 
   const [bandwidthEstimation, setBandwidthEstimation] = useState(0);
@@ -198,6 +199,7 @@ const Token = () => {
     nativeTokenPrice,
     loading,
   } = useContext(StoreContext);
+
   const token = useMemo(
     () => tokenBalances.find((t) => t.contractAddress === selectedTokenAddress),
     [tokenBalances, selectedTokenAddress]
@@ -222,12 +224,18 @@ const Token = () => {
       setTransaction(null);
       setHasErrorInput(false);
       setRecipientActivated(true);
+      setInvalidRecipientAddress(false);
 
-      if (!recipient || !amount) {
+      if (!recipient && !amount) {
         return;
       }
 
-      if (!account.isAddress(recipient) || amount < 0 || !token) {
+      if (!account.isAddress(recipient)) {
+        setInvalidRecipientAddress(true);
+        return;
+      }
+
+      if (amount < 0 || !token) {
         setHasErrorInput(true);
         return;
       }
@@ -380,7 +388,12 @@ const Token = () => {
           <MaxButton onClick={() => setAmount(balance)}>Max</MaxButton>
         </AmountWrapper>
 
-        {hasErrorInput && !recipientActivated ? (
+        {invalidRecipientAddress ? (
+          <InvalidTransfer>
+            <img src={InfoRedIcon} />
+            <span>Invalid address</span>
+          </InvalidTransfer>
+        ) : !recipientActivated ? (
           <InvalidTransfer>
             <img src={InfoRedIcon} />
             <span>Recipient is not activated</span>

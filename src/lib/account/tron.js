@@ -9,7 +9,7 @@ class TronAccount {
   chainId = null;
 
   signer = null;
-  account = null;
+  tronweb = null;
 
   address = null;
   // tron specific
@@ -25,19 +25,19 @@ class TronAccount {
 
   constructor(hashKey) {
     this.signer = getEvmPrivateKey(hashKey);
-    this.account = new TronWeb({
+    this.tronweb = new TronWeb({
       fullHost: "https://api.trongrid.io",
       headers: { "TRON-PRO-API-KEY": import.meta.env.VITE_TRONGRID_API_KEY },
       privateKey: this.signer.slice(2),
     });
-    this.address = this.account.address.fromPrivateKey(this.signer.slice(2));
-    this.hexAddress = this.account.address.toHex(this.address);
+    this.address = this.tronweb.address.fromPrivateKey(this.signer.slice(2));
+    this.hexAddress = this.tronweb.address.toHex(this.address);
 
     this.getNetworkStatus();
   }
 
   isAddress(value) {
-    return this.account.isAddress(value);
+    return this.tronweb.isAddress(value);
   }
 
   linkOfAddress(address) {
@@ -53,10 +53,10 @@ class TronAccount {
   }
 
   async isActivated(address) {
-    if (!this.account) {
+    if (!this.tronweb) {
       return false;
     }
-    const { balance } = await this.account.trx.getAccount(address);
+    const { balance } = await this.tronweb.trx.getAccount(address);
     return !!balance;
   }
 
@@ -75,7 +75,7 @@ class TronAccount {
       NetUsed,
       EnergyLimit,
       EnergyUsed,
-    } = await this.account.trx.getAccountResources(this.address);
+    } = await this.tronweb.trx.getAccountResources(this.address);
 
     this.freeBandwidth = (freeBandwidthLimit || 0) - (freeBandwidthUsed || 0);
     this.stakedBandwidth = (NetLimit || 0) - (NetUsed || 0);
@@ -89,17 +89,17 @@ class TronAccount {
   async queryBalances() {
     const nativeTokenName = "TRX";
     // get TRX balance
-    const trxRawBalance = await this.account.trx.getBalance(this.address);
-    const nativeTokenBalance = this.account.fromSun(trxRawBalance);
+    const trxRawBalance = await this.tronweb.trx.getBalance(this.address);
+    const nativeTokenBalance = this.tronweb.fromSun(trxRawBalance);
     // [TODO] Replace by CG API
     const nativeTokenPrice = 0.155;
 
     // balance of TRC20 USDT
-    const usdtContract = await this.account.contract().at(TRC20_USDT_ADDRESS);
+    const usdtContract = await this.tronweb.contract().at(TRC20_USDT_ADDRESS);
     const usdtRawBalance = await usdtContract.methods
       .balanceOf(this.address)
       .call();
-    const usdtBalance = this.account.fromSun(usdtRawBalance);
+    const usdtBalance = this.tronweb.fromSun(usdtRawBalance);
     // [TODO] Replace by CG API
     const usdtPrice = 1.0;
 
@@ -151,7 +151,7 @@ class TronAccount {
 
   async populateTransferToken(token, to, value) {
     if (!token) {
-      return await this.account.transactionBuilder.sendTrx(
+      return await this.tronweb.transactionBuilder.sendTrx(
         to,
         value,
         this.address
@@ -159,8 +159,8 @@ class TronAccount {
     }
 
     const { transaction } =
-      await this.account.transactionBuilder.triggerSmartContract(
-        this.account.address.toHex(token),
+      await this.tronweb.transactionBuilder.triggerSmartContract(
+        this.tronweb.address.toHex(token),
         "transfer(address,uint256)",
         {
           feeLimit: 100_000_000,
@@ -178,9 +178,9 @@ class TronAccount {
   // it returns estimated consumption of [bandwidth, energy]
   async estimateGas(token, to, value) {
     const unsignedTxn = await this.populateTransferToken(token, to, value);
-    const { raw_data_hex, signature } = await this.account.trx.sign(
+    const { raw_data_hex, signature } = await this.tronweb.trx.sign(
       unsignedTxn,
-      this.account.defaultPrivateKey
+      this.tronweb.defaultPrivateKey
     );
     const bandwidth =
       9 +
@@ -195,8 +195,8 @@ class TronAccount {
 
     // estimate energy for TRC20 transfer
     const { energy_used } =
-      await this.account.transactionBuilder.triggerConstantContract(
-        this.account.address.toHex(token),
+      await this.tronweb.transactionBuilder.triggerConstantContract(
+        this.tronweb.address.toHex(token),
         "transfer(address,uint256)",
         {},
         [
@@ -210,11 +210,11 @@ class TronAccount {
   }
 
   async execute(rawTxn) {
-    const signedTxn = await this.account.trx.sign(
+    const signedTxn = await this.tronweb.trx.sign(
       rawTxn,
-      this.account.defaultPrivateKey
+      this.tronweb.defaultPrivateKey
     );
-    const result = await this.account.trx.sendRawTransaction(signedTxn);
+    const result = await this.tronweb.trx.sendRawTransaction(signedTxn);
     return result;
   }
 }

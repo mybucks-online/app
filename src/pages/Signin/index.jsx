@@ -14,7 +14,6 @@ import { StoreContext } from "@mybucks/contexts/Store";
 import { Box } from "@mybucks/components/Containers";
 import Button from "@mybucks/components/Button";
 import Input from "@mybucks/components/Input";
-import Checkbox from "@mybucks/components/Checkbox";
 import Progress from "@mybucks/components/Progress";
 import { Label } from "@mybucks/components/Label";
 import { H1 } from "@mybucks/components/Texts";
@@ -28,7 +27,6 @@ const TEST_PASSCODE = "223356";
 
 const TEST_PASSWORD = "TexamplePassword34%";
 const TEST_PASSCODE = "22346b";
-
 
 const Container = styled.div`
   max-width: 40.5rem;
@@ -95,18 +93,10 @@ const Caption = styled.p`
   `}
 `;
 
-const CheckboxesWrapper = styled.div`
-  margin: 1rem 0;
-  display: flex;
-  flex-wrap: wrap;
-
-  & > div {
-    min-width: 50%;
-  }
-
-  ${media.sm`
-    flex-direction: column;
-  `}
+const ErrorMessage = styled.div`
+  margin-top: ${({ theme }) => theme.sizes.base};
+  font-size: ${({ theme }) => theme.sizes.sm};
+  color: ${({ theme }) => theme.colors.error};
 `;
 
 const ProgressWrapper = styled.div`
@@ -129,6 +119,10 @@ const Notice = styled.p`
   color: ${({ theme }) => theme.colors.gray200};
 `;
 
+const SubmitButton = styled(Button)`
+  margin-top: ${({ theme }) => theme.sizes.xl};
+`;
+
 const SignIn = () => {
   const { setup } = useContext(StoreContext);
 
@@ -148,14 +142,14 @@ const SignIn = () => {
     () => generateSalt(password, passcode),
     [password, passcode]
   );
-  const hasMinLength = useMemo(
+  const hasMinLengthPassword = useMemo(
     () => password.length >= PASSWORD_MIN_LENGTH,
     [password]
   );
   const hasLowercase = useMemo(() => /[a-z]/.test(password), [password]);
   const hasUppercase = useMemo(() => /[A-Z]/.test(password), [password]);
   const hasNumbers = useMemo(() => /\d/.test(password), [password]);
-  const hasSpecialChars = useMemo(
+  const hasSymbol = useMemo(
     () => /[ !"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]/.test(password),
     [password]
   );
@@ -173,14 +167,42 @@ const SignIn = () => {
       disabled ||
       !password ||
       !passcode ||
-      !hasMinLength ||
+      !hasMinLengthPassword ||
       !hasLowercase ||
       !hasUppercase ||
       !hasNumbers ||
-      !hasSpecialChars ||
+      !hasSymbol ||
       !hasMatchedPassword ||
       !hasValidPasscodeLength,
     [[password, passwordConfirm, passcode, disabled]]
+  );
+
+  const errorMessage = useMemo(
+    () =>
+      !password && !passwordConfirm && !passcode
+        ? ""
+        : !password
+        ? "No password"
+        : !hasLowercase
+        ? "Password: no lowercase"
+        : !hasUppercase
+        ? "Password: no uppercase"
+        : !hasNumbers
+        ? "Password: no numbers"
+        : !hasSymbol
+        ? "Password: no symbol"
+        : !hasMinLengthPassword
+        ? "Password: too short (< " + PASSWORD_MIN_LENGTH + ")"
+        : !passwordConfirm
+        ? "No confirm password"
+        : !hasMatchedPassword
+        ? "Password mismatch"
+        : !passcode
+        ? "No passcode"
+        : !hasValidPasscodeLength
+        ? "Passcode too short (< " + PASSCODE_MIN_LENGTH + ")"
+        : "",
+    [password, passwordConfirm, passcode]
   );
 
   const onSubmit = async () => {
@@ -272,33 +294,15 @@ const SignIn = () => {
             />
           </div>
 
-          <CheckboxesWrapper>
-            <Checkbox id="min-length" value={hasMinLength}>
-              Password length: {PASSWORD_MIN_LENGTH}~{PASSWORD_MAX_LENGTH}
-            </Checkbox>
-            <Checkbox id="uppercase" value={hasUppercase}>
-              Uppercase
-            </Checkbox>
-            <Checkbox id="lowercase" value={hasLowercase}>
-              Lowercase
-            </Checkbox>
-            <Checkbox id="number" value={hasNumbers}>
-              Number
-            </Checkbox>
-            <Checkbox id="special" value={hasSpecialChars}>
-              Symbol
-            </Checkbox>
-            <Checkbox id="match-password" value={hasMatchedPassword}>
-              Match password
-            </Checkbox>
-            <Checkbox id="passcode-length" value={hasValidPasscodeLength}>
-              Passcode length: {PASSCODE_MIN_LENGTH}~{PASSCODE_MAX_LENGTH}
-            </Checkbox>
-          </CheckboxesWrapper>
+          {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
 
-          <Button onClick={onSubmit} disabled={hasInvalidInput} $size="block">
+          <SubmitButton
+            onClick={onSubmit}
+            disabled={hasInvalidInput}
+            $size="block"
+          >
             Open
-          </Button>
+          </SubmitButton>
         </Box>
       </Container>
 

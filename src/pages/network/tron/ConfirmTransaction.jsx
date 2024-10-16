@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import { StoreContext } from "@mybucks/contexts/Store";
 import { ethers } from "ethers";
 import styled from "styled-components";
@@ -21,7 +21,7 @@ const NavsWrapper = styled.div`
 
 const TransactionDetails = styled.div`
   word-break: break-all;
-  margin-bottom: ${({ theme }) => theme.sizes.xl};
+  margin-bottom: ${({ theme }) => theme.sizes.xs};
   font-size: ${({ theme }) => theme.sizes.sm};
   font-weight: ${({ theme }) => theme.weights.base};
   line-height: 140%;
@@ -35,14 +35,12 @@ const TransactionItem = styled.span`
 
 const ResourcesWarning = styled.div`
   word-break: break-word;
-  padding: ${({ theme }) => theme.sizes.xs};
   border-radius: ${({ theme }) => theme.sizes.x3s};
-  margin-bottom: ${({ theme }) => theme.sizes.xl};
+  margin-bottom: ${({ theme }) => theme.sizes.x2l};
   font-size: ${({ theme }) => theme.sizes.sm};
   font-weight: ${({ theme }) => theme.weights.base};
   line-height: 140%;
-  background-color: ${({ theme }) => theme.colors.gray200};
-  color: ${({ theme }) => theme.colors.gray25};
+  color: ${({ theme }) => theme.colors.gray200};
 `;
 
 const InvalidTransfer = styled.div`
@@ -82,6 +80,9 @@ const Button = styled(BaseButton)`
   `}
 `;
 
+const BANDWIDTH_PRICE = 1000; // 1000 Sun
+const ENERGY_PRICE = 210; // 210 Sun
+
 const ConfirmTransaction = ({
   token,
   recipient,
@@ -92,15 +93,18 @@ const ConfirmTransaction = ({
   onSuccess,
   onReject,
 }) => {
-  const { account, fetchBalances, nativeTokenName, nativeTokenPrice } =
+  const { account, nativeTokenBalance, fetchBalances } =
     useContext(StoreContext);
-
-  const [bandwidthEstimation, setBandwidthEstimation] = useState(0);
-  const [energyEstimation, setEnergyEstimation] = useState(0);
-  const [trxBurntEstimation, setTrxBurntEstimation] = useState(0);
-
   const [hasError, setHasError] = useState(false);
   const [pending, setPending] = useState(false);
+
+  const trxBurntEstimation = useMemo(
+    () =>
+      account.tronweb.fromSun(
+        bandwidth * BANDWIDTH_PRICE + energy * ENERGY_PRICE
+      ),
+    [bandwidth, energy]
+  );
 
   const confirm = async () => {
     setPending(true);
@@ -129,7 +133,6 @@ const ConfirmTransaction = ({
 
       <Box>
         <H3>Confirm transaction</H3>
-
         <TransactionDetails>
           <p>
             <TransactionItem>To:</TransactionItem> {recipient}
@@ -140,19 +143,25 @@ const ConfirmTransaction = ({
             {token.contractTickerSymbol}
           </p>
         </TransactionDetails>
-
         <TransactionDetails>
           <p>
-            <TransactionItem>Consumption:</TransactionItem> {bandwidth} Bandwidth
-            + {energy} Energy
+            <TransactionItem>Consumption:</TransactionItem> {bandwidth}{" "}
+            Bandwidth + {energy} Energy, ≈ {trxBurntEstimation} TRX
           </p>
         </TransactionDetails>
-
         <ResourcesWarning>
           If your bandwidth or energy is insufficient, the remaining fee should
           be paid in TRX.
         </ResourcesWarning>
 
+        {Number(trxBurntEstimation) > Number(nativeTokenBalance) && (
+          <InvalidTransfer>
+            <img src={InfoRedIcon} />
+            <span>
+              The transaction may fail due to insufficient TRX balance.
+            </span>
+          </InvalidTransfer>
+        )}
         {hasError ? (
           <InvalidTransfer>
             <img src={InfoRedIcon} />
@@ -161,7 +170,6 @@ const ConfirmTransaction = ({
         ) : (
           ""
         )}
-
         <ButtonsWrapper>
           <Button onClick={confirm} disabled={pending | hasError}>
             Confirm
