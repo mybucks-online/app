@@ -172,6 +172,10 @@ const AddressLink = styled(Link)`
   `}
 `;
 
+const ErrorRefLink = styled.a`
+  text-decoration: underline;
+`;
+
 const Token = () => {
   const [hasErrorInput, setHasErrorInput] = useState(false);
   const [confirming, setConfirming] = useState(false);
@@ -182,7 +186,7 @@ const Token = () => {
   const [amount, setAmount] = useState(0);
 
   const [invalidRecipientAddress, setInvalidRecipientAddress] = useState(false);
-  const [recipientActivated, setRecipientActivated] = useState(false);
+  const [recipientActivated, setRecipientActivated] = useState(true);
 
   const [bandwidthEstimation, setBandwidthEstimation] = useState(0);
   const [energyEstimation, setEnergyEstimation] = useState(0);
@@ -291,6 +295,7 @@ const Token = () => {
         token={token}
         recipient={recipient}
         amount={amount}
+        recipientActivated={recipientActivated}
         bandwidth={bandwidthEstimation}
         energy={energyEstimation}
         transaction={transaction}
@@ -393,10 +398,18 @@ const Token = () => {
             <img src={InfoRedIcon} />
             <span>Invalid address</span>
           </InvalidTransfer>
-        ) : !recipientActivated ? (
+        ) : !recipientActivated && !token.nativeToken ? (
           <InvalidTransfer>
             <img src={InfoRedIcon} />
-            <span>Recipient is not activated</span>
+            <span>
+              Recipient is not activated.{" "}
+              <ErrorRefLink
+                href="https://developers.tron.network/docs/account#account-activation"
+                target="_blank"
+              >
+                Learn More.
+              </ErrorRefLink>
+            </span>
           </InvalidTransfer>
         ) : hasErrorInput ? (
           <InvalidTransfer>

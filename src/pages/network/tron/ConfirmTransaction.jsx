@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { Container, Box } from "@mybucks/components/Containers";
 import BaseButton from "@mybucks/components/Button";
 import { H3 } from "@mybucks/components/Texts";
+import Link from "@mybucks/components/Link";
 import media from "@mybucks/styles/media";
 
 import BackIcon from "@mybucks/assets/icons/back.svg";
@@ -39,7 +40,7 @@ const ResourcesWarning = styled.div`
   margin-bottom: ${({ theme }) => theme.sizes.x2l};
   font-size: ${({ theme }) => theme.sizes.sm};
   font-weight: ${({ theme }) => theme.weights.base};
-  line-height: 140%;
+  line-height: 160%;
   color: ${({ theme }) => theme.colors.gray200};
 `;
 
@@ -80,6 +81,16 @@ const Button = styled(BaseButton)`
   `}
 `;
 
+const LearnMoreLink = styled(Link)`
+  font-size: ${({ theme }) => theme.sizes.sm};
+  font-weight: ${({ theme }) => theme.weights.base};
+  line-height: 140%;
+`;
+
+const ErrorRefLink = styled.a`
+  text-decoration: underline;
+`;
+
 const BANDWIDTH_PRICE = 1000; // 1000 Sun
 const ENERGY_PRICE = 210; // 210 Sun
 
@@ -87,6 +98,7 @@ const ConfirmTransaction = ({
   token,
   recipient,
   amount,
+  recipientActivated,
   transaction,
   bandwidth,
   energy,
@@ -117,6 +129,7 @@ const ConfirmTransaction = ({
       fetchBalances();
       onSuccess(txn);
     } catch (e) {
+      console.error(e);
       setHasError(true);
     }
 
@@ -150,10 +163,39 @@ const ConfirmTransaction = ({
           </p>
         </TransactionDetails>
         <ResourcesWarning>
-          If your bandwidth or energy is insufficient, the remaining fee should
-          be paid in TRX.
+          - If your bandwidth or energy is insufficient, the remaining fee
+          should be paid in TRX.&nbsp;
+          <LearnMoreLink
+            href="https://developers.tron.network/docs/resource-model"
+            target="_blank"
+          >
+            Learn More.
+          </LearnMoreLink>
+          <br />- Staking TRX will provide you with free bandwidth and
+          energy.&nbsp;
+          <LearnMoreLink
+            href="https://developers.tron.network/docs/staking-on-tron-network"
+            target="_blank"
+          >
+            Learn More.
+          </LearnMoreLink>
         </ResourcesWarning>
 
+        {!recipientActivated && (
+          <InvalidTransfer>
+            <img src={InfoRedIcon} />
+            <span>
+              Recipient is not activated. You will be charged account creation
+              fee.{" "}
+              <ErrorRefLink
+                href="https://developers.tron.network/docs/account#account-activation"
+                target="_blank"
+              >
+                Learn More.
+              </ErrorRefLink>
+            </span>
+          </InvalidTransfer>
+        )}
         {Number(trxBurntEstimation) > Number(nativeTokenBalance) && (
           <InvalidTransfer>
             <img src={InfoRedIcon} />

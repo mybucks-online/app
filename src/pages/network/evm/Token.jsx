@@ -180,6 +180,8 @@ const Token = () => {
 
   const [recipient, setRecipient] = useState("");
   const [amount, setAmount] = useState(0);
+  const [invalidRecipientAddress, setInvalidRecipientAddress] = useState(false);
+
   const [gasEstimation, setGasEstimation] = useState(0);
   const [gasEstimationValue, setGasEstimationValue] = useState(0);
   const [history, setHistory] = useState([]);
@@ -213,6 +215,7 @@ const Token = () => {
 
   useEffect(() => {
     const estimateGas = async () => {
+      setInvalidRecipientAddress(false);
       setGasEstimation(0);
       setGasEstimationValue(0);
       setTransaction(null);
@@ -222,7 +225,12 @@ const Token = () => {
         return;
       }
 
-      if (!account.isAddress(recipient) || amount < 0 || !token) {
+      if (!account.isAddress(recipient)) {
+        setInvalidRecipientAddress(true);
+        return;
+      }
+
+      if (amount < 0 || !token) {
         setHasErrorInput(true);
         return;
       }
@@ -359,7 +367,12 @@ const Token = () => {
           <MaxButton onClick={() => setAmount(balance)}>Max</MaxButton>
         </AmountWrapper>
 
-        {hasErrorInput ? (
+        {invalidRecipientAddress ? (
+          <InvalidTransfer>
+            <img src={InfoRedIcon} />
+            <span>Invalid address</span>
+          </InvalidTransfer>
+        ) : hasErrorInput ? (
           <InvalidTransfer>
             <img src={InfoRedIcon} />
             <span>Invalid transfer</span>
