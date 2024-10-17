@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import styled from "styled-components";
 
 import { StoreContext } from "@mybucks/contexts/Store";
-import TokenBalanceRow from "@mybucks/components/TokenBalanceRow";
+import TokenBalanceRow from "@mybucks/pages/network/common/TokenBalanceRow";
 import { truncate } from "@mybucks/lib/utils";
 import media from "@mybucks/styles/media";
 import { Container, Box } from "@mybucks/components/Containers";

@@ -1,6 +1,5 @@
 import React, { useContext, useMemo, useState } from "react";
 import { StoreContext } from "@mybucks/contexts/Store";
-import { ethers } from "ethers";
 import styled from "styled-components";
 
 import { Container, Box } from "@mybucks/components/Containers";
@@ -8,11 +7,14 @@ import BaseButton from "@mybucks/components/Button";
 import { H3 } from "@mybucks/components/Texts";
 import Link from "@mybucks/components/Link";
 import media from "@mybucks/styles/media";
+import {
+  TRON_TXN_POLLING_INTERVAL,
+  TRON_BANDWIDTH_PRICE,
+  TRON_ENERGY_PRICE,
+} from "@mybucks/lib/conf";
 
 import BackIcon from "@mybucks/assets/icons/back.svg";
 import InfoRedIcon from "@mybucks/assets/icons/info-red.svg";
-import InfoWhiteIcon from "@mybucks/assets/icons/info-white.svg";
-import InfoGreenIcon from "@mybucks/assets/icons/info-green.svg";
 
 const NavsWrapper = styled.div`
   width: 100%;
@@ -91,9 +93,6 @@ const ErrorRefLink = styled.a`
   text-decoration: underline;
 `;
 
-const BANDWIDTH_PRICE = 1000; // 1000 Sun
-const ENERGY_PRICE = 210; // 210 Sun
-
 const ConfirmTransaction = ({
   token,
   recipient,
@@ -108,28 +107,56 @@ const ConfirmTransaction = ({
   const { account, nativeTokenBalance, fetchBalances } =
     useContext(StoreContext);
   const [hasError, setHasError] = useState(false);
+  const [errorCode, setErrorCode] = useState("");
   const [pending, setPending] = useState(false);
 
   const trxBurntEstimation = useMemo(
     () =>
       account.tronweb.fromSun(
-        bandwidth * BANDWIDTH_PRICE + energy * ENERGY_PRICE
+        bandwidth * TRON_BANDWIDTH_PRICE + energy * TRON_ENERGY_PRICE
       ),
     [bandwidth, energy]
   );
 
+  const confirmTransactionResult = async (txid) => {
+    const maxAttempts = 3;
+    let attempts = 0;
+
+    while (attempts < maxAttempts) {
+      const { receipt } = await account.getTransactionInfo(txid);
+      if (receipt && receipt.result === "SUCCESS") {
+        return true;
+      }
+
+      attempts++;
+      await new Promise((resolve) =>
+        setTimeout(resolve, TRON_TXN_POLLING_INTERVAL)
+      );
+    }
+    return false;
+  };
+
   const confirm = async () => {
     setPending(true);
     setHasError(false);
+    setErrorCode("");
 
     try {
-      const txn = await account.execute(transaction);
+      const { result, code, txid } = await account.execute(transaction);
+      console.log("txn: ", result, code, txid);
+      if (!result) {
+        setErrorCode(code);
+        throw new Error("");
+      }
 
-      // update balances
-      fetchBalances();
-      onSuccess(txn);
+      const confirmed = await confirmTransactionResult(txid);
+      if (confirmed) {
+        fetchBalances();
+        onSuccess(txid);
+      } else {
+        throw new Error("");
+      }
     } catch (e) {
-      console.error(e);
       setHasError(true);
     }
 
@@ -196,18 +223,21 @@ const ConfirmTransaction = ({
             </span>
           </InvalidTransfer>
         )}
-        {Number(trxBurntEstimation) > Number(nativeTokenBalance) && (
-          <InvalidTransfer>
-            <img src={InfoRedIcon} />
-            <span>
-              The transaction may fail due to insufficient TRX balance.
-            </span>
-          </InvalidTransfer>
-        )}
+        {!hasError &&
+          Number(trxBurntEstimation) > Number(nativeTokenBalance) && (
+            <InvalidTransfer>
+              <img src={InfoRedIcon} />
+              <span>
+                The transaction may fail due to insufficient TRX balance.
+              </span>
+            </InvalidTransfer>
+          )}
         {hasError ? (
           <InvalidTransfer>
             <img src={InfoRedIcon} />
-            <span>Failed to execute! Please check balances.</span>
+            <span>
+              Failed to execute! {errorCode && <strong>{errorCode}</strong>}
+            </span>
           </InvalidTransfer>
         ) : (
           ""

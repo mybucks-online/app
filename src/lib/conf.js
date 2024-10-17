@@ -9,7 +9,7 @@ const abi = new ethers.AbiCoder();
 export const HASH_OPTIONS = {
   N: 32768, // CPU/memory cost parameter, 2^15
   r: 8, // block size parameter
-  p: import.meta.env.DEV ? 5 : 5, // parallelization parameter
+  p: import.meta.env.DEV ? 1 : 5, // parallelization parameter
   keyLen: 64,
 };
 export const PASSWORD_MIN_LENGTH = 12;
@@ -109,6 +109,13 @@ export const GAS_PRICE = Object.freeze({
   AVERAGE: "average",
   LOW: "low",
 });
+
+// After broadcasting raw transaction, it will monitor the confirmation result in every 1000ms
+export const TRON_TXN_POLLING_INTERVAL = 1000;
+// https://developers.tron.network/docs/resource-model#bandwidth
+export const TRON_BANDWIDTH_PRICE = 1000; // 1000 Sun
+export const TRON_ENERGY_PRICE = 210; // 210 Sun
+
 // Do not forget dividing by 100n in gas price calculation
 export const gasMultiplier = (option) =>
   option === GAS_PRICE.HIGH ? 175n : option === GAS_PRICE.AVERAGE ? 150n : 100n;

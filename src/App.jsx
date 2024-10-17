@@ -57,7 +57,8 @@ function Content() {
 }
 
 function App() {
-  const { account, connectivity, hash, loading, reset } = useContext(StoreContext);
+  const { account, connectivity, hash, loading, reset } =
+    useContext(StoreContext);
 
   useIdleTimer({
     onIdle: () => {
@@ -77,8 +78,11 @@ function App() {
       ) : !loading && !!account && !account.activated ? (
         <Warning>
           Please activate your account!{"  "}
-          <WarningLink href="https://developers.tron.network/docs/account#account-activation">
-            Learn more
+          <WarningLink
+            href="https://developers.tron.network/docs/account#account-activation"
+            target="_blank"
+          >
+            Learn More
           </WarningLink>
         </Warning>
       ) : (

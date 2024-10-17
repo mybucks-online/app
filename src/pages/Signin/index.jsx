@@ -20,13 +20,12 @@ import { H1 } from "@mybucks/components/Texts";
 import Modal from "@mybucks/components/Modal";
 import media from "@mybucks/styles/media";
 
-/*
+
 const TEST_PASSWORD = "randommPassword82^";
 const TEST_PASSCODE = "223356";
-*/
 
-const TEST_PASSWORD = "TexamplePassword34%";
-const TEST_PASSCODE = "22346b";
+// const TEST_PASSWORD = "TexamplePassword34%";
+// const TEST_PASSCODE = "22346b";
 
 const Container = styled.div`
   max-width: 40.5rem;

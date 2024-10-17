@@ -1,13 +1,10 @@
 import React, { useState, useEffect, useContext, useMemo } from "react";
 import { ethers } from "ethers";
 import styled from "styled-components";
-import { format } from "date-fns";
-import toFlexible from "toflexible";
 
 import { StoreContext } from "@mybucks/contexts/Store";
 import ConfirmTransaction from "./ConfirmTransaction";
 import MinedTransaction from "./MinedTransaction";
-import { truncate } from "@mybucks/lib/utils";
 import { LOADING_PLACEHOLDER } from "@mybucks/lib/conf";
 import {
   Container as BaseContainer,
@@ -17,8 +14,8 @@ import Avatar from "@mybucks/components/Avatar";
 import Button from "@mybucks/components/Button";
 import Input from "@mybucks/components/Input";
 import { Label } from "@mybucks/components/Label";
-import Link from "@mybucks/components/Link";
 import { H3 } from "@mybucks/components/Texts";
+import ActivityTable from "@mybucks/pages/network/common/ActivityTable";
 import media from "@mybucks/styles/media";
 
 import BackIcon from "@mybucks/assets/icons/back.svg";
@@ -138,40 +135,6 @@ const Submit = styled(Button)`
   `}
 `;
 
-const HistoryTable = styled.table`
-  width: 100%;
-
-  td {
-    padding-bottom: 4px;
-  }
-`;
-
-const AmountTd = styled.td`
-  color: ${({ theme, $in }) =>
-    $in ? theme.colors.success : theme.colors.error};
-`;
-
-const AddressTd = styled.td`
-  ${media.sm`
-    display: none;
-  `}
-`;
-
-const AddressLinkLg = styled(Link)`
-  text-decoration: none;
-  ${media.md`
-    display: none;
-  `}
-`;
-
-const AddressLink = styled(Link)`
-  text-decoration: none;
-  display: none;
-  ${media.md`
-    display: inherit;
-  `}
-`;
-
 const ErrorRefLink = styled.a`
   text-decoration: underline;
 `;
@@ -199,8 +162,6 @@ const Token = () => {
     selectToken,
     tokenBalances,
     fetchBalances,
-    nativeTokenName,
-    nativeTokenPrice,
     loading,
   } = useContext(StoreContext);
 
@@ -286,7 +247,7 @@ const Token = () => {
     setTransaction(null);
     setRecipient("");
     setAmount(0);
-    setTxnHash(txn.hash);
+    setTxnHash(txn);
   };
 
   if (confirming) {
@@ -437,65 +398,7 @@ const Token = () => {
       </Box>
 
       {history.length > 0 && (
-        <Box>
-          <H3>Activity</H3>
-
-          <HistoryTable>
-            <tbody>
-              {history.map((item) => (
-                <tr key={item.txnHash}>
-                  <td>{format(item.time, "MM/dd")}</td>
-                  <AddressTd>
-                    <AddressLinkLg
-                      href={account.linkOfAddress(
-                        item.transferType === "IN"
-                          ? item.fromAddress
-                          : item.toAddress
-                      )}
-                      target="_blank"
-                    >
-                      {item.transferType === "IN"
-                        ? item.fromAddress
-                        : item.toAddress}
-                    </AddressLinkLg>
-
-                    <AddressLink
-                      href={account.linkOfAddress(
-                        item.transferType === "IN"
-                          ? item.fromAddress
-                          : item.toAddress
-                      )}
-                      target="_blank"
-                    >
-                      {truncate(
-                        item.transferType === "IN"
-                          ? item.fromAddress
-                          : item.toAddress
-                      )}
-                    </AddressLink>
-                  </AddressTd>
-                  <AmountTd $in={item.transferType === "IN"}>
-                    {item.transferType === "IN" ? "+" : "-"}&nbsp;
-                    {toFlexible(
-                      parseFloat(
-                        ethers.formatUnits(item.amount, item.decimals)
-                      ),
-                      2
-                    )}
-                  </AmountTd>
-                  <td>
-                    <Link
-                      href={account.linkOfTransaction(item.txnHash)}
-                      target="_blank"
-                    >
-                      details
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </HistoryTable>
-        </Box>
+        <ActivityTable account={account} history={history} />
       )}
     </Container>
   );

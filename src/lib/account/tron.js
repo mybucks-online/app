@@ -217,6 +217,10 @@ class TronAccount {
     const result = await this.tronweb.trx.sendRawTransaction(signedTxn);
     return result;
   }
+
+  async getTransactionInfo(txid) {
+    return this.tronweb.trx.getTransactionInfo(txid);
+  }
 }
 
 export default TronAccount;
