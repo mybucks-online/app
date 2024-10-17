@@ -14,12 +14,12 @@ import { StoreContext } from "@mybucks/contexts/Store";
 import { Box } from "@mybucks/components/Containers";
 import Button from "@mybucks/components/Button";
 import Input from "@mybucks/components/Input";
+import Checkbox from "@mybucks/components/Checkbox";
 import Progress from "@mybucks/components/Progress";
 import { Label } from "@mybucks/components/Label";
 import { H1 } from "@mybucks/components/Texts";
 import Modal from "@mybucks/components/Modal";
 import media from "@mybucks/styles/media";
-
 
 const TEST_PASSWORD = "randommPassword82^";
 const TEST_PASSCODE = "223356";
@@ -92,10 +92,16 @@ const Caption = styled.p`
   `}
 `;
 
-const ErrorMessage = styled.div`
-  margin-top: ${({ theme }) => theme.sizes.base};
-  font-size: ${({ theme }) => theme.sizes.sm};
-  color: ${({ theme }) => theme.colors.error};
+const Checkboxes = styled.div`
+  margin: 1rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  & > div {
+    min-width: 50%;
+  }
+  ${media.sm`
+    flex-direction: column;
+  `}
 `;
 
 const ProgressWrapper = styled.div`
@@ -116,10 +122,6 @@ const Notice = styled.p`
   text-align: center;
   max-width: 16rem;
   color: ${({ theme }) => theme.colors.gray200};
-`;
-
-const SubmitButton = styled(Button)`
-  margin-top: ${({ theme }) => theme.sizes.xl};
 `;
 
 const SignIn = () => {
@@ -174,34 +176,6 @@ const SignIn = () => {
       !hasMatchedPassword ||
       !hasValidPasscodeLength,
     [[password, passwordConfirm, passcode, disabled]]
-  );
-
-  const errorMessage = useMemo(
-    () =>
-      !password && !passwordConfirm && !passcode
-        ? ""
-        : !password
-        ? "No password"
-        : !hasLowercase
-        ? "Password: no lowercase"
-        : !hasUppercase
-        ? "Password: no uppercase"
-        : !hasNumbers
-        ? "Password: no numbers"
-        : !hasSymbol
-        ? "Password: no symbol"
-        : !hasMinLengthPassword
-        ? "Password: too short (< " + PASSWORD_MIN_LENGTH + ")"
-        : !passwordConfirm
-        ? "No confirm password"
-        : !hasMatchedPassword
-        ? "Password mismatch"
-        : !passcode
-        ? "No passcode"
-        : !hasValidPasscodeLength
-        ? "Passcode too short (< " + PASSCODE_MIN_LENGTH + ")"
-        : "",
-    [password, passwordConfirm, passcode]
   );
 
   const onSubmit = async () => {
@@ -293,15 +267,33 @@ const SignIn = () => {
             />
           </div>
 
-          {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+          <Checkboxes>
+            <Checkbox id="uppercase" value={hasUppercase}>
+              Uppercase
+            </Checkbox>
+            <Checkbox id="lowercase" value={hasLowercase}>
+              Lowercase
+            </Checkbox>
+            <Checkbox id="number" value={hasNumbers}>
+              Number
+            </Checkbox>
+            <Checkbox id="special" value={hasSymbol}>
+              Symbol
+            </Checkbox>
+            <Checkbox id="min-length" value={hasMinLengthPassword}>
+              Password length: {PASSWORD_MIN_LENGTH}~{PASSWORD_MAX_LENGTH}
+            </Checkbox>
+            <Checkbox id="match-password" value={hasMatchedPassword}>
+              Match password
+            </Checkbox>
+            <Checkbox id="passcode-length" value={hasValidPasscodeLength}>
+              Passcode length: {PASSCODE_MIN_LENGTH}~{PASSCODE_MAX_LENGTH}
+            </Checkbox>
+          </Checkboxes>
 
-          <SubmitButton
-            onClick={onSubmit}
-            disabled={hasInvalidInput}
-            $size="block"
-          >
+          <Button onClick={onSubmit} disabled={hasInvalidInput} $size="block">
             Open
-          </SubmitButton>
+          </Button>
         </Box>
       </Container>
 
