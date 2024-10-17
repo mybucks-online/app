@@ -1,27 +1,26 @@
-import React, { useContext, useState, useMemo } from "react";
-import { StoreContext } from "@mybucks/contexts/Store";
-import { EVM_NETWORKS } from "@mybucks/lib/conf";
-import TokenRow from "./TokenRow";
+import { useContext } from "react";
+import { toast } from "react-toastify";
 import copy from "clipboard-copy";
 import { ethers } from "ethers";
-import { truncate } from "@mybucks/lib/utils";
-import { toast } from "react-toastify";
 import styled from "styled-components";
 import toFlexible from "toflexible";
-import media from "@mybucks/styles/media";
 
-import { Container, Box } from "@mybucks/components/Containers";
-import BaseButton from "@mybucks/components/Button";
-import Select from "@mybucks/components/Select";
-import Link from "@mybucks/components/Link";
-
+import ArrowUpIcon from "@mybucks/assets/icons/arrow-up.svg";
+import CopyIcon from "@mybucks/assets/icons/copy.svg";
+import HideIcon from "@mybucks/assets/icons/hide.svg";
+import LockIcon from "@mybucks/assets/icons/lock.svg";
 import RefreshIcon from "@mybucks/assets/icons/refresh.svg";
 import ShowIcon from "@mybucks/assets/icons/show.svg";
-import HideIcon from "@mybucks/assets/icons/hide.svg";
-import CopyIcon from "@mybucks/assets/icons/copy.svg";
-import GasIcon from "@mybucks/assets/icons/gas.svg";
-import LockIcon from "@mybucks/assets/icons/lock.svg";
-import ArrowUpIcon from "@mybucks/assets/icons/arrow-up.svg";
+import BaseButton from "@mybucks/components/Button";
+import { Box, Container } from "@mybucks/components/Containers";
+import { Label } from "@mybucks/components/Label";
+import Link from "@mybucks/components/Link";
+import NetworkSelector from "@mybucks/components/NetworkSelector";
+import { StoreContext } from "@mybucks/contexts/Store";
+import { BALANCE_PLACEHOLDER, LOADING_PLACEHOLDER } from "@mybucks/lib/conf";
+import { truncate } from "@mybucks/lib/utils";
+import TokenBalanceRow from "@mybucks/pages/network/common/TokenBalanceRow";
+import media from "@mybucks/styles/media";
 
 const NetworkAndFeatures = styled.div`
   display: flex;
@@ -42,16 +41,6 @@ const NetworkWrapper = styled.div`
   ${media.md`
     gap: ${({ theme }) => theme.sizes.base};
   `}
-`;
-
-const GasPriceWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  width: 6rem;
-  visibility: ${({ $show }) => ($show ? "visible" : "hidden")};
-  font-weight: ${({ theme }) => theme.weights.regular};
-  font-size: ${({ theme }) => theme.sizes.sm};
 `;
 
 const MenuButton = styled(BaseButton).attrs({ $size: "small" })`
@@ -133,10 +122,41 @@ const NativeBalance = styled.h3`
   text-align: center;
   font-weight: ${({ theme }) => theme.weights.highlight};
   font-size: ${({ theme }) => theme.sizes.x2l};
+  margin-bottom: ${({ theme }) => theme.sizes.xl};
 
   ${media.sm`
     font-size: ${({ theme }) => theme.sizes.xl};
   `}
+`;
+
+const BandwidthAndEnergy = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.sizes.base};
+  padding-top: ${({ theme }) => theme.sizes.xs};
+  border-top: 1px solid ${({ theme }) => theme.colors.gray200};
+  ${media.sm`
+    flex-direction: column;
+    gap: ${({ theme }) => theme.sizes.x3s};
+  `}
+`;
+
+const Bandwidth = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: ${({ theme }) => theme.sizes.x2l};
+  flex: 1;
+`;
+
+const BandwidthLabel = styled(Label)`
+  display: inline;
+  margin-bottom: 0;
+  color: ${({ theme }) => theme.colors.gray200};
+`;
+
+const BandwidthValue = styled(BandwidthLabel)`
+  color: ${({ theme }) => theme.colors.gray400};
 `;
 
 const TokensList = styled.div`
@@ -145,36 +165,30 @@ const TokensList = styled.div`
   gap: ${({ theme }) => theme.sizes.lg};
 `;
 
-const EvmHome = () => {
+const TronHome = () => {
   const {
     loading,
     openMenu,
+    showBalances,
+    setShowBalances,
     account,
+    network,
     chainId,
-    updateChain,
+    updateNetwork,
     reset,
     nativeTokenName,
     nativeTokenBalance,
     tokenBalances,
-    tick,
     fetchBalances,
     selectToken,
   } = useContext(StoreContext);
-  const [balancesVisible, setBalancesVisible] = useState(false);
-  const gasPrice = useMemo(
-    () => toFlexible(parseFloat(ethers.formatUnits(account.gasPrice, 9)), 2),
-    [tick, account]
-  );
 
-  const changeChain = (e) => {
-    updateChain(e.target.value);
-  };
   const copyAddress = () => {
     copy(account.address);
     toast("Address copied into clipboard.");
   };
   const toggleBalancesVisible = () => {
-    setBalancesVisible(!balancesVisible);
+    setShowBalances(!showBalances);
   };
   const close = () => {
     reset();
@@ -185,16 +199,11 @@ const EvmHome = () => {
     <Container>
       <NetworkAndFeatures>
         <NetworkWrapper>
-          <Select onChange={changeChain} value={chainId}>
-            {Object.values(EVM_NETWORKS).map(({ chainId: cId, label }) => (
-              <option key={cId} value={cId}>
-                {label}
-              </option>
-            ))}
-          </Select>
-          <GasPriceWrapper $show={gasPrice > 0}>
-            <img src={GasIcon} /> <span>{gasPrice} GWei</span>
-          </GasPriceWrapper>
+          <NetworkSelector
+            network={network}
+            chainId={chainId}
+            updateNetwork={updateNetwork}
+          />
         </NetworkWrapper>
 
         <MenuButton onClick={() => openMenu(true)}>
@@ -227,20 +236,46 @@ const EvmHome = () => {
               <img src={RefreshIcon} />
             </button>
             <button onClick={toggleBalancesVisible}>
-              <img src={balancesVisible ? HideIcon : ShowIcon} />
+              <img src={showBalances ? HideIcon : ShowIcon} />
             </button>
           </RefreshAndEyeballs>
         </AddressWrapper>
 
         <NativeBalance>
           {loading
-            ? "-----"
-            : !balancesVisible
-            ? "*****"
-            : Number(nativeTokenBalance).toFixed(4)}
+            ? LOADING_PLACEHOLDER
+            : !showBalances
+            ? BALANCE_PLACEHOLDER
+            : nativeTokenBalance > 0
+            ? toFlexible(nativeTokenBalance, 2)
+            : "0"}
           &nbsp;
           {nativeTokenName}
         </NativeBalance>
+
+        <BandwidthAndEnergy>
+          <Bandwidth>
+            <BandwidthLabel>Bandwidth:</BandwidthLabel>
+            <BandwidthValue>
+              {loading
+                ? LOADING_PLACEHOLDER
+                : account.freeBandwidth.toLocaleString()}{" "}
+              /{" "}
+              {loading
+                ? LOADING_PLACEHOLDER
+                : account.stakedBandwidth.toLocaleString()}
+            </BandwidthValue>
+          </Bandwidth>
+
+          <Bandwidth>
+            <BandwidthLabel>Energy:</BandwidthLabel>
+            <BandwidthValue>
+              {loading
+                ? LOADING_PLACEHOLDER
+                : account.energyBalance.toLocaleString()}
+            </BandwidthValue>
+          </Bandwidth>
+        </BandwidthAndEnergy>
       </PrimaryBox>
 
       <TokensList>
@@ -248,7 +283,7 @@ const EvmHome = () => {
           .filter((t) => !!t.nativeToken)
           .concat(tokenBalances.filter((t) => !t.nativeToken))
           .map((t) => (
-            <TokenRow
+            <TokenBalanceRow
               key={t.contractAddress}
               token={{
                 symbol: t.contractTickerSymbol,
@@ -257,7 +292,7 @@ const EvmHome = () => {
                 contract: t.contractAddress,
               }}
               balance={ethers.formatUnits(t.balance, t.contractDecimals)}
-              balanceVisible={balancesVisible}
+              showBalance={showBalances}
               quote={t.quote}
               onClick={() => selectToken(t.contractAddress)}
             />
@@ -267,4 +302,4 @@ const EvmHome = () => {
   );
 };
 
-export default EvmHome;
+export default TronHome;

@@ -1,14 +1,16 @@
 import { useContext } from "react";
-import styled from "styled-components";
-import { toast, ToastContainer } from "react-toastify";
 import { useIdleTimer } from "react-idle-timer";
+import { toast, ToastContainer } from "react-toastify";
+import styled from "styled-components";
 
-import { IDLE_DURATION, NETWORK_EVM } from "@mybucks/lib/conf";
 import { StoreContext } from "@mybucks/contexts/Store";
-import SignIn from "@mybucks/pages/Signin";
+import { IDLE_DURATION, NETWORK } from "@mybucks/lib/conf";
 import Menu from "@mybucks/pages/Menu";
-import EvmHome from "@mybucks/pages/evm/Home";
-import EvmToken from "@mybucks/pages/evm/Token";
+import EvmHome from "@mybucks/pages/network/evm/Home";
+import EvmToken from "@mybucks/pages/network/evm/Token";
+import TronHome from "@mybucks/pages/network/tron/Home";
+import TronToken from "@mybucks/pages/network/tron/Token";
+import SignIn from "@mybucks/pages/Signin";
 
 import "react-toastify/dist/ReactToastify.css";
 
@@ -16,13 +18,18 @@ const AppWrapper = styled.div`
   position: relative;
 `;
 
-const ConnectionIssue = styled.div`
+const Warning = styled.div`
   text-align: center;
   padding: 0.5rem;
-  background-color: ${({ theme }) => theme.colors.gray200};
+  background-color: ${({ theme }) => theme.colors.error};
   color: ${({ theme }) => theme.colors.gray25};
   font-size: ${({ theme }) => theme.sizes.base};
   font-weight: ${({ theme }) => theme.weights.regular};
+`;
+
+const WarningLink = styled.a`
+  text-decoration: underline;
+  font-weight: ${({ theme }) => theme.weights.highlight};
 `;
 
 function Content() {
@@ -35,16 +42,22 @@ function Content() {
   if (inMenu) {
     return <Menu />;
   }
-  if (network === NETWORK_EVM) {
+  if (network === NETWORK.EVM) {
     if (selectedTokenAddress) {
       return <EvmToken />;
     }
     return <EvmHome />;
+  } else if (network === NETWORK.TRON) {
+    if (selectedTokenAddress) {
+      return <TronToken />;
+    }
+    return <TronHome />;
   }
 }
 
 function App() {
-  const { connectivity, hash, reset } = useContext(StoreContext);
+  const { account, connectivity, hash, loading, reset } =
+    useContext(StoreContext);
 
   useIdleTimer({
     onIdle: () => {
@@ -59,10 +72,20 @@ function App() {
 
   return (
     <AppWrapper>
-      {!connectivity && (
-        <ConnectionIssue>
-          Please check your internet connection!
-        </ConnectionIssue>
+      {!connectivity ? (
+        <Warning>Please check your internet connection!</Warning>
+      ) : !loading && !!account && !account.activated ? (
+        <Warning>
+          Please activate your account!{"  "}
+          <WarningLink
+            href="https://developers.tron.network/docs/account#account-activation"
+            target="_blank"
+          >
+            Learn More
+          </WarningLink>
+        </Warning>
+      ) : (
+        ""
       )}
       <Content />
       <ToastContainer

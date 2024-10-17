@@ -1,15 +1,16 @@
-import React, { useContext, useState } from "react";
-import styled from "styled-components";
+import { useContext, useState } from "react";
 import { toast } from "react-toastify";
-import { StoreContext } from "@mybucks/contexts/Store";
-import Modal from "@mybucks/components/Modal";
-import Input from "@mybucks/components/Input";
-import { H3 } from "@mybucks/components/Texts";
+import styled from "styled-components";
+
 import Button from "@mybucks/components/Button";
+import Input from "@mybucks/components/Input";
+import Modal from "@mybucks/components/Modal";
+import { H3 } from "@mybucks/components/Texts";
+import { StoreContext } from "@mybucks/contexts/Store";
 import {
-  PASSCODE_MIN_LENGTH,
   PASSCODE_MAX_LENGTH,
   PASSCODE_MAX_TRY,
+  PASSCODE_MIN_LENGTH,
 } from "@mybucks/lib/conf";
 
 const Wrap = styled.div`

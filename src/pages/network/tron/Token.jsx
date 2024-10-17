@@ -1,30 +1,29 @@
-import React, { useState, useEffect, useContext, useMemo } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { ethers } from "ethers";
 import styled from "styled-components";
-import { format } from "date-fns";
-import toFlexible from "toflexible";
 
-import { StoreContext } from "@mybucks/contexts/Store";
-import ConfirmTransaction from "@mybucks/pages/evm/ConfirmTransaction";
-import MinedTransaction from "@mybucks/pages/evm/MinedTransaction";
-import { truncate } from "@mybucks/lib/utils";
-import BackIcon from "@mybucks/assets/icons/back.svg";
-import RefreshIcon from "@mybucks/assets/icons/refresh.svg";
 import ArrowUpRightIcon from "@mybucks/assets/icons/arrow-up-right.svg";
-import InfoRedIcon from "@mybucks/assets/icons/info-red.svg";
+import BackIcon from "@mybucks/assets/icons/back.svg";
 import InfoGreenIcon from "@mybucks/assets/icons/info-green.svg";
-
-import {
-  Container as BaseContainer,
-  Box as BaseBox,
-} from "@mybucks/components/Containers";
+import InfoRedIcon from "@mybucks/assets/icons/info-red.svg";
+import RefreshIcon from "@mybucks/assets/icons/refresh.svg";
 import Avatar from "@mybucks/components/Avatar";
 import Button from "@mybucks/components/Button";
+import {
+  Box as BaseBox,
+  Container as BaseContainer,
+} from "@mybucks/components/Containers";
 import Input from "@mybucks/components/Input";
 import { Label } from "@mybucks/components/Label";
-import Link from "@mybucks/components/Link";
 import { H3 } from "@mybucks/components/Texts";
+import { StoreContext } from "@mybucks/contexts/Store";
+import useDebounce from "@mybucks/hooks/useDebounce";
+import { LOADING_PLACEHOLDER } from "@mybucks/lib/conf";
+import ActivityTable from "@mybucks/pages/network/common/ActivityTable";
 import media from "@mybucks/styles/media";
+
+import ConfirmTransaction from "./ConfirmTransaction";
+import MinedTransaction from "./MinedTransaction";
 
 const Container = styled(BaseContainer)`
   display: flex;
@@ -137,38 +136,8 @@ const Submit = styled(Button)`
   `}
 `;
 
-const HistoryTable = styled.table`
-  width: 100%;
-
-  td {
-    padding-bottom: 4px;
-  }
-`;
-
-const AmountTd = styled.td`
-  color: ${({ theme, $in }) =>
-    $in ? theme.colors.success : theme.colors.error};
-`;
-
-const AddressTd = styled.td`
-  ${media.sm`
-    display: none;
-  `}
-`;
-
-const AddressLinkLg = styled(Link)`
-  text-decoration: none;
-  ${media.md`
-    display: none;
-  `}
-`;
-
-const AddressLink = styled(Link)`
-  text-decoration: none;
-  display: none;
-  ${media.md`
-    display: inherit;
-  `}
+const ErrorRefLink = styled.a`
+  text-decoration: underline;
 `;
 
 const Token = () => {
@@ -179,8 +148,13 @@ const Token = () => {
 
   const [recipient, setRecipient] = useState("");
   const [amount, setAmount] = useState(0);
-  const [gasEstimation, setGasEstimation] = useState(0);
-  const [gasEstimationValue, setGasEstimationValue] = useState(0);
+
+  const [invalidRecipientAddress, setInvalidRecipientAddress] = useState(false);
+  const [recipientActivated, setRecipientActivated] = useState(true);
+
+  const [bandwidthEstimation, setBandwidthEstimation] = useState(0);
+  const [energyEstimation, setEnergyEstimation] = useState(0);
+
   const [history, setHistory] = useState([]);
 
   const {
@@ -189,10 +163,9 @@ const Token = () => {
     selectToken,
     tokenBalances,
     fetchBalances,
-    nativeTokenName,
-    nativeTokenPrice,
     loading,
   } = useContext(StoreContext);
+
   const token = useMemo(
     () => tokenBalances.find((t) => t.contractAddress === selectedTokenAddress),
     [tokenBalances, selectedTokenAddress]
@@ -201,6 +174,64 @@ const Token = () => {
     () => ethers.formatUnits(token.balance, token.contractDecimals),
     [token]
   );
+
+  const { debounce } = useDebounce();
+  const estimateGas = debounce(async () => {
+    setBandwidthEstimation(0);
+    setEnergyEstimation(0);
+    setTransaction(null);
+    setHasErrorInput(false);
+    setRecipientActivated(true);
+    setInvalidRecipientAddress(false);
+
+    if (!recipient || !amount) {
+      return;
+    }
+
+    if (!account.isAddress(recipient)) {
+      setInvalidRecipientAddress(true);
+      return;
+    }
+
+    if (amount < 0 || !token) {
+      setHasErrorInput(true);
+      return;
+    }
+
+    try {
+      const isActivated = await account.isActivated(recipient);
+      setRecipientActivated(isActivated);
+      // trc20 can't be transferred to inactivated account
+      if (!token.nativeToken && !isActivated) {
+        setHasErrorInput(true);
+        return;
+      }
+
+      const txData = await account.populateTransferToken(
+        token.nativeToken ? "" : selectedTokenAddress,
+        recipient,
+        ethers.parseUnits(
+          amount.toString(),
+          token.nativeToken ? 6 : token.contractDecimals
+        )
+      );
+      setTransaction(txData);
+
+      const [bandwidth, energy] = await account.estimateGas(
+        token.nativeToken ? "" : selectedTokenAddress,
+        recipient,
+        ethers.parseUnits(
+          amount.toString(),
+          token.nativeToken ? 6 : token.contractDecimals
+        )
+      );
+      setBandwidthEstimation(bandwidth);
+      setEnergyEstimation(energy);
+      setHasErrorInput(false);
+    } catch (e) {
+      setHasErrorInput(true);
+    }
+  }, 500);
 
   useEffect(() => {
     if (!token.nativeToken) {
@@ -211,45 +242,6 @@ const Token = () => {
   }, []);
 
   useEffect(() => {
-    const estimateGas = async () => {
-      if (!recipient || !amount) {
-        setHasErrorInput(false);
-        setGasEstimation(0);
-        return;
-      }
-
-      if (!ethers.isAddress(recipient) || amount < 0 || !token) {
-        setHasErrorInput(true);
-        setGasEstimation(0);
-        return;
-      }
-
-      setHasErrorInput(false);
-      const txData = await account.populateTransferToken(
-        token.nativeToken ? "" : selectedTokenAddress,
-        recipient,
-        ethers.parseUnits(
-          amount.toString(),
-          token.nativeToken ? 18 : token.contractDecimals
-        )
-      );
-      setTransaction(txData);
-
-      try {
-        const gasAmount = await account.estimateGas(txData);
-        const gas = Number(
-          ethers.formatUnits(account.gasPrice * gasAmount, 18)
-        );
-        const value = gas * nativeTokenPrice;
-        setGasEstimation(gas.toFixed(6));
-        setGasEstimationValue(value.toFixed(6));
-      } catch (e) {
-        setGasEstimation("");
-        setGasEstimationValue("");
-        setHasErrorInput(true);
-      }
-    };
-
     estimateGas();
   }, [recipient, amount, token]);
 
@@ -258,13 +250,19 @@ const Token = () => {
     setTransaction(null);
     setRecipient("");
     setAmount(0);
-    setTxnHash(txn.hash);
+    setTxnHash(txn);
   };
 
   if (confirming) {
     return (
       <ConfirmTransaction
-        {...transaction}
+        token={token}
+        recipient={recipient}
+        amount={amount}
+        recipientActivated={recipientActivated}
+        bandwidth={bandwidthEstimation}
+        energy={energyEstimation}
+        transaction={transaction}
         onReject={() => setConfirming(false)}
         onSuccess={onSuccess}
       />
@@ -325,7 +323,7 @@ const Token = () => {
         </LogoAndLink>
 
         <TokenBalance>
-          {loading ? "---" : Number(balance).toFixed(4)}
+          {loading ? LOADING_PLACEHOLDER : Number(balance).toFixed(4)}
           &nbsp;
           {token.contractTickerSymbol}
         </TokenBalance>
@@ -359,17 +357,35 @@ const Token = () => {
           <MaxButton onClick={() => setAmount(balance)}>Max</MaxButton>
         </AmountWrapper>
 
-        {hasErrorInput ? (
+        {invalidRecipientAddress ? (
+          <InvalidTransfer>
+            <img src={InfoRedIcon} />
+            <span>Invalid address</span>
+          </InvalidTransfer>
+        ) : !recipientActivated && !token.nativeToken ? (
+          <InvalidTransfer>
+            <img src={InfoRedIcon} />
+            <span>
+              Recipient is not activated.{" "}
+              <ErrorRefLink
+                href="https://developers.tron.network/docs/account#account-activation"
+                target="_blank"
+              >
+                Learn More.
+              </ErrorRefLink>
+            </span>
+          </InvalidTransfer>
+        ) : hasErrorInput ? (
           <InvalidTransfer>
             <img src={InfoRedIcon} />
             <span>Invalid transfer</span>
           </InvalidTransfer>
-        ) : gasEstimation > 0 ? (
+        ) : bandwidthEstimation || energyEstimation ? (
           <EstimatedGasFee>
             <img src={InfoGreenIcon} />
             <span>
-              Estimated gas fee: {gasEstimation}&nbsp; {nativeTokenName} / $
-              {gasEstimationValue}
+              Estimated consumption: {bandwidthEstimation} Bandwidth{" "}
+              {energyEstimation > 0 ? `+ ${energyEstimation} Energy` : ""}
             </span>
           </EstimatedGasFee>
         ) : (
@@ -378,72 +394,14 @@ const Token = () => {
 
         <Submit
           onClick={() => setConfirming(true)}
-          disabled={hasErrorInput || gasEstimation === 0}
+          disabled={hasErrorInput || bandwidthEstimation === 0}
         >
           Submit
         </Submit>
       </Box>
 
       {history.length > 0 && (
-        <Box>
-          <H3>Activity</H3>
-
-          <HistoryTable>
-            <tbody>
-              {history.map((item) => (
-                <tr key={item.txnHash}>
-                  <td>{format(item.time, "MM/dd")}</td>
-                  <AddressTd>
-                    <AddressLinkLg
-                      href={account.linkOfAddress(
-                        item.transferType === "IN"
-                          ? item.fromAddress
-                          : item.toAddress
-                      )}
-                      target="_blank"
-                    >
-                      {item.transferType === "IN"
-                        ? item.fromAddress
-                        : item.toAddress}
-                    </AddressLinkLg>
-
-                    <AddressLink
-                      href={account.linkOfAddress(
-                        item.transferType === "IN"
-                          ? item.fromAddress
-                          : item.toAddress
-                      )}
-                      target="_blank"
-                    >
-                      {truncate(
-                        item.transferType === "IN"
-                          ? item.fromAddress
-                          : item.toAddress
-                      )}
-                    </AddressLink>
-                  </AddressTd>
-                  <AmountTd $in={item.transferType === "IN"}>
-                    {item.transferType === "IN" ? "+" : "-"}&nbsp;
-                    {toFlexible(
-                      parseFloat(
-                        ethers.formatUnits(item.amount, item.decimals)
-                      ),
-                      2
-                    )}
-                  </AmountTd>
-                  <td>
-                    <Link
-                      href={account.linkOfTransaction(item.txnHash)}
-                      target="_blank"
-                    >
-                      details
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </HistoryTable>
-        </Box>
+        <ActivityTable account={account} history={history} />
       )}
     </Container>
   );
