@@ -1,24 +1,25 @@
-import React, { useContext, useState, useMemo } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import { Buffer } from "buffer";
 import { scrypt } from "scrypt-js";
 import styled from "styled-components";
-import {
-  HASH_OPTIONS,
-  PASSWORD_MIN_LENGTH,
-  PASSWORD_MAX_LENGTH,
-  PASSCODE_MIN_LENGTH,
-  PASSCODE_MAX_LENGTH,
-  generateSalt,
-} from "@mybucks/lib/conf";
-import { StoreContext } from "@mybucks/contexts/Store";
-import { Box } from "@mybucks/components/Containers";
+
 import Button from "@mybucks/components/Button";
-import Input from "@mybucks/components/Input";
 import Checkbox from "@mybucks/components/Checkbox";
-import Progress from "@mybucks/components/Progress";
+import { Box } from "@mybucks/components/Containers";
+import Input from "@mybucks/components/Input";
 import { Label } from "@mybucks/components/Label";
-import { H1 } from "@mybucks/components/Texts";
 import Modal from "@mybucks/components/Modal";
+import Progress from "@mybucks/components/Progress";
+import { H1 } from "@mybucks/components/Texts";
+import { StoreContext } from "@mybucks/contexts/Store";
+import {
+  generateSalt,
+  HASH_OPTIONS,
+  PASSCODE_MAX_LENGTH,
+  PASSCODE_MIN_LENGTH,
+  PASSWORD_MAX_LENGTH,
+  PASSWORD_MIN_LENGTH,
+} from "@mybucks/lib/conf";
 import media from "@mybucks/styles/media";
 
 const TEST_PASSWORD = "randommPassword82^";

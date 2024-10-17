@@ -1,9 +1,9 @@
-import { ethers, Contract } from "ethers";
 import { CovalentClient } from "@covalenthq/client-sdk";
-import camelcaseKeys from "camelcase-keys";
 import { tokens as defaultTokensList } from "@sushiswap/default-token-list";
+import camelcaseKeys from "camelcase-keys";
+import { Contract, ethers } from "ethers";
 
-import { NETWORK, EVM_NETWORKS, getEvmPrivateKey } from "@mybucks/lib/conf";
+import { EVM_NETWORKS, getEvmPrivateKey, NETWORK } from "@mybucks/lib/conf";
 import IERC20 from "@mybucks/lib/erc20.json";
 
 class EvmAccount {

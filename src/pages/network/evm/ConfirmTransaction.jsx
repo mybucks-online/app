@@ -1,17 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
-import { StoreContext } from "@mybucks/contexts/Store";
 import { ethers } from "ethers";
 import styled from "styled-components";
 
-import { GAS_PRICE, gasMultiplier } from "@mybucks/lib/conf";
-import { Container, Box } from "@mybucks/components/Containers";
-import BaseButton from "@mybucks/components/Button";
-import { H3 } from "@mybucks/components/Texts";
-import media from "@mybucks/styles/media";
-
 import BackIcon from "@mybucks/assets/icons/back.svg";
-import InfoRedIcon from "@mybucks/assets/icons/info-red.svg";
 import InfoGreenIcon from "@mybucks/assets/icons/info-green.svg";
+import InfoRedIcon from "@mybucks/assets/icons/info-red.svg";
+import BaseButton from "@mybucks/components/Button";
+import { Box, Container } from "@mybucks/components/Containers";
+import { H3 } from "@mybucks/components/Texts";
+import { StoreContext } from "@mybucks/contexts/Store";
+import { GAS_PRICE, gasMultiplier } from "@mybucks/lib/conf";
+import media from "@mybucks/styles/media";
 
 const NavsWrapper = styled.div`
   width: 100%;

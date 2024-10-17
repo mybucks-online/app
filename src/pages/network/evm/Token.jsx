@@ -1,29 +1,29 @@
-import React, { useState, useEffect, useContext, useMemo } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { ethers } from "ethers";
 import styled from "styled-components";
 
-import { StoreContext } from "@mybucks/contexts/Store";
-import ConfirmTransaction from "./ConfirmTransaction";
-import MinedTransaction from "./MinedTransaction";
-import { LOADING_PLACEHOLDER } from "@mybucks/lib/conf";
-import {
-  Container as BaseContainer,
-  Box as BaseBox,
-} from "@mybucks/components/Containers";
+import ArrowUpRightIcon from "@mybucks/assets/icons/arrow-up-right.svg";
+import BackIcon from "@mybucks/assets/icons/back.svg";
+import InfoGreenIcon from "@mybucks/assets/icons/info-green.svg";
+import InfoRedIcon from "@mybucks/assets/icons/info-red.svg";
+import RefreshIcon from "@mybucks/assets/icons/refresh.svg";
 import Avatar from "@mybucks/components/Avatar";
 import Button from "@mybucks/components/Button";
+import {
+  Box as BaseBox,
+  Container as BaseContainer,
+} from "@mybucks/components/Containers";
 import Input from "@mybucks/components/Input";
 import { Label } from "@mybucks/components/Label";
-import media from "@mybucks/styles/media";
 import { H3 } from "@mybucks/components/Texts";
-import ActivityTable from "@mybucks/pages/network/common/ActivityTable";
+import { StoreContext } from "@mybucks/contexts/Store";
 import useDebounce from "@mybucks/hooks/useDebounce";
+import { LOADING_PLACEHOLDER } from "@mybucks/lib/conf";
+import ActivityTable from "@mybucks/pages/network/common/ActivityTable";
+import media from "@mybucks/styles/media";
 
-import BackIcon from "@mybucks/assets/icons/back.svg";
-import RefreshIcon from "@mybucks/assets/icons/refresh.svg";
-import ArrowUpRightIcon from "@mybucks/assets/icons/arrow-up-right.svg";
-import InfoRedIcon from "@mybucks/assets/icons/info-red.svg";
-import InfoGreenIcon from "@mybucks/assets/icons/info-green.svg";
+import ConfirmTransaction from "./ConfirmTransaction";
+import MinedTransaction from "./MinedTransaction";
 
 const Container = styled(BaseContainer)`
   display: flex;

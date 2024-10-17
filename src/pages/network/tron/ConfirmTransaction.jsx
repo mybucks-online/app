@@ -1,16 +1,15 @@
 import React, { useContext, useMemo, useState } from "react";
-import { StoreContext } from "@mybucks/contexts/Store";
 import styled from "styled-components";
-
-import { Container, Box } from "@mybucks/components/Containers";
-import BaseButton from "@mybucks/components/Button";
-import { H3 } from "@mybucks/components/Texts";
-import Link from "@mybucks/components/Link";
-import media from "@mybucks/styles/media";
-import { TRON_BANDWIDTH_PRICE, TRON_ENERGY_PRICE } from "@mybucks/lib/conf";
 
 import BackIcon from "@mybucks/assets/icons/back.svg";
 import InfoRedIcon from "@mybucks/assets/icons/info-red.svg";
+import BaseButton from "@mybucks/components/Button";
+import { Box, Container } from "@mybucks/components/Containers";
+import Link from "@mybucks/components/Link";
+import { H3 } from "@mybucks/components/Texts";
+import { StoreContext } from "@mybucks/contexts/Store";
+import { TRON_BANDWIDTH_PRICE, TRON_ENERGY_PRICE } from "@mybucks/lib/conf";
+import media from "@mybucks/styles/media";
 
 const NavsWrapper = styled.div`
   width: 100%;

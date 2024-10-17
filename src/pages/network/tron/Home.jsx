@@ -1,27 +1,26 @@
 import React, { useContext } from "react";
-import toFlexible from "toflexible";
+import { toast } from "react-toastify";
 import copy from "clipboard-copy";
 import { ethers } from "ethers";
-import { toast } from "react-toastify";
 import styled from "styled-components";
+import toFlexible from "toflexible";
 
-import { StoreContext } from "@mybucks/contexts/Store";
-import TokenBalanceRow from "@mybucks/pages/network/common/TokenBalanceRow";
-import { truncate } from "@mybucks/lib/utils";
-import media from "@mybucks/styles/media";
-import { Container, Box } from "@mybucks/components/Containers";
+import ArrowUpIcon from "@mybucks/assets/icons/arrow-up.svg";
+import CopyIcon from "@mybucks/assets/icons/copy.svg";
+import HideIcon from "@mybucks/assets/icons/hide.svg";
+import LockIcon from "@mybucks/assets/icons/lock.svg";
+import RefreshIcon from "@mybucks/assets/icons/refresh.svg";
+import ShowIcon from "@mybucks/assets/icons/show.svg";
 import BaseButton from "@mybucks/components/Button";
+import { Box, Container } from "@mybucks/components/Containers";
 import { Label } from "@mybucks/components/Label";
 import Link from "@mybucks/components/Link";
 import NetworkSelector from "@mybucks/components/NetworkSelector";
+import { StoreContext } from "@mybucks/contexts/Store";
 import { BALANCE_PLACEHOLDER, LOADING_PLACEHOLDER } from "@mybucks/lib/conf";
-
-import RefreshIcon from "@mybucks/assets/icons/refresh.svg";
-import ShowIcon from "@mybucks/assets/icons/show.svg";
-import HideIcon from "@mybucks/assets/icons/hide.svg";
-import CopyIcon from "@mybucks/assets/icons/copy.svg";
-import LockIcon from "@mybucks/assets/icons/lock.svg";
-import ArrowUpIcon from "@mybucks/assets/icons/arrow-up.svg";
+import { truncate } from "@mybucks/lib/utils";
+import TokenBalanceRow from "@mybucks/pages/network/common/TokenBalanceRow";
+import media from "@mybucks/styles/media";
 
 const NetworkAndFeatures = styled.div`
   display: flex;

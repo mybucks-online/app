@@ -1,5 +1,5 @@
-import { NETWORK, EVM_NETWORKS } from "@mybucks/lib/conf";
 import Select from "@mybucks/components/Select";
+import { EVM_NETWORKS, NETWORK } from "@mybucks/lib/conf";
 
 const NetworkSelector = ({ network, chainId, updateNetwork }) => {
   const onChange = (e) => {

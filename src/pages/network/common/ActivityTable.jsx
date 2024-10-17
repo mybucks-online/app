@@ -1,13 +1,13 @@
 import React from "react";
+import { format } from "date-fns";
 import { ethers } from "ethers";
 import styled from "styled-components";
-import { format } from "date-fns";
 import toFlexible from "toflexible";
 
-import { truncate } from "@mybucks/lib/utils";
 import { Box as BaseBox } from "@mybucks/components/Containers";
 import Link from "@mybucks/components/Link";
 import { H3 } from "@mybucks/components/Texts";
+import { truncate } from "@mybucks/lib/utils";
 import media from "@mybucks/styles/media";
 
 const Box = styled(BaseBox)`

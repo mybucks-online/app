@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import { Container, Box as BaseBox } from "@mybucks/components/Containers";
-import { H3 } from "@mybucks/components/Texts";
-import Link from "@mybucks/components/Link";
-import { truncate } from "@mybucks/lib/utils";
 
 import BackIcon from "@mybucks/assets/icons/back.svg";
 import SuccessIcon from "@mybucks/assets/icons/success.svg";
+import { Box as BaseBox, Container } from "@mybucks/components/Containers";
+import Link from "@mybucks/components/Link";
+import { H3 } from "@mybucks/components/Texts";
+import { truncate } from "@mybucks/lib/utils";
 
 const NavsWrapper = styled.div`
   width: 100%;

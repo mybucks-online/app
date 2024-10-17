@@ -1,17 +1,16 @@
 import { useContext } from "react";
-import styled from "styled-components";
-import { toast, ToastContainer } from "react-toastify";
 import { useIdleTimer } from "react-idle-timer";
+import { toast, ToastContainer } from "react-toastify";
+import styled from "styled-components";
 
-import { IDLE_DURATION, NETWORK } from "@mybucks/lib/conf";
 import { StoreContext } from "@mybucks/contexts/Store";
-
-import SignIn from "@mybucks/pages/Signin";
+import { IDLE_DURATION, NETWORK } from "@mybucks/lib/conf";
 import Menu from "@mybucks/pages/Menu";
 import EvmHome from "@mybucks/pages/network/evm/Home";
 import EvmToken from "@mybucks/pages/network/evm/Token";
 import TronHome from "@mybucks/pages/network/tron/Home";
 import TronToken from "@mybucks/pages/network/tron/Token";
+import SignIn from "@mybucks/pages/Signin";
 
 import "react-toastify/dist/ReactToastify.css";
 

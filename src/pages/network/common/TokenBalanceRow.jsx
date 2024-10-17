@@ -1,8 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import toFlexible from "toflexible";
-import { BALANCE_PLACEHOLDER } from "@mybucks/lib/conf";
+
 import Avatar from "@mybucks/components/Avatar";
+import { BALANCE_PLACEHOLDER } from "@mybucks/lib/conf";
 
 /*
   token: 
