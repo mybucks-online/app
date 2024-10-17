@@ -18,6 +18,7 @@ module.exports = {
     "import",
   ],
   rules: {
+    "react/react-in-jsx-scope": "off",
     "react/jsx-no-target-blank": "off",
     "react-refresh/only-export-components": [
       "warn",

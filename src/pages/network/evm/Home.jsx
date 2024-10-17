@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from "react";
+import { useContext, useMemo } from "react";
 import { toast } from "react-toastify";
 import copy from "clipboard-copy";
 import { ethers } from "ethers";

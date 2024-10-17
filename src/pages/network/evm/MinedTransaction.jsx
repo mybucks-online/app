@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 
 import BackIcon from "@mybucks/assets/icons/back.svg";
