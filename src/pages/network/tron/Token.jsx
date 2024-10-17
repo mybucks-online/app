@@ -17,6 +17,7 @@ import { Label } from "@mybucks/components/Label";
 import { H3 } from "@mybucks/components/Texts";
 import ActivityTable from "@mybucks/pages/network/common/ActivityTable";
 import media from "@mybucks/styles/media";
+import useDebounce from "@mybucks/hooks/useDebounce";
 
 import BackIcon from "@mybucks/assets/icons/back.svg";
 import RefreshIcon from "@mybucks/assets/icons/refresh.svg";
@@ -174,6 +175,64 @@ const Token = () => {
     [token]
   );
 
+  const { debounce } = useDebounce();
+  const estimateGas = debounce(async () => {
+    setBandwidthEstimation(0);
+    setEnergyEstimation(0);
+    setTransaction(null);
+    setHasErrorInput(false);
+    setRecipientActivated(true);
+    setInvalidRecipientAddress(false);
+
+    if (!recipient || !amount) {
+      return;
+    }
+
+    if (!account.isAddress(recipient)) {
+      setInvalidRecipientAddress(true);
+      return;
+    }
+
+    if (amount < 0 || !token) {
+      setHasErrorInput(true);
+      return;
+    }
+
+    try {
+      const isActivated = await account.isActivated(recipient);
+      setRecipientActivated(isActivated);
+      // trc20 can't be transferred to inactivated account
+      if (!token.nativeToken && !isActivated) {
+        setHasErrorInput(true);
+        return;
+      }
+
+      const txData = await account.populateTransferToken(
+        token.nativeToken ? "" : selectedTokenAddress,
+        recipient,
+        ethers.parseUnits(
+          amount.toString(),
+          token.nativeToken ? 6 : token.contractDecimals
+        )
+      );
+      setTransaction(txData);
+
+      const [bandwidth, energy] = await account.estimateGas(
+        token.nativeToken ? "" : selectedTokenAddress,
+        recipient,
+        ethers.parseUnits(
+          amount.toString(),
+          token.nativeToken ? 6 : token.contractDecimals
+        )
+      );
+      setBandwidthEstimation(bandwidth);
+      setEnergyEstimation(energy);
+      setHasErrorInput(false);
+    } catch (e) {
+      setHasErrorInput(true);
+    }
+  }, 500);
+
   useEffect(() => {
     if (!token.nativeToken) {
       account.queryTokenHistory(selectedTokenAddress).then((result) => {
@@ -183,63 +242,6 @@ const Token = () => {
   }, []);
 
   useEffect(() => {
-    const estimateGas = async () => {
-      setBandwidthEstimation(0);
-      setEnergyEstimation(0);
-      setTransaction(null);
-      setHasErrorInput(false);
-      setRecipientActivated(true);
-      setInvalidRecipientAddress(false);
-
-      if (!recipient && !amount) {
-        return;
-      }
-
-      if (!account.isAddress(recipient)) {
-        setInvalidRecipientAddress(true);
-        return;
-      }
-
-      if (amount < 0 || !token) {
-        setHasErrorInput(true);
-        return;
-      }
-
-      try {
-        const isActivated = await account.isActivated(recipient);
-        setRecipientActivated(isActivated);
-        // trc20 can't be transferred to inactivated account
-        if (!token.nativeToken && !isActivated) {
-          setHasErrorInput(true);
-          return;
-        }
-
-        const txData = await account.populateTransferToken(
-          token.nativeToken ? "" : selectedTokenAddress,
-          recipient,
-          ethers.parseUnits(
-            amount.toString(),
-            token.nativeToken ? 6 : token.contractDecimals
-          )
-        );
-        setTransaction(txData);
-
-        const [bandwidth, energy] = await account.estimateGas(
-          token.nativeToken ? "" : selectedTokenAddress,
-          recipient,
-          ethers.parseUnits(
-            amount.toString(),
-            token.nativeToken ? 6 : token.contractDecimals
-          )
-        );
-        setBandwidthEstimation(bandwidth);
-        setEnergyEstimation(energy);
-        setHasErrorInput(false);
-      } catch (e) {
-        setHasErrorInput(true);
-      }
-    };
-
     estimateGas();
   }, [recipient, amount, token]);
 

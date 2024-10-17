@@ -17,6 +17,7 @@ import { Label } from "@mybucks/components/Label";
 import media from "@mybucks/styles/media";
 import { H3 } from "@mybucks/components/Texts";
 import ActivityTable from "@mybucks/pages/network/common/ActivityTable";
+import useDebounce from "@mybucks/hooks/useDebounce";
 
 import BackIcon from "@mybucks/assets/icons/back.svg";
 import RefreshIcon from "@mybucks/assets/icons/refresh.svg";
@@ -168,6 +169,50 @@ const Token = () => {
     [token]
   );
 
+  const { debounce } = useDebounce();
+  const estimateGas = debounce(async () => {
+    setInvalidRecipientAddress(false);
+    setGasEstimation(0);
+    setGasEstimationValue(0);
+    setTransaction(null);
+    setHasErrorInput(false);
+
+    if (!recipient || !amount) {
+      return;
+    }
+
+    if (!account.isAddress(recipient)) {
+      setInvalidRecipientAddress(true);
+      return;
+    }
+
+    if (amount < 0 || !token) {
+      setHasErrorInput(true);
+      return;
+    }
+
+    try {
+      const txData = await account.populateTransferToken(
+        token.nativeToken ? "" : selectedTokenAddress,
+        recipient,
+        ethers.parseUnits(
+          amount.toString(),
+          token.nativeToken ? 18 : token.contractDecimals
+        )
+      );
+      setTransaction(txData);
+
+      const gasAmount = await account.estimateGas(txData);
+      const gas = Number(ethers.formatUnits(account.gasPrice * gasAmount, 18));
+      const value = gas * nativeTokenPrice;
+      setGasEstimation(gas.toFixed(6));
+      setGasEstimationValue(value.toFixed(6));
+      setHasErrorInput(false);
+    } catch (e) {
+      setHasErrorInput(true);
+    }
+  }, 500);
+
   useEffect(() => {
     if (!token.nativeToken) {
       account.queryTokenHistory(selectedTokenAddress).then((result) => {
@@ -177,51 +222,6 @@ const Token = () => {
   }, []);
 
   useEffect(() => {
-    const estimateGas = async () => {
-      setInvalidRecipientAddress(false);
-      setGasEstimation(0);
-      setGasEstimationValue(0);
-      setTransaction(null);
-      setHasErrorInput(false);
-
-      if (!recipient || !amount) {
-        return;
-      }
-
-      if (!account.isAddress(recipient)) {
-        setInvalidRecipientAddress(true);
-        return;
-      }
-
-      if (amount < 0 || !token) {
-        setHasErrorInput(true);
-        return;
-      }
-
-      try {
-        const txData = await account.populateTransferToken(
-          token.nativeToken ? "" : selectedTokenAddress,
-          recipient,
-          ethers.parseUnits(
-            amount.toString(),
-            token.nativeToken ? 18 : token.contractDecimals
-          )
-        );
-        setTransaction(txData);
-
-        const gasAmount = await account.estimateGas(txData);
-        const gas = Number(
-          ethers.formatUnits(account.gasPrice * gasAmount, 18)
-        );
-        const value = gas * nativeTokenPrice;
-        setGasEstimation(gas.toFixed(6));
-        setGasEstimationValue(value.toFixed(6));
-        setHasErrorInput(false);
-      } catch (e) {
-        setHasErrorInput(true);
-      }
-    };
-
     estimateGas();
   }, [recipient, amount, token]);
 
