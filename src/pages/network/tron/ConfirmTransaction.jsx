@@ -7,11 +7,7 @@ import BaseButton from "@mybucks/components/Button";
 import { H3 } from "@mybucks/components/Texts";
 import Link from "@mybucks/components/Link";
 import media from "@mybucks/styles/media";
-import {
-  TRON_TXN_POLLING_INTERVAL,
-  TRON_BANDWIDTH_PRICE,
-  TRON_ENERGY_PRICE,
-} from "@mybucks/lib/conf";
+import { TRON_BANDWIDTH_PRICE, TRON_ENERGY_PRICE } from "@mybucks/lib/conf";
 
 import BackIcon from "@mybucks/assets/icons/back.svg";
 import InfoRedIcon from "@mybucks/assets/icons/info-red.svg";
@@ -118,24 +114,6 @@ const ConfirmTransaction = ({
     [bandwidth, energy]
   );
 
-  const confirmTransactionResult = async (txid) => {
-    const maxAttempts = 3;
-    let attempts = 0;
-
-    while (attempts < maxAttempts) {
-      const { receipt } = await account.getTransactionInfo(txid);
-      if (receipt && receipt.result === "SUCCESS") {
-        return true;
-      }
-
-      attempts++;
-      await new Promise((resolve) =>
-        setTimeout(resolve, TRON_TXN_POLLING_INTERVAL)
-      );
-    }
-    return false;
-  };
-
   const confirm = async () => {
     setPending(true);
     setHasError(false);
@@ -143,23 +121,16 @@ const ConfirmTransaction = ({
 
     try {
       const { result, code, txid } = await account.execute(transaction);
-      console.log("txn: ", result, code, txid);
       if (!result) {
         setErrorCode(code);
         throw new Error("");
       }
 
-      const confirmed = await confirmTransactionResult(txid);
-      if (confirmed) {
-        fetchBalances();
-        onSuccess(txid);
-      } else {
-        throw new Error("");
-      }
+      fetchBalances();
+      onSuccess(txid);
     } catch (e) {
       setHasError(true);
     }
-
     setPending(false);
   };
 
@@ -223,16 +194,20 @@ const ConfirmTransaction = ({
             </span>
           </InvalidTransfer>
         )}
-        {!hasError &&
-          Number(trxBurntEstimation) > Number(nativeTokenBalance) && (
-            <InvalidTransfer>
-              <img src={InfoRedIcon} />
-              <span>
-                The transaction may fail due to insufficient TRX balance.
-              </span>
-            </InvalidTransfer>
-          )}
-        {hasError ? (
+
+        {pending ? (
+          <InvalidTransfer>
+            <span>Please wait while confirming transaction!</span>
+          </InvalidTransfer>
+        ) : !hasError &&
+          Number(trxBurntEstimation) > Number(nativeTokenBalance) ? (
+          <InvalidTransfer>
+            <img src={InfoRedIcon} />
+            <span>
+              The transaction may fail due to insufficient TRX balance.
+            </span>
+          </InvalidTransfer>
+        ) : hasError ? (
           <InvalidTransfer>
             <img src={InfoRedIcon} />
             <span>
@@ -242,6 +217,7 @@ const ConfirmTransaction = ({
         ) : (
           ""
         )}
+
         <ButtonsWrapper>
           <Button onClick={confirm} disabled={pending | hasError}>
             Confirm

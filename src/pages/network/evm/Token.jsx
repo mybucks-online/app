@@ -216,6 +216,7 @@ const Token = () => {
         const value = gas * nativeTokenPrice;
         setGasEstimation(gas.toFixed(6));
         setGasEstimationValue(value.toFixed(6));
+        setHasErrorInput(false);
       } catch (e) {
         setHasErrorInput(true);
       }

@@ -110,8 +110,6 @@ export const GAS_PRICE = Object.freeze({
   LOW: "low",
 });
 
-// After broadcasting raw transaction, it will monitor the confirmation result in every 1000ms
-export const TRON_TXN_POLLING_INTERVAL = 1000;
 // https://developers.tron.network/docs/resource-model#bandwidth
 export const TRON_BANDWIDTH_PRICE = 1000; // 1000 Sun
 export const TRON_ENERGY_PRICE = 210; // 210 Sun

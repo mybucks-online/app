@@ -234,6 +234,7 @@ const Token = () => {
         );
         setBandwidthEstimation(bandwidth);
         setEnergyEstimation(energy);
+        setHasErrorInput(false);
       } catch (e) {
         setHasErrorInput(true);
       }
