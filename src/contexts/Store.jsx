@@ -1,10 +1,11 @@
-import { createContext, useState, useEffect } from "react";
-import EvmAccount from "@mybucks/lib/account";
+import { createContext, useEffect, useMemo, useState } from "react";
+
+import EvmAccount from "@mybucks/lib/account/evm";
+import TronAccount from "@mybucks/lib/account/tron";
 import {
   DEFAULT_CHAIN_ID,
   DEFAULT_NETWORK,
-  DEFAULT_ASSET,
-  NETWORK_EVM,
+  NETWORK,
   REFRESH_STATUS_DURATION,
 } from "@mybucks/lib/conf";
 
@@ -21,13 +22,15 @@ export const StoreContext = createContext({
   network: DEFAULT_NETWORK,
   chainId: DEFAULT_CHAIN_ID,
   account: null,
-  updateChain: (c) => {},
+  updateNetwork: (n, c) => {},
 
   loading: false,
   inMenu: false,
   openMenu: (m) => {},
+  showBalances: false,
+  setShowBalances: (f) => {},
 
-  nativeTokenName: DEFAULT_ASSET,
+  nativeTokenName: "",
   nativeTokenBalance: 0,
   tokenBalances: [],
   nftBalances: [],
@@ -50,16 +53,28 @@ const StoreProvider = ({ children }) => {
   const [hash, setHash] = useState("");
 
   // network related
-  const [account, setAccount] = useState(null);
   const [network, setNetwork] = useState(DEFAULT_NETWORK);
   const [chainId, setChainId] = useState(DEFAULT_CHAIN_ID);
+  const account = useMemo(
+    () =>
+      !hash
+        ? null
+        : network === NETWORK.EVM
+        ? new EvmAccount(hash, chainId)
+        : new TronAccount(hash),
+    [hash, network, chainId]
+  );
 
   // common
   const [loading, setLoading] = useState(false);
   const [inMenu, openMenu] = useState(false);
+  const [showBalances, setShowBalances] = useState(false);
+
+  // active token
+  const [selectedTokenAddress, selectToken] = useState("");
 
   // balances related
-  const [nativeTokenName, setNativeTokenName] = useState(DEFAULT_ASSET);
+  const [nativeTokenName, setNativeTokenName] = useState("");
   const [nativeTokenBalance, setNativeTokenBalance] = useState(0);
   const [tokenBalances, setTokenBalances] = useState([]);
   const [nftBalances, setNftBalances] = useState([]);
@@ -70,21 +85,12 @@ const StoreProvider = ({ children }) => {
   // unique counter that increments regularly
   const [tick, setTick] = useState(0);
 
-  // active token
-  const [selectedTokenAddress, selectToken] = useState("");
-
-  useEffect(() => {
-    if (hash) {
-      if (network === NETWORK_EVM) {
-        setAccount(new EvmAccount(hash, chainId));
-      }
-    }
-  }, [hash, chainId, network]);
-
   useEffect(() => {
     if (!account) {
       return;
     }
+    setNativeTokenName("")
+    setTokenBalances([]);
     account.getNetworkStatus().then(() => {
       setTick((_tick) => _tick + 1);
     });
@@ -115,13 +121,14 @@ const StoreProvider = ({ children }) => {
     setSalt("");
     setHash("");
 
-    setChainId(DEFAULT_CHAIN_ID);
     setNetwork(DEFAULT_NETWORK);
-    setAccount(null);
+    setChainId(DEFAULT_CHAIN_ID);
 
     setLoading(false);
+    openMenu(false);
+    setShowBalances(false);
 
-    setNativeTokenName(DEFAULT_ASSET);
+    setNativeTokenName("");
     setNativeTokenBalance(0);
     setTokenBalances([]);
     setNftBalances([]);
@@ -136,7 +143,10 @@ const StoreProvider = ({ children }) => {
     setHash(h);
   };
 
-  const updateChain = (id) => setChainId(id);
+  const updateNetwork = (net, id) => {
+    setNetwork(net);
+    setChainId(id);
+  };
 
   const fetchBalances = async () => {
     setLoading(true);
@@ -169,10 +179,12 @@ const StoreProvider = ({ children }) => {
         network,
         chainId,
         account,
-        updateChain,
+        updateNetwork,
         loading,
         inMenu,
         openMenu,
+        showBalances,
+        setShowBalances,
         nativeTokenName,
         nativeTokenBalance,
         tokenBalances,

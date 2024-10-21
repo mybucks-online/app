@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from "react";
-import styled from "styled-components";
+import { useEffect, useRef } from "react";
 import FocusTrap from "focus-trap-react";
+import styled from "styled-components";
+
 import CloseIcon from "@mybucks/assets/icons/close.svg";
 import useOnClickOutside from "@mybucks/hooks/useOnClickOutside";
 

@@ -1,17 +1,16 @@
-import React, { useContext, useEffect, useState } from "react";
-import { StoreContext } from "@mybucks/contexts/Store";
+import { useContext, useEffect, useState } from "react";
 import { ethers } from "ethers";
 import styled from "styled-components";
 
-import { gasMultiplier } from "@mybucks/lib/conf";
-import { Container, Box } from "@mybucks/components/Containers";
-import BaseButton from "@mybucks/components/Button";
-import { H3 } from "@mybucks/components/Texts";
-import media from "@mybucks/styles/media";
-
 import BackIcon from "@mybucks/assets/icons/back.svg";
-import InfoRedIcon from "@mybucks/assets/icons/info-red.svg";
 import InfoGreenIcon from "@mybucks/assets/icons/info-green.svg";
+import InfoRedIcon from "@mybucks/assets/icons/info-red.svg";
+import BaseButton from "@mybucks/components/Button";
+import { Box, Container } from "@mybucks/components/Containers";
+import { H3 } from "@mybucks/components/Texts";
+import { StoreContext } from "@mybucks/contexts/Store";
+import { GAS_PRICE, gasMultiplier } from "@mybucks/lib/conf";
+import media from "@mybucks/styles/media";
 
 const NavsWrapper = styled.div`
   width: 100%;
@@ -92,7 +91,7 @@ const Button = styled(BaseButton)`
 const ConfirmTransaction = ({ to, value = 0, data, onSuccess, onReject }) => {
   const { account, fetchBalances, nativeTokenName, nativeTokenPrice } =
     useContext(StoreContext);
-  const [gasOption, setGasOption] = useState("low");
+  const [gasOption, setGasOption] = useState(GAS_PRICE.LOW);
 
   const [gasEstimation, setGasEstimation] = useState(0);
   const [gasEstimationValue, setGasEstimationValue] = useState(0);
@@ -172,13 +171,13 @@ const ConfirmTransaction = ({ to, value = 0, data, onSuccess, onReject }) => {
           <OptionItem>
             <input
               type="radio"
-              name="low"
-              id="low"
-              value="low"
-              checked={gasOption === "low"}
-              onChange={() => setGasOption("low")}
+              name={GAS_PRICE.LOW}
+              id={GAS_PRICE.LOW}
+              value={GAS_PRICE.LOW}
+              checked={gasOption === GAS_PRICE.LOW}
+              onChange={() => setGasOption(GAS_PRICE.LOW)}
             />
-            <label htmlFor="low">
+            <label htmlFor={GAS_PRICE.LOW}>
               Low / {ethers.formatUnits(account.gasPrice, 9)} GWei
             </label>
           </OptionItem>
@@ -186,25 +185,25 @@ const ConfirmTransaction = ({ to, value = 0, data, onSuccess, onReject }) => {
           <OptionItem>
             <input
               type="radio"
-              name="average"
-              id="average"
-              value="average"
-              checked={gasOption === "average"}
-              onChange={() => setGasOption("average")}
+              name={GAS_PRICE.AVERAGE}
+              id={GAS_PRICE.AVERAGE}
+              value={GAS_PRICE.AVERAGE}
+              checked={gasOption === GAS_PRICE.AVERAGE}
+              onChange={() => setGasOption(GAS_PRICE.AVERAGE)}
             />
-            <label htmlFor="average">Average (*1.5)</label>
+            <label htmlFor={GAS_PRICE.AVERAGE}>Average (*1.5)</label>
           </OptionItem>
 
           <OptionItem>
             <input
               type="radio"
-              name="high"
-              id="high"
-              value="high"
-              checked={gasOption === "high"}
-              onChange={() => setGasOption("high")}
+              name={GAS_PRICE.HIGH}
+              id={GAS_PRICE.HIGH}
+              value={GAS_PRICE.HIGH}
+              checked={gasOption === GAS_PRICE.HIGH}
+              onChange={() => setGasOption(GAS_PRICE.HIGH)}
             />
-            <label htmlFor="high">High (*1.75)</label>
+            <label htmlFor={GAS_PRICE.HIGH}>High (*1.75)</label>
           </OptionItem>
         </OptionsWrapper>
 

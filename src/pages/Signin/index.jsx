@@ -1,28 +1,32 @@
-import React, { useContext, useState, useMemo } from "react";
+import { useContext, useMemo, useState } from "react";
 import { Buffer } from "buffer";
 import { scrypt } from "scrypt-js";
 import styled from "styled-components";
-import {
-  HASH_OPTIONS,
-  PASSWORD_MIN_LENGTH,
-  PASSWORD_MAX_LENGTH,
-  PASSCODE_MIN_LENGTH,
-  PASSCODE_MAX_LENGTH,
-  generateSalt,
-} from "@mybucks/lib/conf";
-import { StoreContext } from "@mybucks/contexts/Store";
-import { Box } from "@mybucks/components/Containers";
+
 import Button from "@mybucks/components/Button";
-import Input from "@mybucks/components/Input";
 import Checkbox from "@mybucks/components/Checkbox";
-import Progress from "@mybucks/components/Progress";
+import { Box } from "@mybucks/components/Containers";
+import Input from "@mybucks/components/Input";
 import { Label } from "@mybucks/components/Label";
-import { H1 } from "@mybucks/components/Texts";
 import Modal from "@mybucks/components/Modal";
+import Progress from "@mybucks/components/Progress";
+import { H1 } from "@mybucks/components/Texts";
+import { StoreContext } from "@mybucks/contexts/Store";
+import {
+  generateSalt,
+  HASH_OPTIONS,
+  PASSCODE_MAX_LENGTH,
+  PASSCODE_MIN_LENGTH,
+  PASSWORD_MAX_LENGTH,
+  PASSWORD_MIN_LENGTH,
+} from "@mybucks/lib/conf";
 import media from "@mybucks/styles/media";
 
 const TEST_PASSWORD = "randommPassword82^";
 const TEST_PASSCODE = "223356";
+
+// const TEST_PASSWORD = "TexamplePassword34%";
+// const TEST_PASSCODE = "22346b";
 
 const Container = styled.div`
   max-width: 40.5rem;
@@ -89,15 +93,13 @@ const Caption = styled.p`
   `}
 `;
 
-const CheckboxesWrapper = styled.div`
+const Checkboxes = styled.div`
   margin: 1rem 0;
   display: flex;
   flex-wrap: wrap;
-
   & > div {
     min-width: 50%;
   }
-
   ${media.sm`
     flex-direction: column;
   `}
@@ -142,14 +144,14 @@ const SignIn = () => {
     () => generateSalt(password, passcode),
     [password, passcode]
   );
-  const hasMinLength = useMemo(
+  const hasMinLengthPassword = useMemo(
     () => password.length >= PASSWORD_MIN_LENGTH,
     [password]
   );
   const hasLowercase = useMemo(() => /[a-z]/.test(password), [password]);
   const hasUppercase = useMemo(() => /[A-Z]/.test(password), [password]);
   const hasNumbers = useMemo(() => /\d/.test(password), [password]);
-  const hasSpecialChars = useMemo(
+  const hasSymbol = useMemo(
     () => /[ !"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]/.test(password),
     [password]
   );
@@ -167,11 +169,11 @@ const SignIn = () => {
       disabled ||
       !password ||
       !passcode ||
-      !hasMinLength ||
+      !hasMinLengthPassword ||
       !hasLowercase ||
       !hasUppercase ||
       !hasNumbers ||
-      !hasSpecialChars ||
+      !hasSymbol ||
       !hasMatchedPassword ||
       !hasValidPasscodeLength,
     [[password, passwordConfirm, passcode, disabled]]
@@ -266,21 +268,21 @@ const SignIn = () => {
             />
           </div>
 
-          <CheckboxesWrapper>
-            <Checkbox id="min-length" value={hasMinLength}>
-              Password length: {PASSWORD_MIN_LENGTH}~{PASSWORD_MAX_LENGTH}
-            </Checkbox>
+          <Checkboxes>
             <Checkbox id="uppercase" value={hasUppercase}>
-              Uppercase (A~Z)
+              Uppercase
             </Checkbox>
             <Checkbox id="lowercase" value={hasLowercase}>
-              Lowercase (a~z)
+              Lowercase
             </Checkbox>
             <Checkbox id="number" value={hasNumbers}>
-              Number (012~9)
+              Number
             </Checkbox>
-            <Checkbox id="special" value={hasSpecialChars}>
-              Special characters(!@#..)
+            <Checkbox id="special" value={hasSymbol}>
+              Symbol
+            </Checkbox>
+            <Checkbox id="min-length" value={hasMinLengthPassword}>
+              Password length: {PASSWORD_MIN_LENGTH}~{PASSWORD_MAX_LENGTH}
             </Checkbox>
             <Checkbox id="match-password" value={hasMatchedPassword}>
               Match password
@@ -288,7 +290,7 @@ const SignIn = () => {
             <Checkbox id="passcode-length" value={hasValidPasscodeLength}>
               Passcode length: {PASSCODE_MIN_LENGTH}~{PASSCODE_MAX_LENGTH}
             </Checkbox>
-          </CheckboxesWrapper>
+          </Checkboxes>
 
           <Button onClick={onSubmit} disabled={hasInvalidInput} $size="block">
             Open

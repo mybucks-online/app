@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "vite serve",
-    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint . --ext .js,.jsx",
+    "format": "eslint --fix . --ext .js,.jsx",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -26,16 +27,20 @@
     "scrypt-js": "^3.0.1",
     "styled-components": "^6.1.11",
     "styled-normalize": "^8.1.1",
-    "toflexible": "^1.1.0"
+    "toflexible": "^1.1.0",
+    "tronweb": "^6.0.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@vitejs/plugin-react": "^4.2.1",
     "eslint": "^8.57.0",
+    "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
-    "vite": "^5.2.0"
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "vite": "^5.2.0",
+    "vite-plugin-node-polyfills": "^0.22.0"
   }
 }

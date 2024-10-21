@@ -1,15 +1,14 @@
-import React, { useContext, useState } from "react";
-import { StoreContext } from "@mybucks/contexts/Store";
-import styled from "styled-components";
+import { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import copy from "clipboard-copy";
-
-import { Container, Box as BaseBox } from "@mybucks/components/Containers";
-import BaseButton from "@mybucks/components/Button";
-import ConfirmPasscodeModal from "@mybucks/components/ConfirmPasscodeModal";
-import { H3 } from "@mybucks/components/Texts";
+import styled from "styled-components";
 
 import BackIcon from "@mybucks/assets/icons/back.svg";
+import BaseButton from "@mybucks/components/Button";
+import ConfirmPasscodeModal from "@mybucks/components/ConfirmPasscodeModal";
+import { Box as BaseBox, Container } from "@mybucks/components/Containers";
+import { H3 } from "@mybucks/components/Texts";
+import { StoreContext } from "@mybucks/contexts/Store";
 
 const Box = styled(BaseBox)`
   display: flex;

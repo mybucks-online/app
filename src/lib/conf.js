@@ -24,12 +24,13 @@ export const generateSalt = (password, passcode) =>
 export const getEvmPrivateKey = (h) =>
   ethers.keccak256(abi.encode(["string"], [h]));
 
-export const NETWORK_EVM = "evm";
-export const NETWORK_TRON = "tron";
+export const NETWORK = Object.freeze({
+  EVM: "evm",
+  TRON: "tron",
+});
 
-export const DEFAULT_NETWORK = NETWORK_EVM;
+export const DEFAULT_NETWORK = NETWORK.EVM;
 export const DEFAULT_CHAIN_ID = 1;
-export const DEFAULT_ASSET = "ETH";
 
 export const EVM_NETWORKS = {
   1: {
@@ -103,12 +104,26 @@ export const EVM_NETWORKS = {
   },
 };
 
-// [TODO] Please do not forget dividing by 100n
+export const GAS_PRICE = Object.freeze({
+  HIGH: "high",
+  AVERAGE: "average",
+  LOW: "low",
+});
+
+// https://developers.tron.network/docs/resource-model#bandwidth
+export const TRON_BANDWIDTH_PRICE = 1000; // 1000 Sun
+export const TRON_ENERGY_PRICE = 210; // 210 Sun
+
+// Do not forget dividing by 100n in gas price calculation
 export const gasMultiplier = (option) =>
-  option === "high" ? 175n : option === "average" ? 150n : 100n;
+  option === GAS_PRICE.HIGH ? 175n : option === GAS_PRICE.AVERAGE ? 150n : 100n;
 
 // 15 minutes, after this period, wallet will be locked.
 export const IDLE_DURATION = 900_000;
 
 // in every 15 seconds, it refreshes gas price or network status
 export const REFRESH_STATUS_DURATION = 15_000;
+
+// The hidden balances will be displayed as shown below
+export const BALANCE_PLACEHOLDER = "*****";
+export const LOADING_PLACEHOLDER = "-----";
