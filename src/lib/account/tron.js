@@ -2,6 +2,7 @@ import { Buffer } from "buffer";
 import { TronWeb } from "tronweb";
 
 import { getEvmPrivateKey, NETWORK } from "@mybucks/lib/conf";
+import { queryPrice } from "@mybucks/lib/utils";
 
 const TRC20_USDT_ADDRESS = "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t";
 
@@ -92,8 +93,7 @@ class TronAccount {
     // get TRX balance
     const trxRawBalance = await this.tronweb.trx.getBalance(this.address);
     const nativeTokenBalance = this.tronweb.fromSun(trxRawBalance);
-    // [TODO] Replace by CG API
-    const nativeTokenPrice = 0.155;
+    const nativeTokenPrice = await queryPrice(nativeTokenName);
 
     // balance of TRC20 USDT
     const usdtContract = await this.tronweb.contract().at(TRC20_USDT_ADDRESS);
@@ -101,8 +101,7 @@ class TronAccount {
       .balanceOf(this.address)
       .call();
     const usdtBalance = this.tronweb.fromSun(usdtRawBalance);
-    // [TODO] Replace by CG API
-    const usdtPrice = 1.0;
+    const usdtPrice = await queryPrice("USDT");
 
     return [
       nativeTokenName,
