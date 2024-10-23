@@ -121,7 +121,7 @@ This is a fully open-source project built with React, Vite, and related third-pa
 
 ## How to Run
 
-Please sign up for [Infura](https://infura.io) and [GoldRush](https://goldrush.dev/), create free API keys, and update the environment variables accordingly.
+Please sign up for [Infura](https://infura.io), [GoldRush](https://goldrush.dev/) and [Trongrid](https://trongrid.io/), create free API keys, and update the environment variables accordingly.
 
 ```bash
 yarn install
@@ -166,3 +166,27 @@ https://mybucks-online.github.io. 5 IN	A	185.199.111.153
 
 ~~~
 ```
+
+# Quick Links
+
+- Website: https://mybucks.online
+- Wallet: https://app.mybucks.online
+- Docs: https://docs.mybucks.online
+- Github: https://github.com/mybucks-online
+- Discord: https://discord.gg/RTHgTePKgP
+- X: https://x.com/mybucks_online
+- Audit report: https://app.secure3.io/5c92d55acd
+
+# Core principles
+
+Mybucks.online belongs to community, so we welcome any contributions!
+
+As a contributor, please review the following principles:
+- Never change key-generation mechanism, parameters (scrypt, keccak256)
+- Never submit password
+- Never store password including local storage
+- Never use untrusted dependencies
+- Never track user activities
+
+  We use Google Analytics and Google Tag Manager for landing page only.
+- Keep the codebase simple
