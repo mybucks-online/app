@@ -135,9 +135,9 @@ yarn dev
 The project uses `Github Pages` and `Github Actions` for deployment and is connected to a custom domain.
 You can easily verify releases, deployments, and domain configuration:
 
-- [Actions](https://github.com/koko37/mybucks.online-app/actions)
-- [Releases](https://github.com/koko37/mybucks.online-app/releases)
-- [.github/workflows/main-pipeline.yml](https://github.com/koko37/mybucks.online-app/blob/master/.github/workflows/main-pipeline.yml)
+- [Actions](https://github.com/mybucks-online/app/actions)
+- [Releases](https://github.com/mybucks-online/app/releases)
+- [.github/workflows/main-pipeline.yml](https://github.com/mybucks-online/app/blob/master/.github/workflows/main-pipeline.yml)
 
 To check DNS settings:
 

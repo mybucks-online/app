@@ -41,6 +41,7 @@ jobs:
         env:
           VITE_INFURA_API_KEY: ${{ secrets.VITE_INFURA_API_KEY }}
           VITE_COVALENT_API_KEY: ${{ secrets.VITE_COVALENT_API_KEY }}
+          VITE_TRONGRID_API_KEY: ${{ secrets.VITE_TRONGRID_API_KEY }}
         run: yarn build
       - name: Setup Pages
         uses: actions/configure-pages@v4
