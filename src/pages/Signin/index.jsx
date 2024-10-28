@@ -265,6 +265,8 @@ const SignIn = () => {
               maxLength={PASSCODE_MAX_LENGTH}
               onChange={(e) => setPasscode(e.target.value)}
               onKeyDown={onKeyDown}
+              onPaste={(e) => e.preventDefault()}
+              autoComplete="off"
             />
           </div>
 
