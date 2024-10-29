@@ -130,6 +130,13 @@ cp .env.example .env
 yarn dev
 ```
 
+*In the development environment, a different configuration is used to maintain fast response. To replicate the same key generation like the prod environment, you need to update the following line in src/lib/conf.js:*
+
+```javascript
+// src/lib/conf.js
+p: import.meta.env.DEV ? 1 : 5, // parallelization parameter
+```
+
 ## Production Environment
 
 The project uses `Github Pages` and `Github Actions` for deployment and is connected to a custom domain.
