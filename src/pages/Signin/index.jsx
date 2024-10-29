@@ -19,6 +19,7 @@ import {
   PASSCODE_MIN_LENGTH,
   PASSWORD_MAX_LENGTH,
   PASSWORD_MIN_LENGTH,
+  UNKNOWN_FACTS,
 } from "@mybucks/lib/conf";
 import media from "@mybucks/styles/media";
 
@@ -179,6 +180,11 @@ const SignIn = () => {
     [[password, passwordConfirm, passcode, disabled]]
   );
 
+  const unknownFact = useMemo(
+    () => UNKNOWN_FACTS[Math.floor(Math.random() * UNKNOWN_FACTS.length)],
+    []
+  );
+
   const onSubmit = async () => {
     setDisabled(true);
     try {
@@ -303,7 +309,7 @@ const SignIn = () => {
       <Modal show={!!progress} width="20rem">
         <ProgressWrapper>
           <img src="/logo-72x72.png" alt="mybucks.online" />
-          <Notice>Hang on, it takes millions of years to brute force!</Notice>
+          <Notice>{unknownFact}</Notice>
           <Progress value={progress} max="100" />
         </ProgressWrapper>
       </Modal>

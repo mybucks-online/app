@@ -127,3 +127,12 @@ export const REFRESH_STATUS_DURATION = 15_000;
 // The hidden balances will be displayed as shown below
 export const BALANCE_PLACEHOLDER = "*****";
 export const LOADING_PLACEHOLDER = "-----";
+
+export const UNKNOWN_FACTS = [
+  "🌟 Brute-forcing takes millions of years!",
+  "🔐 It runs only in your browser. Your password stays safe!",
+  "📂 We never store or transmit your password.",
+  "🤫 Your account's origin remains anonymous.",
+  "💼 Feel free to transfer your wallet anytime.",
+  "⚠️ Don't forget your password! There's no reset or recovery option.",
+];
