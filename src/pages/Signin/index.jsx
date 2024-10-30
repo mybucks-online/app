@@ -32,7 +32,7 @@ const TEST_PASSCODE = "223356";
 const Container = styled.div`
   max-width: 40.5rem;
   margin: 0 auto;
-  margin-block: 3rem 6.75rem;
+  margin-block: 3rem 3.75rem;
 
   @media (max-width: 696px) {
     margin: 0 ${({ theme }) => theme.sizes.xl};
