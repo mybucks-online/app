@@ -181,8 +181,8 @@ const SignIn = () => {
   );
 
   const unknownFact = useMemo(
-    () => UNKNOWN_FACTS[Math.floor(Math.random() * UNKNOWN_FACTS.length)],
-    []
+    () => UNKNOWN_FACTS[Math.floor(progress / 17)],
+    [progress]
   );
 
   const onSubmit = async () => {
@@ -227,8 +227,8 @@ const SignIn = () => {
         </LogoWrapper>
 
         <Box>
-          <Title>Open your account</Title>
-          <Caption>Keep your password strong and secure</Caption>
+          <Title>Unlock your wallet</Title>
+          <Caption>Use your own unique credentials</Caption>
 
           <div>
             <Label htmlFor="password">Password</Label>

@@ -130,9 +130,9 @@ export const LOADING_PLACEHOLDER = "-----";
 
 export const UNKNOWN_FACTS = [
   "🌟 Brute-forcing takes millions of years!",
-  "🔐 It runs only in your browser. Your password stays safe!",
-  "📂 We never store or transmit your password.",
+  "🔐 It runs only in your browser.",
+  "📂 It never stores or transmits your password.",
   "🤫 Your account's origin remains anonymous.",
   "💼 Feel free to transfer your wallet anytime.",
-  "⚠️ Don't forget your password! There's no reset or recovery option.",
+  "⚠️ There's no reset or recovery option.",
 ];
