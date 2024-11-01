@@ -1,3 +1,8 @@
+
+
+https://github.com/user-attachments/assets/4eba2af8-9d32-4ad2-b5b8-b2f3e9ed2da8
+
+
 # mybucks.online
 
 ## Summary
