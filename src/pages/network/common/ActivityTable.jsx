@@ -1,8 +1,10 @@
+import copy from "clipboard-copy";
 import { format } from "date-fns";
 import { ethers } from "ethers";
 import styled from "styled-components";
 import toFlexible from "toflexible";
 
+import CopyIconImg from "@mybucks/assets/icons/copy.svg";
 import { Box as BaseBox } from "@mybucks/components/Containers";
 import Link from "@mybucks/components/Link";
 import { H3 } from "@mybucks/components/Texts";
@@ -15,10 +17,18 @@ const Box = styled(BaseBox)`
 
 const TableWrapper = styled.table`
   width: 100%;
-
+  font-size: ${({ theme }) => theme.sizes.base};
   td {
-    padding-bottom: 4px;
+    padding-bottom: ${({ theme }) => theme.sizes.x3s};
   }
+
+  ${media.sm`
+    font-size: ${({ theme }) => theme.sizes.sm};
+
+    a {
+      font-size: ${({ theme }) => theme.sizes.sm};
+    }
+  `}
 `;
 
 const AmountTd = styled.td`
@@ -27,9 +37,8 @@ const AmountTd = styled.td`
 `;
 
 const AddressTd = styled.td`
-  ${media.sm`
-    display: none;
-  `}
+  display: flex;
+  align-items: center;
 `;
 
 const AddressLinkLg = styled(Link)`
@@ -45,6 +54,15 @@ const AddressLink = styled(Link)`
   ${media.md`
     display: inherit;
   `}
+`;
+
+const CopyButton = styled.img.attrs({
+  alt: "Copy",
+  src: CopyIconImg,
+})`
+  cursor: pointer;
+  margin-left: ${({ theme }) => theme.sizes.xs};
+  width: ${({ theme }) => theme.sizes.sm};
 `;
 
 const ActivityTable = ({ account, history }) => (
@@ -73,9 +91,22 @@ const ActivityTable = ({ account, history }) => (
                 target="_blank"
               >
                 {truncate(
-                  item.transferType === "IN" ? item.fromAddress : item.toAddress
+                  item.transferType === "IN"
+                    ? item.fromAddress
+                    : item.toAddress,
+                  8
                 )}
               </AddressLink>
+
+              <CopyButton
+                onClick={() =>
+                  copy(
+                    item.transferType === "IN"
+                      ? item.fromAddress
+                      : item.toAddress
+                  )
+                }
+              />
             </AddressTd>
             <AmountTd $in={item.transferType === "IN"}>
               {item.transferType === "IN" ? "+" : "-"}&nbsp;
