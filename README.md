@@ -20,9 +20,9 @@ Mybucks.online is a **password-only, self-custodial cryptocurrency wallet** buil
 ![Sign-in](/screenshots/1.sign-in.png)
 
 <p align="center">
-<img src="screenshots/iphone-13-signin.png" width="32%" alt="Sign-in">
-<img src="screenshots/iphone-13-dashboard.png" width="32%" alt="Dashboard">
-<img src="screenshots/iphone-13-transfer.png" width="32%" alt="Transfer">
+<img src="screenshots/2.mobile-signin.png" width="32%" alt="Sign-in">
+<img src="screenshots/3.mobile-home.png" width="32%" alt="Dashboard">
+<img src="screenshots/4.mobile-transfer.png" width="32%" alt="Transfer">
 </p>
 
 ## Key Points
