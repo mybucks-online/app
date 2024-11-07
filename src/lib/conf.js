@@ -83,7 +83,7 @@ export const EVM_NETWORKS = {
   43114: {
     chainId: 43114,
     name: "avalanche",
-    label: "Avalanche C-Chain",
+    label: "Avalanche",
     provider:
       "https://avalanche-mainnet.infura.io/v3/" +
       import.meta.env.VITE_INFURA_API_KEY,
