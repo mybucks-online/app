@@ -40,13 +40,7 @@ export const EVM_NETWORKS = {
     provider:
       "https://mainnet.infura.io/v3/" + import.meta.env.VITE_INFURA_API_KEY,
     scanner: "https://etherscan.io",
-  },
-  56: {
-    chainId: 56,
-    name: "bsc",
-    label: "BNB Chain",
-    provider: "https://bsc-dataseed.binance.org/",
-    scanner: "https://bscscan.com",
+    order: 1,
   },
   137: {
     chainId: 137,
@@ -56,6 +50,7 @@ export const EVM_NETWORKS = {
       "https://polygon-mainnet.infura.io/v3/" +
       import.meta.env.VITE_INFURA_API_KEY,
     scanner: "https://polygonscan.com",
+    order: 2,
   },
   42161: {
     chainId: 42161,
@@ -65,15 +60,7 @@ export const EVM_NETWORKS = {
       "https://arbitrum-mainnet.infura.io/v3/" +
       import.meta.env.VITE_INFURA_API_KEY,
     scanner: "https://arbiscan.io",
-  },
-  43114: {
-    chainId: 43114,
-    name: "avalanche",
-    label: "Avalanche C-Chain",
-    provider:
-      "https://avalanche-mainnet.infura.io/v3/" +
-      import.meta.env.VITE_INFURA_API_KEY,
-    scanner: "https://snowtrace.io",
+    order: 3,
   },
   10: {
     chainId: 10,
@@ -83,15 +70,25 @@ export const EVM_NETWORKS = {
       "https://optimism-mainnet.infura.io/v3/" +
       import.meta.env.VITE_INFURA_API_KEY,
     scanner: "https://optimistic.etherscan.io",
+    order: 4,
   },
-  59144: {
-    chainId: 59144,
-    name: "linea",
-    label: "Linea",
+  56: {
+    chainId: 56,
+    name: "bsc",
+    label: "BNB Chain",
+    provider: "https://bsc-dataseed.binance.org/",
+    scanner: "https://bscscan.com",
+    order: 5,
+  },
+  43114: {
+    chainId: 43114,
+    name: "avalanche",
+    label: "Avalanche C-Chain",
     provider:
-      "https://linea-mainnet.infura.io/v3/" +
+      "https://avalanche-mainnet.infura.io/v3/" +
       import.meta.env.VITE_INFURA_API_KEY,
-    scanner: "https://lineascan.build",
+    scanner: "https://snowtrace.io",
+    order: 6,
   },
   42220: {
     chainId: 42220,
@@ -101,6 +98,17 @@ export const EVM_NETWORKS = {
       "https://celo-mainnet.infura.io/v3/" +
       import.meta.env.VITE_INFURA_API_KEY,
     scanner: "https://celoscan.io",
+    order: 7,
+  },
+  59144: {
+    chainId: 59144,
+    name: "linea",
+    label: "Linea",
+    provider:
+      "https://linea-mainnet.infura.io/v3/" +
+      import.meta.env.VITE_INFURA_API_KEY,
+    scanner: "https://lineascan.build",
+    order: 8,
   },
 };
 
