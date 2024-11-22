@@ -1,5 +1,15 @@
+import { Buffer } from "buffer";
 import { ethers } from "ethers";
+import { scrypt } from "scrypt-js";
+
 const abi = new ethers.AbiCoder();
+
+export const PASSWORD_MIN_LENGTH = 12;
+export const PASSWORD_MAX_LENGTH = 128;
+export const PASSCODE_MIN_LENGTH = 6;
+export const PASSCODE_MAX_LENGTH = 16;
+
+export const PASSCODE_MAX_TRY = 3;
 
 /**
  * [CRITICAL] DON'T CHANGE FOREVER!!!
@@ -12,15 +22,26 @@ export const HASH_OPTIONS = {
   p: import.meta.env.DEV ? 1 : 5, // parallelization parameter
   keyLen: 64,
 };
-export const PASSWORD_MIN_LENGTH = 12;
-export const PASSWORD_MAX_LENGTH = 128;
-export const PASSCODE_MIN_LENGTH = 6;
-export const PASSCODE_MAX_LENGTH = 16;
 
-export const PASSCODE_MAX_TRY = 3;
+export const generateHash = async (password, passcode, cb = () => {}) => {
+  const salt = `${password.slice(-4)}${passcode}`;
 
-export const generateSalt = (password, passcode) =>
-  `${password.slice(-4)}${passcode}`;
+  const passwordBuffer = Buffer.from(password);
+  const saltBuffer = Buffer.from(salt);
+
+  const hashBuffer = await scrypt(
+    passwordBuffer,
+    saltBuffer,
+    HASH_OPTIONS.N,
+    HASH_OPTIONS.r,
+    HASH_OPTIONS.p,
+    HASH_OPTIONS.keyLen,
+    cb
+  );
+
+  return Buffer.from(hashBuffer).toString("hex");
+};
+
 export const getEvmPrivateKey = (h) =>
   ethers.keccak256(abi.encode(["string"], [h]));
 
@@ -32,8 +53,8 @@ export const NETWORK = Object.freeze({
 export const DEFAULT_NETWORK = NETWORK.EVM;
 export const DEFAULT_CHAIN_ID = 1;
 
-export const EVM_NETWORKS = {
-  1: {
+export const EVM_NETWORKS = [
+  {
     chainId: 1,
     name: "ethereum",
     label: "Ethereum",
@@ -42,7 +63,7 @@ export const EVM_NETWORKS = {
     scanner: "https://etherscan.io",
     order: 1,
   },
-  137: {
+  {
     chainId: 137,
     name: "polygon",
     label: "Polygon",
@@ -52,7 +73,7 @@ export const EVM_NETWORKS = {
     scanner: "https://polygonscan.com",
     order: 2,
   },
-  42161: {
+  {
     chainId: 42161,
     name: "arbitrum",
     label: "Arbitrum",
@@ -62,7 +83,7 @@ export const EVM_NETWORKS = {
     scanner: "https://arbiscan.io",
     order: 3,
   },
-  10: {
+  {
     chainId: 10,
     name: "optimism",
     label: "Optimism",
@@ -72,7 +93,7 @@ export const EVM_NETWORKS = {
     scanner: "https://optimistic.etherscan.io",
     order: 4,
   },
-  56: {
+  {
     chainId: 56,
     name: "bsc",
     label: "BNB Chain",
@@ -80,7 +101,7 @@ export const EVM_NETWORKS = {
     scanner: "https://bscscan.com",
     order: 5,
   },
-  43114: {
+  {
     chainId: 43114,
     name: "avalanche",
     label: "Avalanche",
@@ -90,27 +111,7 @@ export const EVM_NETWORKS = {
     scanner: "https://snowtrace.io",
     order: 6,
   },
-  42220: {
-    chainId: 42220,
-    name: "celo",
-    label: "Celo",
-    provider:
-      "https://celo-mainnet.infura.io/v3/" +
-      import.meta.env.VITE_INFURA_API_KEY,
-    scanner: "https://celoscan.io",
-    order: 7,
-  },
-  59144: {
-    chainId: 59144,
-    name: "linea",
-    label: "Linea",
-    provider:
-      "https://linea-mainnet.infura.io/v3/" +
-      import.meta.env.VITE_INFURA_API_KEY,
-    scanner: "https://lineascan.build",
-    order: 8,
-  },
-};
+];
 
 export const GAS_PRICE = Object.freeze({
   HIGH: "high",
@@ -129,8 +130,8 @@ export const gasMultiplier = (option) =>
 // 15 minutes, after this period, wallet will be locked.
 export const IDLE_DURATION = 900_000;
 
-// in every 15 seconds, it refreshes gas price or network status
-export const REFRESH_STATUS_DURATION = 15_000;
+// in every 30 seconds, it refreshes gas price or network status
+export const REFRESH_STATUS_DURATION = 30_000;
 
 // The hidden balances will be displayed as shown below
 export const BALANCE_PLACEHOLDER = "*****";
