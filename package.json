@@ -1,8 +1,26 @@
 {
-  "name": "mybucks",
+  "name": "mybucks-online",
+  "description": "Mybucks.online | Password-only, self-custodial cryptocurrency wallet",
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "keywords": [
+    "crypto",
+    "wallet",
+    "password-only",
+    "self-custodial",
+    "blockchain",
+    "web3",
+    "ethereum",
+    "tron",
+    "opensource"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mybucks-online/app.git"
+  },
+  "homepage": "https://mybucks.online",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

@@ -20,6 +20,8 @@ import {
 } from "@mybucks/lib/conf";
 import media from "@mybucks/styles/media";
 
+import Logo from "./logo.png";
+
 const TEST_PASSWORD = "randommPassword82^";
 const TEST_PASSCODE = "223356";
 
@@ -287,7 +289,7 @@ const SignIn = () => {
 
       <Modal show={!!progress} width="20rem">
         <ProgressWrapper>
-          <img src="/logo-72x72.png" alt="mybucks.online" />
+          <img src={Logo} alt="mybucks.online" />
           <Notice>{unknownFact}</Notice>
           <Progress value={progress} max="100" />
         </ProgressWrapper>
