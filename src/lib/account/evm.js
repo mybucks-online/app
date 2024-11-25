@@ -9,6 +9,7 @@ import IERC20 from "@mybucks/lib/erc20.json";
 class EvmAccount {
   network = NETWORK.EVM;
   chainId = null;
+  networkInfo = null;
 
   signer = null;
   account = null;
@@ -26,7 +27,8 @@ class EvmAccount {
 
   constructor(hashKey, chainId) {
     this.chainId = chainId;
-    this.provider = new ethers.JsonRpcProvider(EVM_NETWORKS[chainId].provider);
+    this.networkInfo = EVM_NETWORKS.find((n) => n.chainId === chainId);
+    this.provider = new ethers.JsonRpcProvider(this.networkInfo.provider);
 
     this.signer = getEvmPrivateKey(hashKey);
     this.account = new ethers.Wallet(this.signer, this.provider);
@@ -42,15 +44,15 @@ class EvmAccount {
   }
 
   linkOfAddress(address) {
-    return EVM_NETWORKS[this.chainId].scanner + "/address/" + address;
+    return this.networkInfo.scanner + "/address/" + address;
   }
 
   linkOfContract(address) {
-    return EVM_NETWORKS[this.chainId].scanner + "/address/" + address + "#code";
+    return this.networkInfo.scanner + "/address/" + address + "#code";
   }
 
   linkOfTransaction(txn) {
-    return EVM_NETWORKS[this.chainId].scanner + "/tx/" + txn;
+    return this.networkInfo.scanner + "/tx/" + txn;
   }
 
   async getNetworkStatus() {
@@ -146,25 +148,6 @@ class EvmAccount {
       return null;
     }
   }
-
-  /*
-  async nativeCurrency() {
-    const balance = await this.provider.getBalance(this.address);
-    return ethers.formatEther(balance);
-  }
-
-  async balanceOfErc20(token) {
-    const erc20 = new Contract(token, IERC20.abi, this.provider);
-    const result = await erc20.balanceOf(this.account.address);
-    return result;
-  }
-
-  async transferErc20(token, to, amount, gasPrice = null, gasLimit = null) {
-    const erc20 = new Contract(token, IERC20.abi, this.provider);
-    const tx = await erc20.connect(this.account).transfer(to, amount);
-    await tx.wait();
-  }
-*/
 
   /**
    *

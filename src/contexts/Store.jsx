@@ -13,7 +13,6 @@ export const StoreContext = createContext({
   connectivity: true,
   password: "",
   passcode: "",
-  salt: "",
   hash: "",
   setup: (p, pc, s, h) => {},
   reset: () => {},
@@ -49,7 +48,6 @@ const StoreProvider = ({ children }) => {
   // key parts
   const [password, setPassword] = useState("");
   const [passcode, setPasscode] = useState("");
-  const [salt, setSalt] = useState("");
   const [hash, setHash] = useState("");
 
   // network related
@@ -118,7 +116,6 @@ const StoreProvider = ({ children }) => {
   const reset = () => {
     setPassword("");
     setPasscode("");
-    setSalt("");
     setHash("");
 
     setNetwork(DEFAULT_NETWORK);
@@ -136,10 +133,9 @@ const StoreProvider = ({ children }) => {
     selectToken("");
   };
 
-  const setup = (pw, pc, s, h) => {
+  const setup = (pw, pc, h) => {
     setPassword(pw);
     setPasscode(pc);
-    setSalt(s);
     setHash(h);
   };
 
@@ -172,7 +168,6 @@ const StoreProvider = ({ children }) => {
         connectivity,
         password,
         passcode,
-        salt,
         hash,
         reset,
         setup,

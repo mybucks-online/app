@@ -90,18 +90,18 @@ class TronAccount {
   // [TODO] Now it only returns balance of TRX and USDT
   async queryBalances() {
     const nativeTokenName = "TRX";
-    // get TRX balance
-    const trxRawBalance = await this.tronweb.trx.getBalance(this.address);
-    const nativeTokenBalance = this.tronweb.fromSun(trxRawBalance);
-    const nativeTokenPrice = await queryPrice(nativeTokenName);
-
-    // balance of TRC20 USDT
     const usdtContract = await this.tronweb.contract().at(TRC20_USDT_ADDRESS);
-    const usdtRawBalance = await usdtContract.methods
-      .balanceOf(this.address)
-      .call();
+
+    const [trxRawBalance, nativeTokenPrice, usdtRawBalance, usdtPrice] =
+      await Promise.all([
+        this.tronweb.trx.getBalance(this.address),
+        queryPrice(nativeTokenName),
+        usdtContract.methods.balanceOf(this.address).call(),
+        queryPrice("USDT"),
+      ]);
+
+    const nativeTokenBalance = this.tronweb.fromSun(trxRawBalance);
     const usdtBalance = this.tronweb.fromSun(usdtRawBalance);
-    const usdtPrice = await queryPrice("USDT");
 
     return [
       nativeTokenName,

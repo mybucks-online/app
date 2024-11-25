@@ -1,6 +1,4 @@
 import { useContext, useMemo, useState } from "react";
-import { Buffer } from "buffer";
-import { scrypt } from "scrypt-js";
 import styled from "styled-components";
 
 import Button from "@mybucks/components/Button";
@@ -13,8 +11,7 @@ import Progress from "@mybucks/components/Progress";
 import { H1 } from "@mybucks/components/Texts";
 import { StoreContext } from "@mybucks/contexts/Store";
 import {
-  generateSalt,
-  HASH_OPTIONS,
+  generateHash,
   PASSCODE_MAX_LENGTH,
   PASSCODE_MIN_LENGTH,
   PASSWORD_MAX_LENGTH,
@@ -141,10 +138,6 @@ const SignIn = () => {
   const [disabled, setDisabled] = useState(false);
   const [progress, setProgress] = useState(0);
 
-  const salt = useMemo(
-    () => generateSalt(password, passcode),
-    [password, passcode]
-  );
   const hasMinLengthPassword = useMemo(
     () => password.length >= PASSWORD_MIN_LENGTH,
     [password]
@@ -187,25 +180,11 @@ const SignIn = () => {
 
   const onSubmit = async () => {
     setDisabled(true);
-    try {
-      const passwordBuffer = Buffer.from(password);
-      const saltBuffer = Buffer.from(salt);
-      const hashBuffer = await scrypt(
-        passwordBuffer,
-        saltBuffer,
-        HASH_OPTIONS.N,
-        HASH_OPTIONS.r,
-        HASH_OPTIONS.p,
-        HASH_OPTIONS.keyLen,
-        (p) => setProgress(Math.floor(p * 100))
-      );
-      const hashHex = Buffer.from(hashBuffer).toString("hex");
-      setup(password, passcode, salt, hashHex);
-    } catch (e) {
-      console.error("Error while setting up account ...");
-    } finally {
-      setDisabled(false);
-    }
+    const hash = await generateHash(password, passcode, (p) =>
+      setProgress(Math.floor(p * 100))
+    );
+    setup(password, passcode, hash);
+    setDisabled(false);
   };
 
   const onKeyDown = (e) => {
