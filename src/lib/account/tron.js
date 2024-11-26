@@ -1,4 +1,5 @@
 import { Buffer } from "buffer";
+import { ethers } from "ethers";
 import { TronWeb } from "tronweb";
 
 import { getEvmPrivateKey, NETWORK } from "@mybucks/lib/conf";
@@ -104,33 +105,30 @@ class TronAccount {
     const usdtBalance = this.tronweb.fromSun(usdtRawBalance);
 
     return [
-      nativeTokenName,
-      nativeTokenBalance,
-      nativeTokenPrice,
-      [
-        {
-          nativeToken: true,
-          contractName: "TRON",
-          contractTickerSymbol: "TRX",
-          contractAddress: "41eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
-          contractDecimals: 6,
-          balance: trxRawBalance,
-          quote: nativeTokenBalance * nativeTokenPrice,
-          logoURI:
-            "https://assets.coingecko.com/coins/images/1094/standard/tron-logo.png?1696502193",
-        },
-        {
-          nativeToken: false,
-          contractName: "Tether USD",
-          contractTickerSymbol: "USDT",
-          contractAddress: TRC20_USDT_ADDRESS,
-          contractDecimals: 6,
-          balance: usdtRawBalance,
-          quote: usdtBalance * usdtPrice,
-          logoURI:
-            "https://assets.coingecko.com/coins/images/325/standard/Tether.png",
-        },
-      ],
+      {
+        native: true,
+        name: "TRON",
+        symbol: "TRX",
+        address: "41eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        decimals: 6,
+        balance: ethers.formatUnits(trxRawBalance, 6),
+        price: nativeTokenPrice,
+        quote: nativeTokenBalance * nativeTokenPrice,
+        logoURI:
+          "https://assets.coingecko.com/coins/images/1094/standard/tron-logo.png?1696502193",
+      },
+      {
+        native: false,
+        name: "Tether USD",
+        symbol: "USDT",
+        address: TRC20_USDT_ADDRESS,
+        decimals: 6,
+        balance: ethers.formatUnits(usdtRawBalance, 6),
+        price: usdtPrice,
+        quote: usdtBalance * usdtPrice,
+        logoURI:
+          "https://assets.coingecko.com/coins/images/325/standard/Tether.png",
+      },
     ];
   }
 

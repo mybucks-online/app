@@ -149,10 +149,10 @@ const StoreProvider = ({ children }) => {
     const result = await account.queryBalances();
 
     if (result) {
-      setNativeTokenName(result[0]);
-      setNativeTokenBalance(result[1]);
-      setNativeTokenPrice(result[2]);
-      setTokenBalances(result[3]);
+      setNativeTokenName(result[0].name);
+      setNativeTokenBalance(result[0].balance);
+      setNativeTokenPrice(result[0].price);
+      setTokenBalances(result);
 
       setConnectivity(true);
     } else {

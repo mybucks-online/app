@@ -150,7 +150,7 @@ const ConfirmTransaction = ({
 
           <p>
             <TransactionItem>Value:</TransactionItem> {amount}{" "}
-            {token.contractTickerSymbol}
+            {token.symbol}
           </p>
         </TransactionDetails>
         <TransactionDetails>

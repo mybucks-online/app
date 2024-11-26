@@ -161,12 +161,8 @@ const Token = () => {
     loading,
   } = useContext(StoreContext);
   const token = useMemo(
-    () => tokenBalances.find((t) => t.contractAddress === selectedTokenAddress),
+    () => tokenBalances.find((t) => t.address === selectedTokenAddress),
     [tokenBalances, selectedTokenAddress]
-  );
-  const balance = useMemo(
-    () => ethers.formatUnits(token.balance, token.contractDecimals),
-    [token]
   );
 
   const { debounce } = useDebounce();
@@ -193,11 +189,11 @@ const Token = () => {
 
     try {
       const txData = await account.populateTransferToken(
-        token.nativeToken ? "" : selectedTokenAddress,
+        token.native ? "" : selectedTokenAddress,
         recipient,
         ethers.parseUnits(
           amount.toString(),
-          token.nativeToken ? 18 : token.contractDecimals
+          token.decimals
         )
       );
       setTransaction(txData);
@@ -214,7 +210,7 @@ const Token = () => {
   }, 500);
 
   useEffect(() => {
-    if (!token.nativeToken) {
+    if (!token.native) {
       account.queryTokenHistory(selectedTokenAddress).then((result) => {
         setHistory(result || []);
       });
@@ -267,28 +263,28 @@ const Token = () => {
 
       <TokenDetails>
         <LogoAndLink>
-          {token.nativeToken ? (
+          {token.native ? (
             <Avatar
               uri={token.logoURI}
-              symbol={token.contractTickerSymbol}
-              fallbackColor={"#" + token.contractAddress.slice(2, 8)}
+              symbol={token.symbol}
+              fallbackColor={"#" + token.address.slice(2, 8)}
             />
           ) : (
             <a
-              href={account.linkOfContract(token.contractAddress)}
+              href={account.linkOfContract(token.address)}
               target="_blank"
             >
               <Avatar
                 uri={token.logoURI}
-                symbol={token.contractTickerSymbol}
-                fallbackColor={"#" + token.contractAddress.slice(2, 8)}
+                symbol={token.symbol}
+                fallbackColor={"#" + token.address.slice(2, 8)}
               />
             </a>
           )}
 
-          {!token.nativeToken && (
+          {!token.native && (
             <ContractLink
-              href={account.linkOfContract(token.contractAddress)}
+              href={account.linkOfContract(token.address)}
               target="_blank"
             >
               <ArrowUpRight />
@@ -297,13 +293,13 @@ const Token = () => {
         </LogoAndLink>
 
         <TokenBalance>
-          {loading ? LOADING_PLACEHOLDER : Number(balance).toFixed(4)}
+          {loading ? LOADING_PLACEHOLDER : token.balance.toFixed(4)}
           &nbsp;
-          {token.contractTickerSymbol}
+          {token.symbol}
         </TokenBalance>
 
         {!!token.quote && (
-          <TokenValue>${Number(token.quote).toFixed(4)} USD</TokenValue>
+          <TokenValue>${Number(token.quote).toFixed(4)}</TokenValue>
         )}
       </TokenDetails>
 
@@ -328,7 +324,7 @@ const Token = () => {
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
           />
-          <MaxButton onClick={() => setAmount(balance)}>Max</MaxButton>
+          <MaxButton onClick={() => setAmount(token.balance)}>Max</MaxButton>
         </AmountWrapper>
 
         {invalidRecipientAddress ? (

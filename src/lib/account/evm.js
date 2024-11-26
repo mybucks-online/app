@@ -1,10 +1,13 @@
 import { CovalentClient } from "@covalenthq/client-sdk";
-import { tokens as defaultTokensList } from "@sushiswap/default-token-list";
+import { tokens as defaultTokensList } from "@uniswap/default-token-list";
+import { Alchemy } from "alchemy-sdk";
 import camelcaseKeys from "camelcase-keys";
 import { Contract, ethers } from "ethers";
 
 import { EVM_NETWORKS, getEvmPrivateKey, NETWORK } from "@mybucks/lib/conf";
 import IERC20 from "@mybucks/lib/erc20.json";
+
+const alchemyApiKey = import.meta.env.VITE_ALCHEMY_API_KEY;
 
 class EvmAccount {
   network = NETWORK.EVM;
@@ -24,6 +27,7 @@ class EvmAccount {
   gasPrice = 0;
 
   queryClient = null;
+  alchemyClient = null;
 
   constructor(hashKey, chainId) {
     this.chainId = chainId;
@@ -37,6 +41,11 @@ class EvmAccount {
     this.queryClient = new CovalentClient(
       import.meta.env.VITE_COVALENT_API_KEY
     );
+
+    this.alchemyClient = new Alchemy({
+      network: this.networkInfo.networkId,
+      apiKey: alchemyApiKey,
+    });
   }
 
   isAddress(value) {
@@ -61,56 +70,87 @@ class EvmAccount {
   }
 
   async queryBalances() {
-    try {
-      const { data, error } =
-        await this.queryClient.BalanceService.getTokenBalancesForWalletAddress(
-          this.chainId,
-          this.account.address
-        );
-      if (error) {
-        throw new Error("invalid balances");
+    // get balances
+    const [nativeBalance, { tokenBalances }] = await Promise.all([
+      this.provider.getBalance(this.address),
+      this.alchemyClient.core.getTokenBalances(this.address),
+    ]);
+
+    // get balances of native token, and erc20 tokens and merge into single array
+    tokenBalances.unshift({
+      contractAddress: this.networkInfo.wrappedAsset,
+      tokenBalance: nativeBalance,
+      native: true,
+    });
+
+    // get prices
+    const response = await fetch(
+      `https://api.g.alchemy.com/prices/v1/${alchemyApiKey}/tokens/by-address`,
+      {
+        method: "POST",
+        headers: {
+          accept: "application/json",
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          addresses: tokenBalances.map(({ contractAddress: address }) => ({
+            network: this.networkInfo.networkId,
+            address,
+          })),
+        }),
       }
-      const tokens = camelcaseKeys(data.items, { deep: true });
-
-      const nativeTokenName = tokens.find(
-        (t) => !!t.nativeToken
-      ).contractTickerSymbol;
-      const nativeTokenBalance = ethers.formatUnits(
-        tokens.find((t) => !!t.nativeToken).balance,
-        18
+    );
+    const { data: rawPrices } = await response.json();
+    // converts key:value pair of address and latest price
+    const prices = rawPrices
+      .filter((t) => !t.error)
+      .reduce(
+        (acc, t) => ({ ...acc, [t.address.toLowerCase()]: t.prices[0].value }),
+        {}
       );
-      const nativeTokenPrice = tokens.find((t) => !!t.nativeToken).quoteRate;
-      const balances = tokens
-        .filter(
-          (token) => token.balance.toString() !== "0" || token.nativeToken
-        )
-        .map((token) => ({
-          ...token,
-          logoURI: defaultTokensList.find((t) =>
-            token.nativeToken
-              ? t.name === token.contractName
-              : t.address.toLowerCase() === token.contractAddress.toLowerCase()
-          )?.logoURI,
-        }));
 
-      /**
-       * token attributes:
-       *
-       *    nativeToken
-       *    contractName
-       *    contractTickerSymbol
-       *    contractAddress
-       *    contractDecimals
-       *    balance
-       *    quote
-       *    logoURI
-       */
+    // find token details including name, symbol, decimals
+    // and filter out not-listed tokens
+    const balances = tokenBalances
+      .map(({ contractAddress, tokenBalance, native }) => ({
+        ...defaultTokensList.find(
+          ({ address }) =>
+            address.toLowerCase() === contractAddress.toLowerCase()
+        ),
+        rawBalance: tokenBalance,
+        native,
+      }))
+      .filter((t) => !!t.address)
+      .map((t) => ({
+        ...t,
+        balance: parseFloat(ethers.formatUnits(t.rawBalance, t.decimals)),
+        price: parseFloat(prices[t.address.toLowerCase()]),
+        quote:
+          parseFloat(ethers.formatUnits(t.rawBalance, t.decimals)) *
+          parseFloat(prices[t.address.toLowerCase()]),
+      }));
+    // remove `wrapped` for native currency
+    balances[0].name = balances[0].name.split(" ")[1];
+    balances[0].symbol = balances[0].symbol.slice(1);
+    return balances;
 
-      return [nativeTokenName, nativeTokenBalance, nativeTokenPrice, balances];
-    } catch (e) {
-      console.error("failed to fetch balances ...");
-      return null;
-    }
+    /**
+     * return format:
+     *
+     * array of
+     *
+     * chainId,
+     * address
+     * name
+     * symbol
+     * decimals
+     * logoURI
+     * balance
+     * rawBalance
+     * price
+     * quote
+     * native (optional)
+     */
   }
 
   async queryTokenHistory(contractAddress) {

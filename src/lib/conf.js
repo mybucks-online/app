@@ -1,3 +1,4 @@
+import { Network } from "alchemy-sdk";
 import { Buffer } from "buffer";
 import { ethers } from "ethers";
 import { scrypt } from "scrypt-js";
@@ -56,60 +57,66 @@ export const DEFAULT_CHAIN_ID = 1;
 export const EVM_NETWORKS = [
   {
     chainId: 1,
+    networkId: Network.ETH_MAINNET,
     name: "ethereum",
     label: "Ethereum",
     provider:
       "https://mainnet.infura.io/v3/" + import.meta.env.VITE_INFURA_API_KEY,
     scanner: "https://etherscan.io",
-    order: 1,
+    wrappedAsset: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
   },
   {
     chainId: 137,
+    networkId: Network.MATIC_MAINNET,
     name: "polygon",
     label: "Polygon",
     provider:
       "https://polygon-mainnet.infura.io/v3/" +
       import.meta.env.VITE_INFURA_API_KEY,
     scanner: "https://polygonscan.com",
-    order: 2,
+    wrappedAsset: "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270",
   },
   {
     chainId: 42161,
+    networkId: Network.ARB_MAINNET,
     name: "arbitrum",
     label: "Arbitrum",
     provider:
       "https://arbitrum-mainnet.infura.io/v3/" +
       import.meta.env.VITE_INFURA_API_KEY,
     scanner: "https://arbiscan.io",
-    order: 3,
+    wrappedAsset: "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
   },
   {
     chainId: 10,
+    networkId: Network.OPT_MAINNET,
     name: "optimism",
     label: "Optimism",
     provider:
       "https://optimism-mainnet.infura.io/v3/" +
       import.meta.env.VITE_INFURA_API_KEY,
     scanner: "https://optimistic.etherscan.io",
-    order: 4,
+    wrappedAsset: "0x4200000000000000000000000000000000000006",
   },
   {
     chainId: 56,
+    networkId: Network.BNB_MAINNET,
     name: "bsc",
     label: "BNB Chain",
     provider: "https://bsc-dataseed.binance.org/",
     scanner: "https://bscscan.com",
-    order: 5,
+    wrappedAsset: "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
   },
   {
     chainId: 43114,
+    networkId: Network.AVAX_MAINNET,
     name: "avalanche",
     label: "Avalanche",
     provider:
       "https://avalanche-mainnet.infura.io/v3/" +
       import.meta.env.VITE_INFURA_API_KEY,
     scanner: "https://snowtrace.io",
-    order: 6,
+    wrappedAsset: "0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7",
   },
 ];
 
