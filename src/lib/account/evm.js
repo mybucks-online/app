@@ -75,13 +75,30 @@ class EvmAccount {
       this.provider.getBalance(this.address),
       this.alchemyClient.core.getTokenBalances(this.address),
     ]);
-
-    // get balances of native token, and erc20 tokens and merge into single array
+    // get balances of native token, erc20 tokens and merge into single array
+    // it uses wrapped asset in order to get the price of native currency
     tokenBalances.unshift({
       contractAddress: this.networkInfo.wrappedAsset,
       tokenBalance: nativeBalance,
       native: true,
     });
+    // find token details including name, symbol, decimals
+    // and filter out not-listed(spam) tokens
+    const filteredBalances = tokenBalances
+      .map(({ contractAddress, tokenBalance, native }) => ({
+        ...defaultTokensList.find(
+          ({ address }) =>
+            address.toLowerCase() === contractAddress.toLowerCase()
+        ),
+        rawBalance: tokenBalance,
+        native,
+      }))
+      .filter((t) => !!t.address)
+      .map((t) => ({
+        ...t,
+        balance: parseFloat(ethers.formatUnits(t.rawBalance, t.decimals)),
+      }))
+      .filter((t) => t.native || t.balance > 0);
 
     // get prices
     const response = await fetch(
@@ -93,7 +110,7 @@ class EvmAccount {
           "content-type": "application/json",
         },
         body: JSON.stringify({
-          addresses: tokenBalances.map(({ contractAddress: address }) => ({
+          addresses: filteredBalances.map(({ address }) => ({
             network: this.networkInfo.networkId,
             address,
           })),
@@ -109,27 +126,14 @@ class EvmAccount {
         {}
       );
 
-    // find token details including name, symbol, decimals
-    // and filter out not-listed tokens
-    const balances = tokenBalances
-      .map(({ contractAddress, tokenBalance, native }) => ({
-        ...defaultTokensList.find(
-          ({ address }) =>
-            address.toLowerCase() === contractAddress.toLowerCase()
-        ),
-        rawBalance: tokenBalance,
-        native,
-      }))
-      .filter((t) => !!t.address)
-      .map((t) => ({
-        ...t,
-        balance: parseFloat(ethers.formatUnits(t.rawBalance, t.decimals)),
-        price: parseFloat(prices[t.address.toLowerCase()]),
-        quote:
-          parseFloat(ethers.formatUnits(t.rawBalance, t.decimals)) *
-          parseFloat(prices[t.address.toLowerCase()]),
-      }));
+    const balances = filteredBalances.map((t) => ({
+      ...t,
+      price: parseFloat(prices[t.address.toLowerCase()]),
+      quote: t.balance * parseFloat(prices[t.address.toLowerCase()]),
+    }));
+
     // remove `wrapped` for native currency
+    balances[0].address = "0x";
     balances[0].name = balances[0].name.split(" ")[1];
     balances[0].symbol = balances[0].symbol.slice(1);
     return balances;

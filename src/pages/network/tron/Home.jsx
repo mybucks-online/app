@@ -281,7 +281,7 @@ const TronHome = () => {
       <TokensList>
         {tokenBalances.map((t) => (
           <TokenBalanceRow
-            key={t.name}
+            key={t.address}
             token={{
               symbol: t.symbol,
               name: t.name,
