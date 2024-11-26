@@ -1,5 +1,5 @@
 import { CovalentClient } from "@covalenthq/client-sdk";
-import { tokens as defaultTokensList } from "@uniswap/default-token-list";
+import { tokens as defaultTokensList } from "@sushiswap/default-token-list";
 import { Alchemy } from "alchemy-sdk";
 import camelcaseKeys from "camelcase-keys";
 import { Contract, ethers } from "ethers";
