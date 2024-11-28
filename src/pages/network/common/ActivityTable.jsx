@@ -71,60 +71,49 @@ const ActivityTable = ({ account, history }) => (
 
     <TableWrapper>
       <tbody>
-        {history.map((item) => (
-          <tr key={item.txnHash}>
-            <td>{format(item.time, "MM/dd")}</td>
-            <AddressTd>
-              <AddressLinkLg
-                href={account.linkOfAddress(
-                  item.transferType === "IN" ? item.fromAddress : item.toAddress
-                )}
-                target="_blank"
-              >
-                {item.transferType === "IN" ? item.fromAddress : item.toAddress}
-              </AddressLinkLg>
+        {history
+          .map((item) => ({
+            ...item,
+            isReceipt: item.to.toLowerCase() === account.address.toLowerCase(),
+            target:
+              item.from.toLowerCase() === account.address.toLowerCase()
+                ? item.to
+                : item.from,
+          }))
+          .map((item) => (
+            <tr key={item.hash}>
+              <td>{format(item.blockTimestamp, "MM/dd")}</td>
+              <AddressTd>
+                <AddressLinkLg
+                  href={account.linkOfAddress(item.target)}
+                  target="_blank"
+                >
+                  {item.target}
+                </AddressLinkLg>
 
-              <AddressLink
-                href={account.linkOfAddress(
-                  item.transferType === "IN" ? item.fromAddress : item.toAddress
-                )}
-                target="_blank"
-              >
-                {truncate(
-                  item.transferType === "IN"
-                    ? item.fromAddress
-                    : item.toAddress,
-                  8
-                )}
-              </AddressLink>
+                <AddressLink
+                  href={account.linkOfAddress(item.target)}
+                  target="_blank"
+                >
+                  {truncate(item.target, 8)}
+                </AddressLink>
 
-              <CopyButton
-                onClick={() =>
-                  copy(
-                    item.transferType === "IN"
-                      ? item.fromAddress
-                      : item.toAddress
-                  )
-                }
-              />
-            </AddressTd>
-            <AmountTd $in={item.transferType === "IN"}>
-              {item.transferType === "IN" ? "+" : "-"}&nbsp;
-              {toFlexible(
-                parseFloat(ethers.formatUnits(item.amount, item.decimals)),
-                2
-              )}
-            </AmountTd>
-            <td>
-              <Link
-                href={account.linkOfTransaction(item.txnHash)}
-                target="_blank"
-              >
-                details
-              </Link>
-            </td>
-          </tr>
-        ))}
+                <CopyButton onClick={() => copy(item.target)} />
+              </AddressTd>
+              <AmountTd $in={item.isReceipt}>
+                {item.isReceipt ? "+" : "-"}&nbsp;
+                {toFlexible(item.value, 2)}
+              </AmountTd>
+              <td>
+                <Link
+                  href={account.linkOfTransaction(item.hash)}
+                  target="_blank"
+                >
+                  details
+                </Link>
+              </td>
+            </tr>
+          ))}
       </tbody>
     </TableWrapper>
   </Box>

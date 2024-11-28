@@ -157,40 +157,66 @@ class EvmAccount {
      */
   }
 
-  async queryTokenHistory(contractAddress) {
-    try {
-      const { data, error } =
-        await this.queryClient.BalanceService.getErc20TransfersForWalletAddressByPage(
-          this.chainId,
-          this.account.address,
-          {
-            contractAddress,
-            pageNumber: 0,
-            pageSize: 5,
-          }
-        );
-      if (error) {
-        throw new Error("invalid history");
-      }
+  async queryTokenHistory(tokenAddress, maxCount = 5) {
+    const { transfers: rxTransfers } =
+      await this.alchemyClient.core.getAssetTransfers({
+        category: [tokenAddress ? "erc20" : "external"],
+        order: "desc",
+        withMetadata: true,
+        toAddress: this.address,
+        excludeZeroValue: true,
+        contractAddresses: tokenAddress ? [tokenAddress] : undefined,
+        maxCount,
+      });
 
-      const items = camelcaseKeys(data.items, { deep: true });
-      return items
-        .map(({ transfers }) =>
-          transfers.map((item) => ({
-            txnHash: item.txHash,
-            transferType: item.transferType,
-            fromAddress: item.fromAddress,
-            toAddress: item.toAddress,
-            amount: item.delta,
-            decimals: item.contractDecimals,
-            time: item.blockSignedAt,
-          }))
-        )
-        .flat();
-    } catch (e) {
-      console.error("failed to fetch token history ...");
-      return null;
-    }
+    const { transfers: txTransfers } =
+      await this.alchemyClient.core.getAssetTransfers({
+        category: [tokenAddress ? "erc20" : "external"],
+        order: "desc",
+        withMetadata: true,
+        fromAddress: this.address,
+        excludeZeroValue: true,
+        contractAddresses: tokenAddress ? [tokenAddress] : undefined,
+        maxCount,
+      });
+
+    const transfers = [...rxTransfers, ...txTransfers];
+    transfers.sort(
+      (a, b) => parseInt(b.blockNum, 16) - parseInt(a.blockNum, 16)
+    );
+
+    return transfers
+      .map(
+        ({
+          from,
+          to,
+          value,
+          hash,
+          blockNum,
+          metadata: { blockTimestamp },
+        }) => ({
+          hash,
+          from,
+          to,
+          value,
+          blockNum,
+          blockTimestamp,
+        })
+      )
+      .slice(0, maxCount);
+
+    /**
+     * return format:
+     *
+     * array of
+     *
+     * from
+     * to
+     * value
+     * hash
+     * blockNum
+     * blockTimestamp
+     */
   }
 
   /**

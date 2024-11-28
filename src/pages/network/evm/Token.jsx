@@ -191,10 +191,7 @@ const Token = () => {
       const txData = await account.populateTransferToken(
         token.native ? "" : selectedTokenAddress,
         recipient,
-        ethers.parseUnits(
-          amount.toString(),
-          token.decimals
-        )
+        ethers.parseUnits(amount.toString(), token.decimals)
       );
       setTransaction(txData);
 
@@ -210,11 +207,11 @@ const Token = () => {
   }, 500);
 
   useEffect(() => {
-    if (!token.native) {
-      account.queryTokenHistory(selectedTokenAddress).then((result) => {
-        setHistory(result || []);
+    account
+      .queryTokenHistory(token.native ? "" : selectedTokenAddress)
+      .then((result) => {
+        setHistory(result);
       });
-    }
   }, []);
 
   useEffect(() => {
@@ -270,10 +267,7 @@ const Token = () => {
               fallbackColor={"#" + token.address.slice(2, 8)}
             />
           ) : (
-            <a
-              href={account.linkOfContract(token.address)}
-              target="_blank"
-            >
+            <a href={account.linkOfContract(token.address)} target="_blank">
               <Avatar
                 uri={token.logoURI}
                 symbol={token.symbol}
