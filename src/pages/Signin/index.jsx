@@ -176,7 +176,7 @@ const SignIn = () => {
   );
 
   const unknownFact = useMemo(
-    () => UNKNOWN_FACTS[Math.floor(progress / 17)],
+    () => UNKNOWN_FACTS[Math.floor(progress / 20)],
     [progress]
   );
 

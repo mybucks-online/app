@@ -149,6 +149,5 @@ export const UNKNOWN_FACTS = [
   "It runs only in your browser.",
   "It never stores or transmits your password.",
   "Your account's origin remains anonymous.",
-  "Feel free to transfer your wallet anytime.",
   "There's no reset or recovery option.",
 ];
