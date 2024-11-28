@@ -1,5 +1,4 @@
 import { Buffer } from "buffer";
-import { ethers } from "ethers";
 import { TronWeb } from "tronweb";
 
 import { getEvmPrivateKey, NETWORK } from "@mybucks/lib/conf";
@@ -101,8 +100,8 @@ class TronAccount {
         queryPrice("USDT"),
       ]);
 
-    const nativeTokenBalance = this.tronweb.fromSun(trxRawBalance);
-    const usdtBalance = this.tronweb.fromSun(usdtRawBalance);
+    const trxBalance = parseFloat(this.tronweb.fromSun(trxRawBalance));
+    const usdtBalance = parseFloat(this.tronweb.fromSun(usdtRawBalance));
 
     return [
       {
@@ -111,9 +110,9 @@ class TronAccount {
         symbol: "TRX",
         address: "41eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
         decimals: 6,
-        balance: ethers.formatUnits(trxRawBalance, 6),
+        balance: trxBalance,
         price: nativeTokenPrice,
-        quote: nativeTokenBalance * nativeTokenPrice,
+        quote: trxBalance * nativeTokenPrice,
         logoURI:
           "https://assets.coingecko.com/coins/images/1094/standard/tron-logo.png?1696502193",
       },
@@ -123,7 +122,7 @@ class TronAccount {
         symbol: "USDT",
         address: TRC20_USDT_ADDRESS,
         decimals: 6,
-        balance: ethers.formatUnits(usdtRawBalance, 6),
+        balance: usdtBalance,
         price: usdtPrice,
         quote: usdtBalance * usdtPrice,
         logoURI:
@@ -134,16 +133,6 @@ class TronAccount {
 
   // [TODO] Not implemented yet
   async queryTokenHistory(contractAddress) {
-    /**
-     * Return the array of following properties:
-     * txnHash
-     * transferType
-     * fromAddress
-     * toAddress
-     * amount
-     * decimals
-     * time
-     */
     return [];
   }
 
