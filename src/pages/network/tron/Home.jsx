@@ -1,7 +1,6 @@
 import { useContext } from "react";
 import { toast } from "react-toastify";
 import copy from "clipboard-copy";
-import { ethers } from "ethers";
 import styled from "styled-components";
 import toFlexible from "toflexible";
 

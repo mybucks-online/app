@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ethers } from "ethers";
 import styled from "styled-components";
 
@@ -148,22 +148,18 @@ const Token = () => {
 
   const [gasEstimation, setGasEstimation] = useState(0);
   const [gasEstimationValue, setGasEstimationValue] = useState(0);
-  const [history, setHistory] = useState([]);
 
   const {
     account,
     selectedTokenAddress,
     selectToken,
-    tokenBalances,
+    token,
     fetchBalances,
+    transfers,
     nativeTokenName,
     nativeTokenPrice,
     loading,
   } = useContext(StoreContext);
-  const token = useMemo(
-    () => tokenBalances.find((t) => t.address === selectedTokenAddress),
-    [tokenBalances, selectedTokenAddress]
-  );
 
   const { debounce } = useDebounce();
   const estimateGas = debounce(async () => {
@@ -205,14 +201,6 @@ const Token = () => {
       setHasErrorInput(true);
     }
   }, 500);
-
-  useEffect(() => {
-    account
-      .queryTokenHistory(token.native ? "" : selectedTokenAddress)
-      .then((result) => {
-        setHistory(result);
-      });
-  }, []);
 
   useEffect(() => {
     estimateGas();
@@ -351,8 +339,8 @@ const Token = () => {
         </Submit>
       </Box>
 
-      {history.length > 0 && (
-        <ActivityTable account={account} history={history} />
+      {transfers.length > 0 && (
+        <ActivityTable account={account} history={transfers} />
       )}
     </Container>
   );

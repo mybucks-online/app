@@ -1,7 +1,6 @@
 import { CovalentClient } from "@covalenthq/client-sdk";
 import { tokens as defaultTokensList } from "@sushiswap/default-token-list";
 import { Alchemy } from "alchemy-sdk";
-import camelcaseKeys from "camelcase-keys";
 import { Contract, ethers } from "ethers";
 
 import { EVM_NETWORKS, getEvmPrivateKey, NETWORK } from "@mybucks/lib/conf";
@@ -158,27 +157,27 @@ class EvmAccount {
   }
 
   async queryTokenHistory(tokenAddress, maxCount = 5) {
-    const { transfers: rxTransfers } =
-      await this.alchemyClient.core.getAssetTransfers({
-        category: [tokenAddress ? "erc20" : "external"],
-        order: "desc",
-        withMetadata: true,
-        toAddress: this.address,
-        excludeZeroValue: true,
-        contractAddresses: tokenAddress ? [tokenAddress] : undefined,
-        maxCount,
-      });
-
-    const { transfers: txTransfers } =
-      await this.alchemyClient.core.getAssetTransfers({
-        category: [tokenAddress ? "erc20" : "external"],
-        order: "desc",
-        withMetadata: true,
-        fromAddress: this.address,
-        excludeZeroValue: true,
-        contractAddresses: tokenAddress ? [tokenAddress] : undefined,
-        maxCount,
-      });
+    const [{ transfers: rxTransfers }, { transfers: txTransfers }] =
+      await Promise.all([
+        this.alchemyClient.core.getAssetTransfers({
+          category: [tokenAddress ? "erc20" : "external"],
+          order: "desc",
+          withMetadata: true,
+          toAddress: this.address,
+          excludeZeroValue: true,
+          contractAddresses: tokenAddress ? [tokenAddress] : undefined,
+          maxCount,
+        }),
+        this.alchemyClient.core.getAssetTransfers({
+          category: [tokenAddress ? "erc20" : "external"],
+          order: "desc",
+          withMetadata: true,
+          fromAddress: this.address,
+          excludeZeroValue: true,
+          contractAddresses: tokenAddress ? [tokenAddress] : undefined,
+          maxCount,
+        }),
+      ]);
 
     const transfers = [...rxTransfers, ...txTransfers];
     transfers.sort(

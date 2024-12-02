@@ -1,6 +1,5 @@
 import copy from "clipboard-copy";
 import { format } from "date-fns";
-import { ethers } from "ethers";
 import styled from "styled-components";
 import toFlexible from "toflexible";
 

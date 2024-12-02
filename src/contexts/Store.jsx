@@ -58,8 +58,8 @@ const StoreProvider = ({ children }) => {
       !hash
         ? null
         : network === NETWORK.EVM
-        ? new EvmAccount(hash, chainId)
-        : new TronAccount(hash),
+          ? new EvmAccount(hash, chainId)
+          : new TronAccount(hash),
     [hash, network, chainId]
   );
 
@@ -68,17 +68,24 @@ const StoreProvider = ({ children }) => {
   const [inMenu, openMenu] = useState(false);
   const [showBalances, setShowBalances] = useState(false);
 
-  // active token
-  const [selectedTokenAddress, selectToken] = useState("");
-
   // balances related
   const [nativeTokenName, setNativeTokenName] = useState("");
   const [nativeTokenBalance, setNativeTokenBalance] = useState(0);
   const [tokenBalances, setTokenBalances] = useState([]);
   const [nftBalances, setNftBalances] = useState([]);
 
+  // transfers history
+  const [transfers, setTransfers] = useState([]);
+
   // prices related
   const [nativeTokenPrice, setNativeTokenPrice] = useState(0);
+
+  // active token
+  const [selectedTokenAddress, selectToken] = useState("");
+  const token = useMemo(
+    () => tokenBalances.find((t) => t.address === selectedTokenAddress),
+    [tokenBalances, selectedTokenAddress]
+  );
 
   // unique counter that increments regularly
   const [tick, setTick] = useState(0);
@@ -87,7 +94,7 @@ const StoreProvider = ({ children }) => {
     if (!account) {
       return;
     }
-    setNativeTokenName("")
+    setNativeTokenName("");
     setTokenBalances([]);
     account.getNetworkStatus().then(() => {
       setTick((_tick) => _tick + 1);
@@ -112,6 +119,18 @@ const StoreProvider = ({ children }) => {
       clearInterval(timerId);
     };
   }, [account]);
+
+  useEffect(() => {
+    if (!selectedTokenAddress) {
+      setTransfers([]);
+      return;
+    }
+    account
+      .queryTokenHistory(token.native ? "" : selectedTokenAddress)
+      .then((result) => {
+        setTransfers(result);
+      });
+  }, [selectedTokenAddress]);
 
   const reset = () => {
     setPassword("");
@@ -184,11 +203,13 @@ const StoreProvider = ({ children }) => {
         nativeTokenBalance,
         tokenBalances,
         nftBalances,
+        transfers,
         nativeTokenPrice,
         tick,
         fetchBalances,
         selectedTokenAddress,
         selectToken,
+        token,
       }}
     >
       {children}
