@@ -148,6 +148,7 @@ const StoreProvider = ({ children }) => {
     setNativeTokenBalance(0);
     setTokenBalances([]);
     setNftBalances([]);
+    setTransfers([]);
 
     selectToken("");
   };

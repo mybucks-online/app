@@ -1,4 +1,3 @@
-import { CovalentClient } from "@covalenthq/client-sdk";
 import { tokens as defaultTokensList } from "@sushiswap/default-token-list";
 import { Alchemy } from "alchemy-sdk";
 import { Contract, ethers } from "ethers";
@@ -25,7 +24,6 @@ class EvmAccount {
   // wei unit
   gasPrice = 0;
 
-  queryClient = null;
   alchemyClient = null;
 
   constructor(hashKey, chainId) {
@@ -36,10 +34,6 @@ class EvmAccount {
     this.signer = getEvmPrivateKey(hashKey);
     this.account = new ethers.Wallet(this.signer, this.provider);
     this.address = this.account.address;
-
-    this.queryClient = new CovalentClient(
-      import.meta.env.VITE_COVALENT_API_KEY
-    );
 
     this.alchemyClient = new Alchemy({
       network: this.networkInfo.networkId,
