@@ -232,34 +232,31 @@ const EvmHome = () => {
           {loading
             ? LOADING_PLACEHOLDER
             : !showBalances
-            ? BALANCE_PLACEHOLDER
-            : nativeTokenBalance > 0
-            ? toFlexible(nativeTokenBalance, 2)
-            : "0"}
+              ? BALANCE_PLACEHOLDER
+              : nativeTokenBalance > 0
+                ? toFlexible(nativeTokenBalance, 2)
+                : "0"}
           &nbsp;
           {nativeTokenName}
         </NativeBalance>
       </PrimaryBox>
 
       <TokensList>
-        {tokenBalances
-          .filter((t) => !!t.nativeToken)
-          .concat(tokenBalances.filter((t) => !t.nativeToken))
-          .map((t) => (
-            <TokenBalanceRow
-              key={t.contractAddress}
-              token={{
-                symbol: t.contractTickerSymbol,
-                name: t.contractName,
-                logoURI: t.logoURI,
-                contract: t.contractAddress,
-              }}
-              balance={ethers.formatUnits(t.balance, t.contractDecimals)}
-              showBalance={showBalances}
-              quote={t.quote}
-              onClick={() => selectToken(t.contractAddress)}
-            />
-          ))}
+        {tokenBalances.map((t) => (
+          <TokenBalanceRow
+            key={t.address}
+            token={{
+              symbol: t.symbol,
+              name: t.name,
+              logoURI: t.logoURI,
+              contract: t.address,
+            }}
+            balance={t.balance}
+            showBalance={showBalances}
+            quote={t.quote}
+            onClick={() => selectToken(t.address)}
+          />
+        ))}
       </TokensList>
     </Container>
   );

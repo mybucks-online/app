@@ -117,7 +117,7 @@ This is a fully open-source project built with React, Vite, and related third-pa
 - **ethers**  
   A standard library for manipulating EVM accounts.
 
-- **@covalenthq/client-sdk**  
+- **alchemy-sdk**
   Provides query functions for massive crypto assets in multiple networks.
 
 - **@sushiswap/default-token-list**

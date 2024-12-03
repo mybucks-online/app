@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ethers } from "ethers";
 import styled from "styled-components";
 
@@ -155,25 +155,15 @@ const Token = () => {
   const [bandwidthEstimation, setBandwidthEstimation] = useState(0);
   const [energyEstimation, setEnergyEstimation] = useState(0);
 
-  const [history, setHistory] = useState([]);
-
   const {
     account,
     selectedTokenAddress,
     selectToken,
-    tokenBalances,
+    token,
     fetchBalances,
+    transfers,
     loading,
   } = useContext(StoreContext);
-
-  const token = useMemo(
-    () => tokenBalances.find((t) => t.contractAddress === selectedTokenAddress),
-    [tokenBalances, selectedTokenAddress]
-  );
-  const balance = useMemo(
-    () => ethers.formatUnits(token.balance, token.contractDecimals),
-    [token]
-  );
 
   const { debounce } = useDebounce();
   const estimateGas = debounce(async () => {
@@ -202,28 +192,22 @@ const Token = () => {
       const isActivated = await account.isActivated(recipient);
       setRecipientActivated(isActivated);
       // trc20 can't be transferred to inactivated account
-      if (!token.nativeToken && !isActivated) {
+      if (!token.native && !isActivated) {
         setHasErrorInput(true);
         return;
       }
 
       const txData = await account.populateTransferToken(
-        token.nativeToken ? "" : selectedTokenAddress,
+        token.native ? "" : selectedTokenAddress,
         recipient,
-        ethers.parseUnits(
-          amount.toString(),
-          token.nativeToken ? 6 : token.contractDecimals
-        )
+        ethers.parseUnits(amount.toString(), token.native ? 6 : token.decimals)
       );
       setTransaction(txData);
 
       const [bandwidth, energy] = await account.estimateGas(
-        token.nativeToken ? "" : selectedTokenAddress,
+        token.native ? "" : selectedTokenAddress,
         recipient,
-        ethers.parseUnits(
-          amount.toString(),
-          token.nativeToken ? 6 : token.contractDecimals
-        )
+        ethers.parseUnits(amount.toString(), token.native ? 6 : token.decimals)
       );
       setBandwidthEstimation(bandwidth);
       setEnergyEstimation(energy);
@@ -232,14 +216,6 @@ const Token = () => {
       setHasErrorInput(true);
     }
   }, 500);
-
-  useEffect(() => {
-    if (!token.nativeToken) {
-      account.queryTokenHistory(selectedTokenAddress).then((result) => {
-        setHistory(result || []);
-      });
-    }
-  }, []);
 
   useEffect(() => {
     estimateGas();
@@ -293,28 +269,25 @@ const Token = () => {
 
       <TokenDetails>
         <LogoAndLink>
-          {token.nativeToken ? (
+          {token.native ? (
             <Avatar
               uri={token.logoURI}
-              symbol={token.contractTickerSymbol}
-              fallbackColor={"#" + token.contractAddress.slice(2, 8)}
+              symbol={token.symbol}
+              fallbackColor={"#" + token.address.slice(2, 8)}
             />
           ) : (
-            <a
-              href={account.linkOfContract(token.contractAddress)}
-              target="_blank"
-            >
+            <a href={account.linkOfContract(token.address)} target="_blank">
               <Avatar
                 uri={token.logoURI}
-                symbol={token.contractTickerSymbol}
-                fallbackColor={"#" + token.contractAddress.slice(2, 8)}
+                symbol={token.symbol}
+                fallbackColor={"#" + token.address.slice(2, 8)}
               />
             </a>
           )}
 
-          {!token.nativeToken && (
+          {!token.native && (
             <ContractLink
-              href={account.linkOfContract(token.contractAddress)}
+              href={account.linkOfContract(token.address)}
               target="_blank"
             >
               <ArrowUpRight />
@@ -323,13 +296,13 @@ const Token = () => {
         </LogoAndLink>
 
         <TokenBalance>
-          {loading ? LOADING_PLACEHOLDER : Number(balance).toFixed(4)}
+          {loading ? LOADING_PLACEHOLDER : token.balance.toFixed(4)}
           &nbsp;
-          {token.contractTickerSymbol}
+          {token.symbol}
         </TokenBalance>
 
         {!!token.quote && (
-          <TokenValue>${Number(token.quote).toFixed(4)} USD</TokenValue>
+          <TokenValue>${token.quote.toFixed(4)} USD</TokenValue>
         )}
       </TokenDetails>
 
@@ -354,7 +327,7 @@ const Token = () => {
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
           />
-          <MaxButton onClick={() => setAmount(balance)}>Max</MaxButton>
+          <MaxButton onClick={() => setAmount(token.balance)}>Max</MaxButton>
         </AmountWrapper>
 
         {invalidRecipientAddress ? (
@@ -362,7 +335,7 @@ const Token = () => {
             <img src={InfoRedIcon} />
             <span>Invalid address</span>
           </InvalidTransfer>
-        ) : !recipientActivated && !token.nativeToken ? (
+        ) : !recipientActivated && !token.native ? (
           <InvalidTransfer>
             <img src={InfoRedIcon} />
             <span>
@@ -400,8 +373,8 @@ const Token = () => {
         </Submit>
       </Box>
 
-      {history.length > 0 && (
-        <ActivityTable account={account} history={history} />
+      {transfers.length > 0 && (
+        <ActivityTable account={account} history={transfers} />
       )}
     </Container>
   );

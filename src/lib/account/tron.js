@@ -100,52 +100,39 @@ class TronAccount {
         queryPrice("USDT"),
       ]);
 
-    const nativeTokenBalance = this.tronweb.fromSun(trxRawBalance);
-    const usdtBalance = this.tronweb.fromSun(usdtRawBalance);
+    const trxBalance = parseFloat(this.tronweb.fromSun(trxRawBalance));
+    const usdtBalance = parseFloat(this.tronweb.fromSun(usdtRawBalance));
 
     return [
-      nativeTokenName,
-      nativeTokenBalance,
-      nativeTokenPrice,
-      [
-        {
-          nativeToken: true,
-          contractName: "TRON",
-          contractTickerSymbol: "TRX",
-          contractAddress: "41eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
-          contractDecimals: 6,
-          balance: trxRawBalance,
-          quote: nativeTokenBalance * nativeTokenPrice,
-          logoURI:
-            "https://assets.coingecko.com/coins/images/1094/standard/tron-logo.png?1696502193",
-        },
-        {
-          nativeToken: false,
-          contractName: "Tether USD",
-          contractTickerSymbol: "USDT",
-          contractAddress: TRC20_USDT_ADDRESS,
-          contractDecimals: 6,
-          balance: usdtRawBalance,
-          quote: usdtBalance * usdtPrice,
-          logoURI:
-            "https://assets.coingecko.com/coins/images/325/standard/Tether.png",
-        },
-      ],
+      {
+        native: true,
+        name: "TRON",
+        symbol: "TRX",
+        address: "41eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        decimals: 6,
+        balance: trxBalance,
+        price: nativeTokenPrice,
+        quote: trxBalance * nativeTokenPrice,
+        logoURI:
+          "https://assets.coingecko.com/coins/images/1094/standard/tron-logo.png?1696502193",
+      },
+      {
+        native: false,
+        name: "Tether USD",
+        symbol: "USDT",
+        address: TRC20_USDT_ADDRESS,
+        decimals: 6,
+        balance: usdtBalance,
+        price: usdtPrice,
+        quote: usdtBalance * usdtPrice,
+        logoURI:
+          "https://assets.coingecko.com/coins/images/325/standard/Tether.png",
+      },
     ];
   }
 
   // [TODO] Not implemented yet
   async queryTokenHistory(contractAddress) {
-    /**
-     * Return the array of following properties:
-     * txnHash
-     * transferType
-     * fromAddress
-     * toAddress
-     * amount
-     * decimals
-     * time
-     */
     return [];
   }
 
