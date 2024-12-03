@@ -126,7 +126,10 @@ const StoreProvider = ({ children }) => {
       return;
     }
     account
-      .queryTokenHistory(token.native ? "" : selectedTokenAddress)
+      .queryTokenHistory(
+        token.native ? "" : selectedTokenAddress,
+        token.decimals
+      )
       .then((result) => {
         setTransfers(result);
       });

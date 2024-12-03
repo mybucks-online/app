@@ -150,7 +150,7 @@ class EvmAccount {
      */
   }
 
-  async queryTokenHistory(tokenAddress, maxCount = 5) {
+  async queryTokenHistory(tokenAddress, decimals, maxCount = 5) {
     const { transfers: rxTransfers } =
       await this.alchemyClient.core.getAssetTransfers({
         category: [tokenAddress ? "erc20" : "external"],
@@ -186,11 +186,14 @@ class EvmAccount {
           hash,
           blockNum,
           metadata: { blockTimestamp },
+          rawContract,
         }) => ({
           hash,
           from,
           to,
-          value,
+          value:
+            value ||
+            parseFloat(ethers.formatUnits(rawContract.value, decimals)),
           blockNum,
           blockTimestamp,
         })
