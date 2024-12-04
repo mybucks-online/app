@@ -7,12 +7,15 @@ https://github.com/user-attachments/assets/4eba2af8-9d32-4ad2-b5b8-b2f3e9ed2da8
 
 ## Summary
 
-Mybucks.online is a **password-only, self-custodial cryptocurrency wallet** built with [React.js](https://react.dev). It generates a private key from your password using an industry-standard, verified **one-way hash function**. Your private key forms your account, allowing you to transfer, receive, and hold your crypto assets permanently.
+Mybucks.online is a **password-only, self-custodial cryptocurrency wallet** built with [React.js](https://react.dev). It generates a private key from your password and passcode using an industry-standard, verified **one-way hash function**. Your private key forms your account, allowing you to transfer, receive, and hold your crypto assets permanently.
 
 ## How to Use
 
 1. Visit `app.mybucks.online`.
-2. Input your password, confirmation, and passcode.
+2. Input your password, confirmation, and passcode.  
+  Test credentials:  
+    password: **DemoAccount5&**  
+    passcode: **112324**
 3. Click `Open`.
 
 (This process is the same for both initial opening and all subsequent uses.)
@@ -44,18 +47,6 @@ Mybucks.online is a **password-only, self-custodial cryptocurrency wallet** buil
 - **Simple Access:** Only requires a password, no 12-word seed phrases.
 - **No KYC Hassles:** No worries about KYC or suspensions.
 - **Private Key Portability:** Backup your password/private key. Import into Metamask to use across DeFi products.
-
-### Analogy
-
-Think of it like a public locker at a railway station:
-
-1. Find an empty box.
-2. Set up your password anonymously.
-3. Place your goods inside and lock.
-
-Return later to access your goods with just your password—no ID checks required.
-
-That's all! 🎉
 
 ## Generate the private key
 
@@ -102,7 +93,7 @@ async function generatePrivateKey(password, passcode) {
 You can transfer all your holdings to family or friends in a few seconds by sharing your password only.
 
 ```
-mybucks.online / mYpAssword987^5 : 239a8b
+mybucks.online / DemoAccount5& : 112324
 ```
 
 Send this short note to your friend in a private channel.
@@ -117,16 +108,18 @@ This is a fully open-source project built with React, Vite, and related third-pa
 - **ethers**  
   A standard library for manipulating EVM accounts.
 
-- **alchemy-sdk**
+- **alchemy-sdk**  
   Provides query functions for massive crypto assets in multiple networks.
 
 - **@sushiswap/default-token-list**
+
+- **tronweb**
 
 - **styled-components**
 
 ## How to Run
 
-Please sign up for [Infura](https://infura.io), [GoldRush](https://goldrush.dev/) and [Trongrid](https://trongrid.io/), create free API keys, and update the environment variables accordingly.
+Please sign up for [Infura](https://infura.io), [Alchemy](https://alchemy.com/) and [Trongrid](https://trongrid.io/), create free API keys, and update the environment variables accordingly.
 
 ```bash
 yarn install
