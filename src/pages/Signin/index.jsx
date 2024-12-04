@@ -119,6 +119,11 @@ const ProgressWrapper = styled.div`
   }
 `;
 
+const GreetingIcon = styled.img`
+  width: 4.5rem;
+  height: 4.5rem;
+`;
+
 const Notice = styled.p`
   text-align: center;
   max-width: 16rem;
@@ -289,7 +294,7 @@ const SignIn = () => {
 
       <Modal show={!!progress} width="20rem">
         <ProgressWrapper>
-          <img src={Logo} alt="mybucks.online" />
+          <GreetingIcon src={Logo} alt="Hi" loading="lazy" />
           <Notice>{unknownFact}</Notice>
           <Progress value={progress} max="100" />
         </ProgressWrapper>
