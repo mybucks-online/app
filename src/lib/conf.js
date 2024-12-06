@@ -139,8 +139,8 @@ export const EVM_NETWORKS = [
 ];
 
 export const findNetworkByName = (networkName) => {
-  if (networkName === Network.TRON) {
-    return [NETWORK.TRON, 0];
+  if (networkName === NETWORK.TRON) {
+    return [NETWORK.TRON, 1];
   }
 
   const { chainId } = EVM_NETWORKS.find((item) => item.name === networkName);
