@@ -1,8 +1,8 @@
 import { Network } from "alchemy-sdk";
 import { Buffer } from "buffer";
 import { ethers } from "ethers";
-import { scrypt } from "scrypt-js";
 import { nanoid } from "nanoid";
+import { scrypt } from "scrypt-js";
 
 const abi = new ethers.AbiCoder();
 

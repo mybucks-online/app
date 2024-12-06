@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState, useEffect } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 
 import Button from "@mybucks/components/Button";
@@ -11,14 +11,14 @@ import Progress from "@mybucks/components/Progress";
 import { H1 } from "@mybucks/components/Texts";
 import { StoreContext } from "@mybucks/contexts/Store";
 import {
+  findNetworkByName,
   generateHash,
+  parseUrl,
   PASSCODE_MAX_LENGTH,
   PASSCODE_MIN_LENGTH,
   PASSWORD_MAX_LENGTH,
   PASSWORD_MIN_LENGTH,
   UNKNOWN_FACTS,
-  parseUrl,
-  findNetworkByName,
 } from "@mybucks/lib/conf";
 import media from "@mybucks/styles/media";
 
