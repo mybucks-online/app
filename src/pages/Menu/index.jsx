@@ -104,9 +104,16 @@ const Menu = () => {
           <Address>{account.address}</Address>
 
           <Button onClick={backupAddress}>Address</Button>
-          <Button onClick={onClickPassword}>Password</Button>
-          <Button onClick={onClickPrivateKey}>Private Key</Button>
-          <Button onClick={onClickGenerateLink}>Generate Link</Button>
+
+          <Button onClick={onClickPassword} $variant="danger">
+            Password
+          </Button>
+          <Button onClick={onClickPrivateKey} $variant="danger">
+            Private Key
+          </Button>
+          <Button onClick={onClickGenerateLink} $variant="danger">
+            Transfer Link
+          </Button>
         </Box>
       </Container>
 
