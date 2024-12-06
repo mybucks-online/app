@@ -18,4 +18,7 @@ export default defineConfig({
       "@mybucks": path.resolve(__dirname, "./src"),
     },
   },
+  optimizeDeps: {
+    exclude: ["js-big-decimal"],
+  },
 });
