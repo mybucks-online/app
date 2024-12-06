@@ -147,6 +147,15 @@ export const findNetworkByName = (networkName) => {
   return [NETWORK.EVM, chainId];
 };
 
+export const findNetworkNameByChainId = (network, chainId) => {
+  if (network === NETWORK.TRON) {
+    return NETWORK.TRON;
+  }
+
+  const { name } = EVM_NETWORKS.find((item) => item.chainId === chainId);
+  return name;
+};
+
 export const GAS_PRICE = Object.freeze({
   HIGH: "high",
   AVERAGE: "average",
