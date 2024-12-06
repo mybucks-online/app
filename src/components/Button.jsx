@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 
 /**
- * $variant: primary | secondary | outline
+ * $variant: primary | secondary | outline | danger
  * $size: small | normal | block
  */
 const Button = styled.button`
@@ -13,18 +13,18 @@ const Button = styled.button`
           padding: ${({ theme }) => `${theme.sizes.x3s} ${theme.sizes.xl}`};
         `
       : $size === "block"
-      ? css`
-          display: block;
-          width: 100%;
-          font-size: ${({ theme }) => theme.sizes.base};
-          font-weight: ${({ theme }) => theme.weights.highlight};
-          padding: ${({ theme }) => theme.sizes.base};
-        `
-      : css`
-          font-size: ${({ theme }) => theme.sizes.base};
-          font-weight: ${({ theme }) => theme.weights.highlight};
-          padding: ${({ theme }) => theme.sizes.base};
-        `};
+        ? css`
+            display: block;
+            width: 100%;
+            font-size: ${({ theme }) => theme.sizes.base};
+            font-weight: ${({ theme }) => theme.weights.highlight};
+            padding: ${({ theme }) => theme.sizes.base};
+          `
+        : css`
+            font-size: ${({ theme }) => theme.sizes.base};
+            font-weight: ${({ theme }) => theme.weights.highlight};
+            padding: ${({ theme }) => theme.sizes.base};
+          `};
 
   ${({ $variant }) =>
     $variant === "secondary"
@@ -34,16 +34,22 @@ const Button = styled.button`
           border: none;
         `
       : $variant === "outline"
-      ? css`
-          color: ${({ theme }) => theme.colors.primary};
-          background-color: ${({ theme }) => theme.colors.gray25};
-          border: 1px solid ${({ theme }) => theme.colors.primary};
-        `
-      : css`
-          background-color: ${({ theme }) => theme.colors.primary};
-          color: ${({ theme }) => theme.colors.gray25};
-          border: none;
-        `};
+        ? css`
+            color: ${({ theme }) => theme.colors.primary};
+            background-color: ${({ theme }) => theme.colors.gray25};
+            border: 1px solid ${({ theme }) => theme.colors.primary};
+          `
+        : $variant === "danger"
+          ? css`
+              color: ${({ theme }) => theme.colors.gray25};
+              background-color: ${({ theme }) => theme.colors.error};
+              border: none;
+            `
+          : css`
+              background-color: ${({ theme }) => theme.colors.primary};
+              color: ${({ theme }) => theme.colors.gray25};
+              border: none;
+            `};
 
   line-height: 140%;
   border-radius: ${({ theme }) => theme.radius.base};

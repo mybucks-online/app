@@ -14,20 +14,20 @@ export const StoreContext = createContext({
   password: "",
   passcode: "",
   hash: "",
-  setup: (p, pc, s, h) => {},
+  setup: () => {},
   reset: () => {},
 
   // evm | tron
   network: DEFAULT_NETWORK,
   chainId: DEFAULT_CHAIN_ID,
   account: null,
-  updateNetwork: (n, c) => {},
+  updateNetwork: () => {},
 
   loading: false,
   inMenu: false,
-  openMenu: (m) => {},
+  openMenu: () => {},
   showBalances: false,
-  setShowBalances: (f) => {},
+  setShowBalances: () => {},
 
   nativeTokenName: "",
   nativeTokenBalance: 0,
@@ -40,7 +40,7 @@ export const StoreContext = createContext({
   fetchBalances: () => {},
 
   selectedTokenAddress: "",
-  selectToken: (t) => {},
+  selectToken: () => {},
 });
 
 const StoreProvider = ({ children }) => {
@@ -156,10 +156,17 @@ const StoreProvider = ({ children }) => {
     selectToken("");
   };
 
-  const setup = (pw, pc, h) => {
+  const setup = (pw, pc, hsh, nw, cid) => {
     setPassword(pw);
     setPasscode(pc);
-    setHash(h);
+    setHash(hsh);
+
+    if (nw) {
+      setNetwork(nw);
+    }
+    if (cid) {
+      setChainId(cid);
+    }
   };
 
   const updateNetwork = (net, id) => {
