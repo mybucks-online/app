@@ -84,7 +84,7 @@ const Menu = () => {
       const networkName = findNetworkNameByChainId(network, chainId);
       const link = generateUrl(password, passcode, networkName);
       copy(
-        window.location.origin + window.location.pathname + "?secret=" + link
+        window.location.origin + window.location.pathname + "?wallet=" + link
       );
       toast("Wallet link copied into clipboard.");
     }

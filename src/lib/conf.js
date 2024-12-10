@@ -47,9 +47,11 @@ export const generateHash = async (password, passcode, cb = () => {}) => {
 export const getEvmPrivateKey = (h) =>
   ethers.keccak256(abi.encode(["string"], [h]));
 
+const URL_DELIMITER = "\u0002";
+
 export function generateUrl(password, passcode, network) {
   const merged = Buffer.from(
-    password + "\u0002" + passcode + "\u0002" + network,
+    password + URL_DELIMITER + passcode + URL_DELIMITER + network,
     "utf-8"
   );
   const base64Encoded = merged.toString("base64");
@@ -60,7 +62,7 @@ export function generateUrl(password, passcode, network) {
 export function parseUrl(token) {
   const payload = token.slice(6, token.length - 6);
   const base64Decoded = Buffer.from(payload, "base64").toString("utf-8");
-  const [password, passcode, network] = base64Decoded.split("\u0002");
+  const [password, passcode, network] = base64Decoded.split(URL_DELIMITER);
   return [password, passcode, network];
 }
 

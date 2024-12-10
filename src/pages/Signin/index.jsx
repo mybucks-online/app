@@ -192,7 +192,7 @@ const SignIn = () => {
       // get "secret" param from URL
       const url = new URL(window.location.href);
       const params = new URLSearchParams(url.search);
-      const secret = params.get("secret");
+      const secret = params.get("wallet");
       if (!secret) {
         return;
       }
