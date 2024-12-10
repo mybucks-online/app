@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 
 import Button from "@mybucks/components/Button";
@@ -11,7 +11,9 @@ import Progress from "@mybucks/components/Progress";
 import { H1 } from "@mybucks/components/Texts";
 import { StoreContext } from "@mybucks/contexts/Store";
 import {
+  findNetworkByName,
   generateHash,
+  parseUrl,
   PASSCODE_MAX_LENGTH,
   PASSCODE_MIN_LENGTH,
   PASSWORD_MAX_LENGTH,
@@ -184,6 +186,35 @@ const SignIn = () => {
     () => UNKNOWN_FACTS[Math.floor(progress / 20)],
     [progress]
   );
+
+  useEffect(() => {
+    const parseUrlAndSubmit = async () => {
+      // get "secret" param from URL
+      const url = new URL(window.location.href);
+      const params = new URLSearchParams(url.search);
+      const secret = params.get("wallet");
+      if (!secret) {
+        return;
+      }
+
+      // parse password, passcode, network name from "secret" param
+      const [pwd, pc, nn] = parseUrl(secret);
+      if (!pwd || !pc || !nn) {
+        return;
+      }
+      const [network, chainId] = findNetworkByName(nn);
+
+      // open wallet
+      setDisabled(true);
+      const hash = await generateHash(pwd, pc, (p) =>
+        setProgress(Math.floor(p * 100))
+      );
+      setup(pwd, pc, hash, network, chainId);
+      setDisabled(false);
+    };
+
+    parseUrlAndSubmit();
+  }, []);
 
   const onSubmit = async () => {
     setDisabled(true);

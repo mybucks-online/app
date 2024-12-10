@@ -18,7 +18,7 @@ import Link from "@mybucks/components/Link";
 import NetworkSelector from "@mybucks/components/NetworkSelector";
 import { StoreContext } from "@mybucks/contexts/Store";
 import { BALANCE_PLACEHOLDER, LOADING_PLACEHOLDER } from "@mybucks/lib/conf";
-import { truncate } from "@mybucks/lib/utils";
+import { clearQueryParams, truncate } from "@mybucks/lib/utils";
 import TokenBalanceRow from "@mybucks/pages/network/common/TokenBalanceRow";
 import media from "@mybucks/styles/media";
 
@@ -177,6 +177,8 @@ const EvmHome = () => {
   const close = () => {
     reset();
     copy("");
+
+    clearQueryParams();
   };
 
   return (

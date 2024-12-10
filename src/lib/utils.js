@@ -12,3 +12,8 @@ export const queryPrice = async (base, quote = "USD") => {
     return 0;
   }
 };
+
+export const clearQueryParams = () => {
+  const url = window.location.origin + window.location.pathname;
+  window.history.replaceState({}, document.title, url);
+};

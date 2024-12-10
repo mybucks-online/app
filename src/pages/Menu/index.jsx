@@ -9,6 +9,7 @@ import ConfirmPasscodeModal from "@mybucks/components/ConfirmPasscodeModal";
 import { Box as BaseBox, Container } from "@mybucks/components/Containers";
 import { H3 } from "@mybucks/components/Texts";
 import { StoreContext } from "@mybucks/contexts/Store";
+import { findNetworkNameByChainId, generateUrl } from "@mybucks/lib/conf";
 
 const Box = styled(BaseBox)`
   display: flex;
@@ -41,10 +42,15 @@ const Button = styled(BaseButton)`
   margin-bottom: ${({ theme }) => theme.sizes.x2l};
 `;
 
+const BACKUP_PASSWORD = 1;
+const BACKUP_PRIVATE_KEY = 2;
+const BACKUP_TRANSFER_LINK = 3;
+
 const Menu = () => {
   const [confirmPasscode, setConfirmPasscode] = useState(false);
-  const [isBackupPassword, setIsBackupPassword] = useState(false);
-  const { openMenu, account, password, passcode } = useContext(StoreContext);
+  const [nextStep, setNextStep] = useState(0);
+  const { openMenu, account, password, passcode, network, chainId } =
+    useContext(StoreContext);
 
   const backupAddress = () => {
     copy(account.address);
@@ -52,23 +58,35 @@ const Menu = () => {
   };
 
   const onClickPassword = () => {
-    setIsBackupPassword(true);
+    setNextStep(BACKUP_PASSWORD);
     setConfirmPasscode(true);
   };
 
   const onClickPrivateKey = () => {
-    setIsBackupPassword(false);
+    setNextStep(BACKUP_PRIVATE_KEY);
+    setConfirmPasscode(true);
+  };
+
+  const onClickGenerateLink = () => {
+    setNextStep(BACKUP_TRANSFER_LINK);
     setConfirmPasscode(true);
   };
 
   const onConfirmedPasscode = () => {
     setConfirmPasscode(false);
-    if (isBackupPassword) {
+    if (nextStep === BACKUP_PASSWORD) {
       copy(`${password} : ${passcode}`);
       toast("Password copied into clipboard.");
-    } else {
+    } else if (nextStep === BACKUP_PRIVATE_KEY) {
       copy(account.signer);
       toast("Private key copied into clipboard.");
+    } else if (nextStep === BACKUP_TRANSFER_LINK) {
+      const networkName = findNetworkNameByChainId(network, chainId);
+      const link = generateUrl(password, passcode, networkName);
+      copy(
+        window.location.origin + window.location.pathname + "?wallet=" + link
+      );
+      toast("Wallet link copied into clipboard.");
     }
   };
 
@@ -86,8 +104,16 @@ const Menu = () => {
           <Address>{account.address}</Address>
 
           <Button onClick={backupAddress}>Address</Button>
-          <Button onClick={onClickPassword}>Password</Button>
-          <Button onClick={onClickPrivateKey}>Private Key</Button>
+
+          <Button onClick={onClickPassword} $variant="danger">
+            Password
+          </Button>
+          <Button onClick={onClickPrivateKey} $variant="danger">
+            Private Key
+          </Button>
+          <Button onClick={onClickGenerateLink} $variant="danger">
+            Transfer Link
+          </Button>
         </Box>
       </Container>
 
