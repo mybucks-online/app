@@ -90,13 +90,18 @@ async function generatePrivateKey(password, passcode) {
 
 ## Transfer Ownership
 
-You can transfer all your holdings to family or friends in a few seconds by sharing your password only.
+You can transfer all your holdings to family or friends in a few seconds by sharing your password only.  
+Send this short note to your friend in a private channel.
 
 ```
 mybucks.online / DemoAccount5& : 112324
 ```
 
-Send this short note to your friend in a private channel.
+And you can even transfer wallet itself by using a URL:  
+https://app.mybucks.online/?wallet=VWnsSGRGVtb0FjY291bnQ1JgIxMTIzMjQCb3B0aW1pc20=_wNovT
+
+You can extract this link in the `Backup` menu.  
+This feature allows you to transfer cryptocurrency `without asking recipient's address`.
 
 # About the Project
 
