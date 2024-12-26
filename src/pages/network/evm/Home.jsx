@@ -5,7 +5,7 @@ import { ethers } from "ethers";
 import styled from "styled-components";
 import toFlexible from "toflexible";
 
-import ArrowUpIcon from "@mybucks/assets/icons/arrow-up.svg";
+import CogIcon from "@mybucks/assets/icons/cog.svg";
 import CopyIcon from "@mybucks/assets/icons/copy.svg";
 import GasIcon from "@mybucks/assets/icons/gas.svg";
 import HideIcon from "@mybucks/assets/icons/hide.svg";
@@ -25,7 +25,7 @@ import media from "@mybucks/styles/media";
 const NetworkAndFeatures = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 1rem;
   margin-bottom: ${({ theme }) => theme.sizes.x4l};
 
   ${media.md`
@@ -47,7 +47,6 @@ const GasPriceWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 6px;
-  width: 6rem;
   visibility: ${({ $show }) => ($show ? "visible" : "hidden")};
   font-weight: ${({ theme }) => theme.weights.regular};
   font-size: ${({ theme }) => theme.sizes.sm};
@@ -58,12 +57,7 @@ const MenuButton = styled(BaseButton).attrs({ $size: "small" })`
   align-items: center;
   gap: 8px;
   padding: 6px 8px;
-
-  ${media.sm`
-    span {
-      display: none;
-    }
-  `}
+  margin-left: auto;
 `;
 
 const CloseButton = styled(BaseButton).attrs({ $size: "small" })`
@@ -196,7 +190,7 @@ const EvmHome = () => {
         </NetworkWrapper>
 
         <MenuButton onClick={() => openMenu(true)}>
-          <img src={ArrowUpIcon} /> <span>Backup</span>
+          <img src={CogIcon} />
         </MenuButton>
 
         <CloseButton onClick={close}>
