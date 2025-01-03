@@ -145,7 +145,7 @@ function App() {
       </Main>
 
       <Footer>
-        <h5>&copy; 2024 Mybucks.online MIT Licensed</h5>
+        <h5>&copy; 2025 Mybucks.online MIT Licensed</h5>
 
         <p>
           Audited by{" "}
