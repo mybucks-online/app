@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import FocusTrap from "focus-trap-react";
 import styled from "styled-components";
 
-import CloseIcon from "@mybucks/assets/icons/close.svg";
+import { CloseIcon } from "@mybucks/assets/icons";
 import useOnClickOutside from "@mybucks/hooks/useOnClickOutside";
 
 export const Overlay = styled.div`

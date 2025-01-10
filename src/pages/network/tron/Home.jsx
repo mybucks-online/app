@@ -4,12 +4,14 @@ import copy from "clipboard-copy";
 import styled from "styled-components";
 import toFlexible from "toflexible";
 
-import CogIcon from "@mybucks/assets/icons/cog.svg";
-import CopyIcon from "@mybucks/assets/icons/copy.svg";
-import HideIcon from "@mybucks/assets/icons/hide.svg";
-import LockIcon from "@mybucks/assets/icons/lock.svg";
-import RefreshIcon from "@mybucks/assets/icons/refresh.svg";
-import ShowIcon from "@mybucks/assets/icons/show.svg";
+import {
+  CogIcon,
+  CopyIcon,
+  HideIcon,
+  LockIcon,
+  RefreshIcon,
+  ShowIcon,
+} from "@mybucks/assets/icons";
 import BaseButton from "@mybucks/components/Button";
 import { Box, Container } from "@mybucks/components/Containers";
 import { Label } from "@mybucks/components/Label";

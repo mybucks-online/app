@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
-import BackIcon from "@mybucks/assets/icons/back.svg";
-import SuccessIcon from "@mybucks/assets/icons/success.svg";
+import { BackIcon, SuccessIcon } from "@mybucks/assets/icons";
 import { Box as BaseBox, Container } from "@mybucks/components/Containers";
 import Link from "@mybucks/components/Link";
 import { H3 } from "@mybucks/components/Texts";

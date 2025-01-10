@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import copy from "clipboard-copy";
 import styled from "styled-components";
 
-import BackIcon from "@mybucks/assets/icons/back.svg";
+import { BackIcon } from "@mybucks/assets/icons";
 import BaseButton from "@mybucks/components/Button";
 import ConfirmPasscodeModal from "@mybucks/components/ConfirmPasscodeModal";
 import { Box as BaseBox, Container } from "@mybucks/components/Containers";

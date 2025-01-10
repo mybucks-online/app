@@ -3,7 +3,7 @@ import { format } from "date-fns";
 import styled from "styled-components";
 import toFlexible from "toflexible";
 
-import CopyIconImg from "@mybucks/assets/icons/copy.svg";
+import { CopyIcon } from "@mybucks/assets/icons";
 import { Box as BaseBox } from "@mybucks/components/Containers";
 import Link from "@mybucks/components/Link";
 import { H3 } from "@mybucks/components/Texts";
@@ -57,7 +57,7 @@ const AddressLink = styled(Link)`
 
 const CopyButton = styled.img.attrs({
   alt: "Copy",
-  src: CopyIconImg,
+  src: CopyIcon,
 })`
   cursor: pointer;
   margin-left: ${({ theme }) => theme.sizes.xs};

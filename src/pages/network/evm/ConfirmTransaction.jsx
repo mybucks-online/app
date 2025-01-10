@@ -2,9 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { ethers } from "ethers";
 import styled from "styled-components";
 
-import BackIcon from "@mybucks/assets/icons/back.svg";
-import InfoGreenIcon from "@mybucks/assets/icons/info-green.svg";
-import InfoRedIcon from "@mybucks/assets/icons/info-red.svg";
+import { BackIcon, InfoGreenIcon, InfoRedIcon } from "@mybucks/assets/icons";
 import BaseButton from "@mybucks/components/Button";
 import { Box, Container } from "@mybucks/components/Containers";
 import { H3 } from "@mybucks/components/Texts";

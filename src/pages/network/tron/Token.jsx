@@ -2,11 +2,13 @@ import { useContext, useEffect, useState } from "react";
 import { ethers } from "ethers";
 import styled from "styled-components";
 
-import ArrowUpRightIcon from "@mybucks/assets/icons/arrow-up-right.svg";
-import BackIcon from "@mybucks/assets/icons/back.svg";
-import InfoGreenIcon from "@mybucks/assets/icons/info-green.svg";
-import InfoRedIcon from "@mybucks/assets/icons/info-red.svg";
-import RefreshIcon from "@mybucks/assets/icons/refresh.svg";
+import {
+  ArrowUpRightIcon,
+  BackIcon,
+  InfoGreenIcon,
+  InfoRedIcon,
+  RefreshIcon,
+} from "@mybucks/assets/icons";
 import Avatar from "@mybucks/components/Avatar";
 import Button from "@mybucks/components/Button";
 import {
@@ -19,6 +21,7 @@ import { H3 } from "@mybucks/components/Texts";
 import { StoreContext } from "@mybucks/contexts/Store";
 import useDebounce from "@mybucks/hooks/useDebounce";
 import { LOADING_PLACEHOLDER } from "@mybucks/lib/conf";
+import { formatCurrency } from "@mybucks/lib/utils";
 import ActivityTable from "@mybucks/pages/network/common/ActivityTable";
 import media from "@mybucks/styles/media";
 
@@ -302,7 +305,7 @@ const Token = () => {
         </TokenBalance>
 
         {!!token.quote && (
-          <TokenValue>${token.quote.toFixed(4)} USD</TokenValue>
+          <TokenValue>{formatCurrency(token.quote)}</TokenValue>
         )}
       </TokenDetails>
 

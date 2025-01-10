@@ -17,3 +17,15 @@ export const clearQueryParams = () => {
   const url = window.location.origin + window.location.pathname;
   window.history.replaceState({}, document.title, url);
 };
+
+export const formatCurrency = (
+  amount,
+  locale = 'en',
+  currency = 'USD',
+  maximumFractionDigits = 2
+) =>
+  Intl.NumberFormat(locale, {
+    currency,
+    maximumFractionDigits,
+    style: "currency",
+  }).format(amount);

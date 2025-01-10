@@ -3,6 +3,7 @@ import toFlexible from "toflexible";
 
 import Avatar from "@mybucks/components/Avatar";
 import { BALANCE_PLACEHOLDER } from "@mybucks/lib/conf";
+import { formatCurrency } from "@mybucks/lib/utils";
 
 /*
   token: 
@@ -90,16 +91,16 @@ const TokenBalanceRow = ({ token, balance, quote, onClick, showBalance }) => (
         {!showBalance
           ? BALANCE_PLACEHOLDER
           : balance > 0
-          ? toFlexible(balance, 2)
-          : "0.00"}
+            ? toFlexible(balance, 2)
+            : "0.00"}
       </Balance>
 
       <Value>
         {!showBalance
           ? BALANCE_PLACEHOLDER
           : quote > 0
-          ? `$${toFlexible(quote, 2)}`
-          : ""}
+            ? formatCurrency(quote)
+            : ""}
       </Value>
     </BalanceAndValueWrap>
   </Wrap>
