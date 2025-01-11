@@ -1,7 +1,8 @@
+import { getEvmPrivateKey } from "@mybucks.online/core";
 import { Buffer } from "buffer";
 import { TronWeb } from "tronweb";
 
-import { getEvmPrivateKey, NETWORK } from "@mybucks/lib/conf";
+import { NETWORK } from "@mybucks/lib/conf";
 import { queryPrice } from "@mybucks/lib/utils";
 
 const TRC20_USDT_ADDRESS = "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t";

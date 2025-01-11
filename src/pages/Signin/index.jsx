@@ -1,4 +1,5 @@
 import { useContext, useEffect, useMemo, useState } from "react";
+import { generateHash } from "@mybucks.online/core";
 import styled from "styled-components";
 
 import Button from "@mybucks/components/Button";
@@ -12,7 +13,6 @@ import { H1 } from "@mybucks/components/Texts";
 import { StoreContext } from "@mybucks/contexts/Store";
 import {
   findNetworkByName,
-  generateHash,
   parseUrl,
   PASSCODE_MAX_LENGTH,
   PASSCODE_MIN_LENGTH,

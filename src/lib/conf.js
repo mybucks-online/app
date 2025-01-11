@@ -1,10 +1,6 @@
 import { Network } from "alchemy-sdk";
 import { Buffer } from "buffer";
-import { ethers } from "ethers";
 import { nanoid } from "nanoid";
-import { scrypt } from "scrypt-js";
-
-const abi = new ethers.AbiCoder();
 
 export const PASSWORD_MIN_LENGTH = 12;
 export const PASSWORD_MAX_LENGTH = 128;
@@ -12,40 +8,6 @@ export const PASSCODE_MIN_LENGTH = 6;
 export const PASSCODE_MAX_LENGTH = 16;
 
 export const PASSCODE_MAX_TRY = 3;
-
-/**
- * [CRITICAL] DON'T CHANGE FOREVER!!!
- * Reference:
- *    https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html#scrypt
- */
-export const HASH_OPTIONS = {
-  N: 32768, // CPU/memory cost parameter, 2^15
-  r: 8, // block size parameter
-  p: import.meta.env.DEV ? 1 : 5, // parallelization parameter
-  keyLen: 64,
-};
-
-export const generateHash = async (password, passcode, cb = () => {}) => {
-  const salt = `${password.slice(-4)}${passcode}`;
-
-  const passwordBuffer = Buffer.from(password);
-  const saltBuffer = Buffer.from(salt);
-
-  const hashBuffer = await scrypt(
-    passwordBuffer,
-    saltBuffer,
-    HASH_OPTIONS.N,
-    HASH_OPTIONS.r,
-    HASH_OPTIONS.p,
-    HASH_OPTIONS.keyLen,
-    cb
-  );
-
-  return Buffer.from(hashBuffer).toString("hex");
-};
-
-export const getEvmPrivateKey = (h) =>
-  ethers.keccak256(abi.encode(["string"], [h]));
 
 const URL_DELIMITER = "\u0002";
 

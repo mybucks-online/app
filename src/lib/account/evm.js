@@ -1,8 +1,9 @@
+import { getEvmPrivateKey } from "@mybucks.online/core";
 import { tokens as defaultTokensList } from "@sushiswap/default-token-list";
 import { Alchemy } from "alchemy-sdk";
 import { Contract, ethers } from "ethers";
 
-import { EVM_NETWORKS, getEvmPrivateKey, NETWORK } from "@mybucks/lib/conf";
+import { EVM_NETWORKS, NETWORK } from "@mybucks/lib/conf";
 import IERC20 from "@mybucks/lib/erc20.json";
 
 const alchemyApiKey = import.meta.env.VITE_ALCHEMY_API_KEY;
