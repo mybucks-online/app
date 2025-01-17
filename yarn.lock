@@ -769,13 +769,14 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@mybucks.online/core@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@mybucks.online/core/-/core-1.0.2.tgz#6a671b68e7c9c20e6ff04fd4d2351ccd38aa3af1"
-  integrity sha512-Ptbn9L8A6yFU5+NlK1plqu5/Y6RgLyZB6VPsHVjExJjHLiMUiGWX8/8Lmdhfsx/lTmLECtZl65zmG91rkbjYYA==
+"@mybucks.online/core@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@mybucks.online/core/-/core-1.0.3.tgz#1fd4e0bf37584afc3dc8c319e175741f5dba5f32"
+  integrity sha512-zBXVUbiGAGgkDK90KjF1sJisuLWuEhGRO9sBVAPGjpZqtrPlVYDjX/ieWJmQ6alWdX3UYG4y7lsSITVura85RA==
   dependencies:
     buffer "^6.0.3"
     ethers "^6.13.5"
+    nanoid "^5.0.9"
     scrypt-js "^3.0.1"
 
 "@noble/curves@1.2.0":

@@ -1,5 +1,5 @@
 import { useContext, useEffect, useMemo, useState } from "react";
-import { generateHash } from "@mybucks.online/core";
+import { generateHash, parseToken } from "@mybucks.online/core";
 import styled from "styled-components";
 
 import Button from "@mybucks/components/Button";
@@ -13,7 +13,6 @@ import { H1 } from "@mybucks/components/Texts";
 import { StoreContext } from "@mybucks/contexts/Store";
 import {
   findNetworkByName,
-  parseUrl,
   PASSCODE_MAX_LENGTH,
   PASSCODE_MIN_LENGTH,
   PASSWORD_MAX_LENGTH,
@@ -188,7 +187,7 @@ const SignIn = () => {
   );
 
   useEffect(() => {
-    const parseUrlAndSubmit = async () => {
+    const parseTokenAndSubmit = async () => {
       // get "secret" param from URL
       const url = new URL(window.location.href);
       const params = new URLSearchParams(url.search);
@@ -198,7 +197,7 @@ const SignIn = () => {
       }
 
       // parse password, passcode, network name from "secret" param
-      const [pwd, pc, nn] = parseUrl(secret);
+      const [pwd, pc, nn] = parseToken(secret);
       if (!pwd || !pc || !nn) {
         return;
       }
@@ -213,7 +212,7 @@ const SignIn = () => {
       setDisabled(false);
     };
 
-    parseUrlAndSubmit();
+    parseTokenAndSubmit();
   }, []);
 
   const onSubmit = async () => {

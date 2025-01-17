@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import { toast } from "react-toastify";
+import { generateToken } from "@mybucks.online/core";
 import copy from "clipboard-copy";
 import styled from "styled-components";
 
@@ -9,7 +10,7 @@ import ConfirmPasscodeModal from "@mybucks/components/ConfirmPasscodeModal";
 import { Box as BaseBox, Container } from "@mybucks/components/Containers";
 import { H3 } from "@mybucks/components/Texts";
 import { StoreContext } from "@mybucks/contexts/Store";
-import { findNetworkNameByChainId, generateUrl } from "@mybucks/lib/conf";
+import { findNetworkNameByChainId } from "@mybucks/lib/conf";
 
 const Box = styled(BaseBox)`
   display: flex;
@@ -82,7 +83,7 @@ const Menu = () => {
       toast("Private key copied into clipboard.");
     } else if (nextStep === BACKUP_TRANSFER_LINK) {
       const networkName = findNetworkNameByChainId(network, chainId);
-      const link = generateUrl(password, passcode, networkName);
+      const link = generateToken(password, passcode, networkName);
       copy(
         window.location.origin + window.location.pathname + "?wallet=" + link
       );
