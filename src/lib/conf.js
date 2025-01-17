@@ -1,6 +1,4 @@
 import { Network } from "alchemy-sdk";
-import { Buffer } from "buffer";
-import { nanoid } from "nanoid";
 
 export const PASSWORD_MIN_LENGTH = 12;
 export const PASSWORD_MAX_LENGTH = 128;
@@ -8,25 +6,6 @@ export const PASSCODE_MIN_LENGTH = 6;
 export const PASSCODE_MAX_LENGTH = 16;
 
 export const PASSCODE_MAX_TRY = 3;
-
-const URL_DELIMITER = "\u0002";
-
-export function generateUrl(password, passcode, network) {
-  const merged = Buffer.from(
-    password + URL_DELIMITER + passcode + URL_DELIMITER + network,
-    "utf-8"
-  );
-  const base64Encoded = merged.toString("base64");
-  const padding = nanoid(12);
-  return padding.slice(0, 6) + base64Encoded + padding.slice(6);
-}
-
-export function parseUrl(token) {
-  const payload = token.slice(6, token.length - 6);
-  const base64Decoded = Buffer.from(payload, "base64").toString("utf-8");
-  const [password, passcode, network] = base64Decoded.split(URL_DELIMITER);
-  return [password, passcode, network];
-}
 
 export const NETWORK = Object.freeze({
   EVM: "evm",
