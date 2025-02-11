@@ -1,5 +1,5 @@
 import { getEvmPrivateKey } from "@mybucks.online/core";
-import { tokens as defaultTokensList } from "@sushiswap/default-token-list";
+import { tokens as defaultTokensList } from "@uniswap/default-token-list";
 import { Alchemy } from "alchemy-sdk";
 import { Contract, ethers } from "ethers";
 

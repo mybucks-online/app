@@ -88,9 +88,13 @@ async function generatePrivateKey(password, passcode) {
 }
 ```
 
-## npm install @mybucks.online/core
+## @mybucks.online/core
 
 The core components responsible for hash and private-key generation have been extracted into an independent package. You can explore the details of this package [here](https://www.npmjs.com/package/@mybucks.online/core).
+
+```
+npm install @mybucks.online/core
+```
 
 ## Transfer Ownership
 
@@ -120,7 +124,7 @@ This is a fully open-source project built with React, Vite, and related third-pa
 - **alchemy-sdk**  
   Provides query functions for massive crypto assets in multiple networks.
 
-- **@sushiswap/default-token-list**
+- **@uniswap/default-token-list**
 
 - **tronweb**
 

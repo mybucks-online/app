@@ -949,11 +949,6 @@
     "@noble/hashes" "~1.4.0"
     "@scure/base" "~1.1.6"
 
-"@sushiswap/default-token-list@^43.3.0":
-  version "43.3.0"
-  resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-43.3.0.tgz#a1e86d6dcd7100074adbd3ac861e6501ae9bcff4"
-  integrity sha512-2GLpiBO0FoxKvbbXnKQjHRgzePJHmHzAzLLR25lpMqvJ80UNjtcbQ4BCbEfxuxt6d0Gdu+/RwqzfuzWBeUPvsw==
-
 "@tronweb3/google-protobuf@^3.21.2":
   version "3.21.2"
   resolved "https://registry.yarnpkg.com/@tronweb3/google-protobuf/-/google-protobuf-3.21.2.tgz#0964cf83ed7826d31c3cb4e4ecf07655681631c9"
@@ -1043,6 +1038,11 @@
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@ungap/structured-clone/-/structured-clone-1.2.0.tgz#756641adb587851b5ccb3e095daf27ae581c8406"
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
+
+"@uniswap/default-token-list@^13.5.0":
+  version "13.5.0"
+  resolved "https://registry.yarnpkg.com/@uniswap/default-token-list/-/default-token-list-13.5.0.tgz#039c1d850baf87a83f4803c45a9771b2fad2e80a"
+  integrity sha512-VDCOWxj7ZTYv2r750KeNTbBMyou1RzgIt+/AXWc4FgVIuOQyqsVZulfaEANLE+6smYEHdkuUpQid/5EdDNHM8A==
 
 "@vitejs/plugin-react@^4.2.1":
   version "4.3.0"
