@@ -7,7 +7,7 @@ https://github.com/user-attachments/assets/4eba2af8-9d32-4ad2-b5b8-b2f3e9ed2da8
 
 ## Summary
 
-Mybucks.online is a **password-only, self-custodial cryptocurrency wallet** built with [React.js](https://react.dev). It generates a private key from your password and passcode using an industry-standard, verified **one-way hash function**. Your private key forms your account, allowing you to transfer, receive, and hold your crypto assets permanently.
+Mybucks.online is a **password-only, self-custodial and browser-based cryptocurrency wallet** built with [React.js](https://react.dev). It generates a private key from your password and passcode using an industry-standard, verified **one-way hash function**. Your private key forms your account, allowing you to transfer, receive, and hold your crypto assets permanently.
 
 ## How to Use
 
@@ -88,6 +88,10 @@ async function generatePrivateKey(password, passcode) {
 }
 ```
 
+## npm install @mybucks.online/core
+
+The core components responsible for hash and private-key generation have been extracted into an independent package. You can explore the details of this package [here](https://www.npmjs.com/package/@mybucks.online/core).
+
 ## Transfer Ownership
 
 You can transfer all your holdings to family or friends in a few seconds by sharing your password only.  
@@ -131,13 +135,6 @@ yarn install
 cp .env.example .env
 # Update the .env variables with valid keys
 yarn dev
-```
-
-*In the development environment, a different configuration is used to maintain fast response. To replicate the same key generation like the prod environment, you need to update the following line in src/lib/conf.js:*
-
-```javascript
-// src/lib/conf.js
-p: import.meta.env.DEV ? 1 : 5, // parallelization parameter
 ```
 
 ## Production Environment
