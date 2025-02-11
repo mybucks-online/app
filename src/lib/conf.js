@@ -79,6 +79,17 @@ export const EVM_NETWORKS = [
     scanner: "https://snowtrace.io",
     wrappedAsset: "0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7",
   },
+  {
+    chainId: 8453,
+    networkId: Network.BASE_MAINNET,
+    name: "base",
+    label: "Base",
+    provider:
+      "https://base-mainnet.infura.io/v3/" +
+      import.meta.env.VITE_INFURA_API_KEY,
+    scanner: "https://basescan.org",
+    wrappedAsset: "0x4200000000000000000000000000000000000006",
+  },
 ];
 
 export const findNetworkByName = (networkName) => {
