@@ -106,7 +106,7 @@ mybucks.online / DemoAccount5& : 112324
 ```
 
 And you can even transfer wallet itself by using a URL:  
-https://app.mybucks.online/?wallet=VWnsSGRGVtb0FjY291bnQ1JgIxMTIzMjQCb3B0aW1pc20=_wNovT
+https://mybucks-online.vercel.app/?wallet=VWnsSGRGVtb0FjY291bnQ1JgIxMTIzMjQCb3B0aW1pc20=_wNovT
 
 You can extract this link in the `Backup` menu.  
 This feature allows you to transfer cryptocurrency `without asking recipient's address`.
@@ -180,8 +180,8 @@ https://mybucks-online.github.io. 5 IN	A	185.199.111.153
 
 # Quick Links
 
-- Website: https://mybucks.online
-- Wallet: https://app.mybucks.online
+- Website: [https://mybucks.online](https://mybucks-online.vercel.app/)
+- Wallet: [https://app.mybucks.online](https://mybucks-online.vercel.app/)
 - Docs: https://docs.mybucks.online
 - Github: https://github.com/mybucks-online
 - Discord: https://discord.gg/RTHgTePKgP
