@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import { generateToken } from "@mybucks.online/core";
 import copy from "clipboard-copy";
+import { QRCodeSVG } from "qrcode.react";
 import styled from "styled-components";
 
 import { BackIcon } from "@mybucks/assets/icons";
@@ -25,7 +26,7 @@ const NavsWrapper = styled.div`
 `;
 
 const Title = styled(H3)`
-  margin-bottom: ${({ theme }) => theme.sizes.xs};
+  margin-bottom: ${({ theme }) => theme.sizes.sm};
 `;
 
 const Address = styled.p`
@@ -34,6 +35,7 @@ const Address = styled.p`
   font-size: ${({ theme }) => theme.sizes.sm};
   font-weight: ${({ theme }) => theme.weights.regular};
   line-height: 140%;
+  margin-top: ${({ theme }) => theme.sizes.xs};
   margin-bottom: ${({ theme }) => theme.sizes.x2l};
   color: ${({ theme }) => theme.colors.gray200};
 `;
@@ -101,7 +103,8 @@ const Menu = () => {
         </NavsWrapper>
 
         <Box>
-          <Title>Backup Account</Title>
+          <Title>Account Details</Title>
+          <QRCodeSVG value={network + ":" + account.address} />
           <Address>{account.address}</Address>
 
           <Button onClick={backupAddress}>Address</Button>

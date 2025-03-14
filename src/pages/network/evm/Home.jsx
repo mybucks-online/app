@@ -6,11 +6,11 @@ import styled from "styled-components";
 import toFlexible from "toflexible";
 
 import {
-  CogIcon,
   CopyIcon,
   GasIcon,
   HideIcon,
   LockIcon,
+  QrcodeIcon,
   RefreshIcon,
   ShowIcon,
 } from "@mybucks/assets/icons";
@@ -192,7 +192,7 @@ const EvmHome = () => {
         </NetworkWrapper>
 
         <MenuButton onClick={() => openMenu(true)}>
-          <img src={CogIcon} />
+          <img src={QrcodeIcon} />
         </MenuButton>
 
         <CloseButton onClick={close}>
