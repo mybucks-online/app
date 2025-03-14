@@ -8,6 +8,7 @@ export { default as HideIcon } from "./hide.svg";
 export { default as InfoGreenIcon } from "./info-green.svg";
 export { default as InfoRedIcon } from "./info-red.svg";
 export { default as LockIcon } from "./lock.svg";
+export { default as QrcodeIcon } from "./qrcode.svg";
 export { default as RefreshIcon } from "./refresh.svg";
 export { default as ShowIcon } from "./show.svg";
 export { default as SuccessIcon } from "./success.svg";

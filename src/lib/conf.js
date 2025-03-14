@@ -8,7 +8,7 @@ export const PASSCODE_MAX_LENGTH = 16;
 export const PASSCODE_MAX_TRY = 3;
 
 export const NETWORK = Object.freeze({
-  EVM: "evm",
+  EVM: "ethereum",
   TRON: "tron",
 });
 
