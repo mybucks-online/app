@@ -244,7 +244,10 @@ const SignIn = () => {
 
         <Box>
           <Title>Unlock your wallet</Title>
-          <Caption>Use your own unique credentials</Caption>
+          <Caption>
+            Log in using existing credentials, or create a new wallet with new
+            credentials
+          </Caption>
 
           <div>
             <Label htmlFor="password">Password</Label>
