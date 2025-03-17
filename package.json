@@ -2,7 +2,7 @@
   "name": "mybucks-online",
   "description": "Mybucks.online | Password-only, self-custodial cryptocurrency wallet",
   "private": true,
-  "version": "1.0.8",
+  "version": "1.12",
   "type": "module",
   "keywords": [
     "crypto",
