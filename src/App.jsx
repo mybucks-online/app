@@ -1,10 +1,12 @@
 import { useContext } from "react";
 import { useIdleTimer } from "react-idle-timer";
 import { toast, ToastContainer } from "react-toastify";
+import copy from "clipboard-copy";
 import styled from "styled-components";
 
 import { StoreContext } from "@mybucks/contexts/Store";
 import { IDLE_DURATION, NETWORK } from "@mybucks/lib/conf";
+import { clearQueryParams } from "@mybucks/lib/utils";
 import Menu from "@mybucks/pages/Menu";
 import EvmHome from "@mybucks/pages/network/evm/Home";
 import EvmToken from "@mybucks/pages/network/evm/Token";
@@ -110,6 +112,8 @@ function App() {
     onIdle: () => {
       if (hash) {
         reset();
+        clearQueryParams();
+        copy("");
         toast("Account locked after 15 minutes idle!");
       }
     },
