@@ -2,7 +2,7 @@
   "name": "mybucks-online",
   "description": "Mybucks.online | Password-only, self-custodial cryptocurrency wallet",
   "private": true,
-  "version": "1.12",
+  "version": "1.13",
   "type": "module",
   "keywords": [
     "crypto",
@@ -30,7 +30,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@mybucks.online/core": "^1.0.3",
+    "@mybucks.online/core": "^1.0.8",
     "@uniswap/default-token-list": "^13.5.0",
     "alchemy-sdk": "^3.5.0",
     "buffer": "^6.0.3",
