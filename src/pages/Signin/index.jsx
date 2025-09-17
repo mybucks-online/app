@@ -8,6 +8,7 @@ import { Box } from "@mybucks/components/Containers";
 import Input from "@mybucks/components/Input";
 import { Label } from "@mybucks/components/Label";
 import Modal from "@mybucks/components/Modal";
+import PasswordToggleIcon from "@mybucks/components/PasswordToggleIcon";
 import Progress from "@mybucks/components/Progress";
 import { H1 } from "@mybucks/components/Texts";
 import { StoreContext } from "@mybucks/contexts/Store";
@@ -131,13 +132,37 @@ const Notice = styled.p`
   color: ${({ theme }) => theme.colors.gray200};
 `;
 
+const PasswordInputWrapper = styled.div`
+  position: relative;
+`;
+
+const ToggleButton = styled.button`
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+`;
+
 const SignIn = () => {
   const { setup } = useContext(StoreContext);
 
   const [password, setPassword] = useState(
-    import.meta.env.DEV ? TEST_PASSWORD : ""
-  );
-  const [passwordConfirm, setPasswordConfirm] = useState(
     import.meta.env.DEV ? TEST_PASSWORD : ""
   );
   const [passcode, setPasscode] = useState(
@@ -145,6 +170,10 @@ const SignIn = () => {
   );
   const [disabled, setDisabled] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasscode, setShowPasscode] = useState(false);
+  const [passwordFocused, setPasswordFocused] = useState(false);
+  const [passcodeFocused, setPasscodeFocused] = useState(false);
 
   const hasMinLengthPassword = useMemo(
     () => password.length >= PASSWORD_MIN_LENGTH,
@@ -156,10 +185,6 @@ const SignIn = () => {
   const hasSymbol = useMemo(
     () => /[ !"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]/.test(password),
     [password]
-  );
-  const hasMatchedPassword = useMemo(
-    () => password && password === passwordConfirm,
-    [password, passwordConfirm]
   );
   const hasValidPasscodeLength = useMemo(
     () => passcode.length >= PASSCODE_MIN_LENGTH,
@@ -176,9 +201,8 @@ const SignIn = () => {
       !hasUppercase ||
       !hasNumbers ||
       !hasSymbol ||
-      !hasMatchedPassword ||
       !hasValidPasscodeLength,
-    [[password, passwordConfirm, passcode, disabled]]
+    [password, passcode, disabled, hasMinLengthPassword, hasLowercase, hasUppercase, hasNumbers, hasSymbol, hasValidPasscodeLength]
   );
 
   const unknownFact = useMemo(
@@ -251,48 +275,57 @@ const SignIn = () => {
 
           <div>
             <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="Password"
-              disabled={disabled}
-              value={password}
-              maxLength={PASSWORD_MAX_LENGTH}
-              onChange={(e) => setPassword(e.target.value)}
-              onKeyDown={onKeyDown}
-              onPaste={(e) => e.preventDefault()}
-            />
-          </div>
-
-          <div>
-            <Label htmlFor="password-confirm">Confirm Password</Label>
-            <Input
-              id="password-confirm"
-              type="password"
-              placeholder="Confirm password"
-              disabled={disabled}
-              value={passwordConfirm}
-              maxLength={PASSWORD_MAX_LENGTH}
-              onChange={(e) => setPasswordConfirm(e.target.value)}
-              onKeyDown={onKeyDown}
-              onPaste={(e) => e.preventDefault()}
-            />
+            <PasswordInputWrapper>
+              <Input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                disabled={disabled}
+                value={password}
+                maxLength={PASSWORD_MAX_LENGTH}
+                onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={onKeyDown}
+                onPaste={(e) => e.preventDefault()}
+                onFocus={() => setPasswordFocused(true)}
+                onBlur={() => setPasswordFocused(false)}
+              />
+              <ToggleButton
+                type="button"
+                disabled={disabled}
+                onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                <PasswordToggleIcon show={showPassword} focused={passwordFocused} />
+              </ToggleButton>
+            </PasswordInputWrapper>
           </div>
 
           <div>
             <Label htmlFor="passcode">Passcode</Label>
-            <Input
-              id="passcode"
-              type="text"
-              placeholder="Passcode"
-              disabled={disabled}
-              value={passcode}
-              maxLength={PASSCODE_MAX_LENGTH}
-              onChange={(e) => setPasscode(e.target.value)}
-              onKeyDown={onKeyDown}
-              onPaste={(e) => e.preventDefault()}
-              autoComplete="off"
-            />
+            <PasswordInputWrapper>
+              <Input
+                id="passcode"
+                type={showPasscode ? "text" : "password"}
+                placeholder="Passcode"
+                disabled={disabled}
+                value={passcode}
+                maxLength={PASSCODE_MAX_LENGTH}
+                onChange={(e) => setPasscode(e.target.value)}
+                onKeyDown={onKeyDown}
+                onPaste={(e) => e.preventDefault()}
+                autoComplete="off"
+                onFocus={() => setPasscodeFocused(true)}
+                onBlur={() => setPasscodeFocused(false)}
+              />
+              <ToggleButton
+                type="button"
+                disabled={disabled}
+                onClick={() => setShowPasscode(!showPasscode)}
+                aria-label={showPasscode ? "Hide passcode" : "Show passcode"}
+              >
+                <PasswordToggleIcon show={showPasscode} focused={passcodeFocused} />
+              </ToggleButton>
+            </PasswordInputWrapper>
           </div>
 
           <Checkboxes>
@@ -310,9 +343,6 @@ const SignIn = () => {
             </Checkbox>
             <Checkbox id="min-length" value={hasMinLengthPassword}>
               Password length: {PASSWORD_MIN_LENGTH}~{PASSWORD_MAX_LENGTH}
-            </Checkbox>
-            <Checkbox id="match-password" value={hasMatchedPassword}>
-              Match password
             </Checkbox>
             <Checkbox id="passcode-length" value={hasValidPasscodeLength}>
               Passcode length: {PASSCODE_MIN_LENGTH}~{PASSCODE_MAX_LENGTH}
