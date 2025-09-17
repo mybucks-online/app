@@ -8,10 +8,10 @@ import { Box } from "@mybucks/components/Containers";
 import Input from "@mybucks/components/Input";
 import { Label } from "@mybucks/components/Label";
 import Modal from "@mybucks/components/Modal";
+import PasswordToggleIcon from "@mybucks/components/PasswordToggleIcon";
 import Progress from "@mybucks/components/Progress";
 import { H1 } from "@mybucks/components/Texts";
 import { StoreContext } from "@mybucks/contexts/Store";
-import { HideIcon, ShowIcon } from "@mybucks/assets/icons";
 import {
   findNetworkByName,
   PASSCODE_MAX_LENGTH,
@@ -148,21 +148,14 @@ const ToggleButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: ${({ theme }) => theme.colors.gray400};
-  transition: color 0.2s ease;
 
   &:hover {
-    color: ${({ theme }) => theme.colors.gray600};
+    opacity: 0.8;
   }
 
   &:disabled {
     cursor: not-allowed;
     opacity: 0.5;
-  }
-
-  img {
-    width: 1.25rem;
-    height: 1.25rem;
   }
 `;
 
@@ -179,6 +172,8 @@ const SignIn = () => {
   const [progress, setProgress] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
   const [showPasscode, setShowPasscode] = useState(false);
+  const [passwordFocused, setPasswordFocused] = useState(false);
+  const [passcodeFocused, setPasscodeFocused] = useState(false);
 
   const hasMinLengthPassword = useMemo(
     () => password.length >= PASSWORD_MIN_LENGTH,
@@ -291,14 +286,16 @@ const SignIn = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 onKeyDown={onKeyDown}
                 onPaste={(e) => e.preventDefault()}
+                onFocus={() => setPasswordFocused(true)}
+                onBlur={() => setPasswordFocused(false)}
               />
               <ToggleButton
                 type="button"
                 disabled={disabled}
                 onClick={() => setShowPassword(!showPassword)}
-                aria-label={showPassword ? "Hide" : "Show"}
+                aria-label={showPassword ? "Hide password" : "Show password"}
               >
-                <img src={showPassword ? HideIcon : ShowIcon} alt={showPassword ? "Hide password" : "Show password"} />
+                <PasswordToggleIcon show={showPassword} focused={passwordFocused} />
               </ToggleButton>
             </PasswordInputWrapper>
           </div>
@@ -317,14 +314,16 @@ const SignIn = () => {
                 onKeyDown={onKeyDown}
                 onPaste={(e) => e.preventDefault()}
                 autoComplete="off"
+                onFocus={() => setPasscodeFocused(true)}
+                onBlur={() => setPasscodeFocused(false)}
               />
               <ToggleButton
                 type="button"
                 disabled={disabled}
                 onClick={() => setShowPasscode(!showPasscode)}
-                aria-label={showPasscode ? "Hide" : "Show"}
+                aria-label={showPasscode ? "Hide passcode" : "Show passcode"}
               >
-                <img src={showPasscode ? HideIcon : ShowIcon} alt={showPasscode ? "Hide passcode" : "Show passcode"} />
+                <PasswordToggleIcon show={showPasscode} focused={passcodeFocused} />
               </ToggleButton>
             </PasswordInputWrapper>
           </div>
