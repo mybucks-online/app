@@ -17,20 +17,31 @@ const SelectWrapper = styled.div`
     pointer-events: none;
     right: ${({ theme }) => theme.sizes.base};
     content: "";
+    transition: border-color 0.2s;
   }
 
   &::before {
     border-left: var(--size) solid transparent;
     border-right: var(--size) solid transparent;
-    border-bottom: var(--size) solid black;
+    border-bottom: var(--size) solid ${({ theme }) => theme.colors.gray400};
     top: 40%;
   }
 
   &::after {
     border-left: var(--size) solid transparent;
     border-right: var(--size) solid transparent;
-    border-top: var(--size) solid black;
+    border-top: var(--size) solid ${({ theme }) => theme.colors.gray400};
     top: 55%;
+  }
+
+  &:has(select:hover)::before,
+  &:has(select:focus)::before {
+    border-bottom-color: ${({ theme }) => theme.colors.primary};
+  }
+
+  &:has(select:hover)::after,
+  &:has(select:focus)::after {
+    border-top-color: ${({ theme }) => theme.colors.primary};
   }
 `;
 
@@ -49,6 +60,7 @@ const SelectComponent = styled.select`
   font-weight: ${({ theme }) => theme.weights.highlight};
   line-height: 130%;
   cursor: pointer;
+  color: ${({ theme }) => theme.colors.gray400};
 
   &:focus,
   &:hover {

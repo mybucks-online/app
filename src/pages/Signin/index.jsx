@@ -18,22 +18,18 @@ import {
   PASSCODE_MIN_LENGTH,
   PASSWORD_MAX_LENGTH,
   PASSWORD_MIN_LENGTH,
+  TEST_PASSCODE,
+  TEST_PASSWORD,
   UNKNOWN_FACTS,
 } from "@mybucks/lib/conf";
 import media from "@mybucks/styles/media";
 
 import Logo from "./logo.png";
 
-const TEST_PASSWORD = "randommPassword82^";
-const TEST_PASSCODE = "223356";
-
-// const TEST_PASSWORD = "TexamplePassword34%";
-// const TEST_PASSCODE = "22346b";
-
 const Container = styled.div`
   max-width: 40.5rem;
   margin: 0 auto;
-  margin-block: 3rem 3.75rem;
+  margin-block: ${({ theme }) => `${theme.sizes.x2l} ${theme.sizes.x4l}`};
 
   @media (max-width: 696px) {
     margin: 0 ${({ theme }) => theme.sizes.xl};
@@ -114,7 +110,7 @@ const ProgressWrapper = styled.div`
   align-items: center;
   justify-content: center;
   gap: ${({ theme }) => theme.sizes.base};
-  padding: ${({ theme }) => theme.sizes.base};
+  padding: ${({ theme }) => `${theme.sizes.xl} ${theme.sizes.base}`};
 
   progress {
     max-width: 16rem;

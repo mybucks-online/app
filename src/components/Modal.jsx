@@ -8,7 +8,8 @@ import useOnClickOutside from "@mybucks/hooks/useOnClickOutside";
 export const Overlay = styled.div`
   position: fixed;
   inset: 0;
-  background-color: #eeec;
+  background-color: ${({ theme }) =>
+    theme.mode === "light" ? "rgba(0, 0, 0, 0.7)" : "rgba(0, 0, 0, 0.8)"};
   transition: background-color ease 0.3s;
   z-index: 10;
   display: flex;

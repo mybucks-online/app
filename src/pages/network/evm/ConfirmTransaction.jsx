@@ -35,6 +35,15 @@ const OptionsWrapper = styled.fieldset`
   font-weight: ${({ theme }) => theme.weights.regular};
   line-height: 130%;
   margin-bottom: ${({ theme }) => theme.sizes.xl};
+  color: ${({ theme }) => theme.colors.gray400};
+
+  legend {
+    color: ${({ theme }) => theme.colors.gray400};
+  }
+
+  label {
+    color: ${({ theme }) => theme.colors.gray400};
+  }
 `;
 
 const OptionItem = styled.div`

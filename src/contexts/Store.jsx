@@ -41,6 +41,9 @@ export const StoreContext = createContext({
 
   selectedTokenAddress: "",
   selectToken: () => {},
+
+  theme: "light",
+  toggleTheme: () => {},
 });
 
 const StoreProvider = ({ children }) => {
@@ -49,6 +52,12 @@ const StoreProvider = ({ children }) => {
   const [password, setPassword] = useState("");
   const [passcode, setPasscode] = useState("");
   const [hash, setHash] = useState("");
+
+  // theme related
+  const [theme, setTheme] = useState(() => {
+    const savedTheme = localStorage.getItem("theme");
+    return savedTheme || "dark";
+  });
 
   // network related
   const [network, setNetwork] = useState(DEFAULT_NETWORK);
@@ -192,6 +201,12 @@ const StoreProvider = ({ children }) => {
     setLoading(false);
   };
 
+  const toggleTheme = () => {
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+    localStorage.setItem("theme", newTheme);
+  };
+
   return (
     <StoreContext.Provider
       value={{
@@ -221,6 +236,8 @@ const StoreProvider = ({ children }) => {
         selectedTokenAddress,
         selectToken,
         token,
+        theme,
+        toggleTheme,
       }}
     >
       {children}

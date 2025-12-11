@@ -58,7 +58,7 @@ const CloseButton = styled(BaseButton).attrs({ $size: "small" })`
 `;
 
 const PrimaryBox = styled(Box).attrs({ $variant: "sm" })`
-  margin-bottom: ${({ theme }) => theme.sizes.x4l};
+  margin-bottom: ${({ theme }) => theme.sizes.x2l};
 
   ${media.md`
     margin-bottom: ${({ theme }) => theme.sizes.xl};
@@ -119,6 +119,7 @@ const NativeBalance = styled.h3`
   font-weight: ${({ theme }) => theme.weights.highlight};
   font-size: ${({ theme }) => theme.sizes.x2l};
   margin-bottom: ${({ theme }) => theme.sizes.xl};
+  color: ${({ theme }) => theme.colors.gray400};
 
   ${media.sm`
     font-size: ${({ theme }) => theme.sizes.xl};
@@ -158,7 +159,7 @@ const BandwidthValue = styled(BandwidthLabel)`
 const TokensList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.sizes.lg};
+  gap: ${({ theme }) => theme.sizes.xs};
 `;
 
 const TronHome = () => {

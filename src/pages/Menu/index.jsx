@@ -45,6 +45,13 @@ const Button = styled(BaseButton)`
   margin-bottom: ${({ theme }) => theme.sizes.x2l};
 `;
 
+const QRCodeWrapper = styled.div`
+  background-color: white;
+  padding: ${({ theme }) => theme.sizes.x3s};
+  border-radius: ${({ theme }) => theme.radius.sm};
+  display: inline-block;
+`;
+
 const BACKUP_PASSWORD = 1;
 const BACKUP_PRIVATE_KEY = 2;
 const BACKUP_TRANSFER_LINK = 3;
@@ -104,7 +111,9 @@ const Menu = () => {
 
         <Box>
           <Title>Account Details</Title>
-          <QRCodeSVG value={network + ":" + account.address} />
+          <QRCodeWrapper>
+            <QRCodeSVG value={network + ":" + account.address} />
+          </QRCodeWrapper>
           <Address>{account.address}</Address>
 
           <Button onClick={backupAddress}>Address</Button>

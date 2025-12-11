@@ -5,7 +5,7 @@ import media from "@mybucks/styles/media";
 export const Container = styled.div`
   max-width: ${({ theme }) => theme.sizes.x9l};
   margin: 0 auto;
-  margin-block: 2.5rem 6.75rem;
+  margin-block: ${({ theme }) => `${theme.sizes.x2l} ${theme.sizes.x4l}`};
 
   @media (max-width: 890px) {
     margin: 0 ${({ theme }) => theme.sizes.xl};
@@ -23,8 +23,8 @@ export const Box = styled.div`
     $variant === "xs"
       ? `${theme.sizes.base} ${theme.sizes.base}`
       : $variant === "sm"
-      ? `${theme.sizes.xl} ${theme.sizes.xl}`
-      : `${theme.sizes.x4l} ${theme.sizes.x5l}`};
+      ? `${theme.sizes.base} ${theme.sizes.xl}`
+      : `${theme.sizes.x2l} ${theme.sizes.x4l}`};
 
   ${media.sm`
       padding: ${({ theme, $variant }) =>

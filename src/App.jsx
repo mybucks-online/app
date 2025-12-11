@@ -53,15 +53,41 @@ const Footer = styled.footer`
 
   nav ul {
     list-style-type: none;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-wrap: nowrap;
 
     li {
-      display: inline;
+      display: inline-flex;
+      align-items: center;
       margin: 0 ${({ theme }) => theme.sizes.x2s};
+      flex-shrink: 0;
     }
   }
 
   a:hover {
     color: ${({ theme }) => theme.colors.gray400};
+  }
+
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: ${({ theme }) => theme.colors.gray200};
+    transition: color 0.2s;
+
+    &:hover {
+      color: ${({ theme }) => theme.colors.gray400};
+    }
+
+    svg {
+      display: block;
+    }
   }
 
   ${media.md`
@@ -106,6 +132,8 @@ function App() {
     hash,
     loading,
     reset,
+    theme,
+    toggleTheme,
   } = useContext(StoreContext);
 
   useIdleTimer({
@@ -219,6 +247,43 @@ function App() {
                 </svg>
               </a>
             </li>
+
+            <li>
+              <button
+                onClick={toggleTheme}
+                title={theme === "light" ? "Switch to dark mode" : "Switch to light mode"}
+                aria-label={theme === "light" ? "Switch to dark mode" : "Switch to light mode"}
+              >
+                {theme === "light" ? (
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16Z"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M12 2V4M12 20V22M4.92993 4.92993L6.34314 6.34314M17.6569 17.6569L19.0711 19.0711M2 12H4M20 12H22M4.92993 19.0711L6.34314 17.6569M17.6569 6.34314L19.0711 4.92993"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                ) : (
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                )}
+              </button>
+            </li>
           </ul>
         </nav>
       </Footer>
@@ -226,7 +291,7 @@ function App() {
       <ToastContainer
         position="top-center"
         hideProgressBar={false}
-        theme="light"
+        theme={theme}
       />
     </AppWrapper>
   );
