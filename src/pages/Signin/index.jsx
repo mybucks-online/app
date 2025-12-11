@@ -29,7 +29,7 @@ import Logo from "./logo.png";
 const Container = styled.div`
   max-width: 40.5rem;
   margin: 0 auto;
-  margin-block: 3rem 3.75rem;
+  margin-block: ${({ theme }) => `${theme.sizes.x2l} ${theme.sizes.x4l}`};
 
   @media (max-width: 696px) {
     margin: 0 ${({ theme }) => theme.sizes.xl};
