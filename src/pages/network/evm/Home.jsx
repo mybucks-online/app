@@ -128,6 +128,7 @@ const NativeBalance = styled.h3`
   text-align: center;
   font-weight: ${({ theme }) => theme.weights.highlight};
   font-size: ${({ theme }) => theme.sizes.x2l};
+  color: ${({ theme }) => theme.colors.gray400};
 
   ${media.sm`
     font-size: ${({ theme }) => theme.sizes.xl};

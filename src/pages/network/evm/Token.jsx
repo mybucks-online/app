@@ -80,6 +80,7 @@ const TokenBalance = styled.h5`
   font-weight: ${({ theme }) => theme.weights.regular};
   line-height: 120%;
   text-align: center;
+  color: ${({ theme }) => theme.colors.gray400};
 `;
 
 const TokenValue = styled.h6`
