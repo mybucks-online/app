@@ -87,6 +87,7 @@ const TokenValue = styled.h6`
   font-size: ${({ theme }) => theme.sizes.base};
   font-weight: ${({ theme }) => theme.weights.highlight};
   line-height: 150%;
+  color: ${({ theme }) => theme.colors.gray400};
 `;
 
 const AmountWrapper = styled.div`

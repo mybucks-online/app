@@ -52,6 +52,7 @@ const GasPriceWrapper = styled.div`
   visibility: ${({ $show }) => ($show ? "visible" : "hidden")};
   font-weight: ${({ theme }) => theme.weights.regular};
   font-size: ${({ theme }) => theme.sizes.sm};
+  color: ${({ theme }) => theme.colors.gray400};
 `;
 
 const MenuButton = styled(BaseButton).attrs({ $size: "small" })`

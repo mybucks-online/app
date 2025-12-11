@@ -35,6 +35,10 @@ const AmountTd = styled.td`
     $in ? theme.colors.success : theme.colors.error};
 `;
 
+const DateTimeTd = styled.td`
+  color: ${({ theme }) => theme.colors.gray400};
+`;
+
 const AddressTd = styled.td`
   display: flex;
   align-items: center;
@@ -81,7 +85,7 @@ const ActivityTable = ({ account, history }) => (
           }))
           .map((item) => (
             <tr key={item.hash}>
-              <td>{format(item.blockTimestamp, "MM/dd")}</td>
+              <DateTimeTd>{format(item.blockTimestamp, "MM/dd")}</DateTimeTd>
               <AddressTd>
                 <AddressLinkLg
                   href={account.linkOfAddress(item.target)}
