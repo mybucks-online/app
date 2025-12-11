@@ -85,7 +85,7 @@ const ActivityTable = ({ account, history }) => (
           }))
           .map((item) => (
             <tr key={item.hash}>
-              <DateTimeTd>{format(item.blockTimestamp, "MM/dd")}</DateTimeTd>
+              <DateTimeTd>{format(item.blockTimestamp, "MM/dd/yy")}</DateTimeTd>
               <AddressTd>
                 <AddressLinkLg
                   href={account.linkOfAddress(item.target)}
