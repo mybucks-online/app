@@ -43,8 +43,24 @@ const light = {
   },
 };
 
+const dark = {
+  ...light,
+  colors: {
+    primary: "#3B9EFF",
+    link: "#3B9EFF",
+    success: "#29CC6A",
+    error: "#FF5630",
+    gray25: "#18181A",
+    gray50: "#1F1F21",
+    gray100: "#2C2C2E",
+    gray200: "#98989D",
+    gray400: "#F4F4F4",
+  },
+};
+
 const themes = {
   light,
+  dark,
 };
 
 export default themes;
