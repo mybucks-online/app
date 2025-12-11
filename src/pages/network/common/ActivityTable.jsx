@@ -70,7 +70,7 @@ const CopyButton = styled.img.attrs({
 
 const ActivityTable = ({ account, history }) => (
   <Box>
-    <H3>Activity</H3>
+    <H3>Recent transactions</H3>
 
     <TableWrapper>
       <tbody>
