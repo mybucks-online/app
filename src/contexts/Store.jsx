@@ -56,7 +56,7 @@ const StoreProvider = ({ children }) => {
   // theme related
   const [theme, setTheme] = useState(() => {
     const savedTheme = localStorage.getItem("theme");
-    return savedTheme || "light";
+    return savedTheme || "dark";
   });
 
   // network related

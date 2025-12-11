@@ -18,8 +18,8 @@ import {
   PASSCODE_MIN_LENGTH,
   PASSWORD_MAX_LENGTH,
   PASSWORD_MIN_LENGTH,
-  TEST_PASSWORD,
   TEST_PASSCODE,
+  TEST_PASSWORD,
   UNKNOWN_FACTS,
 } from "@mybucks/lib/conf";
 import media from "@mybucks/styles/media";
