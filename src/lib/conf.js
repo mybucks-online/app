@@ -141,3 +141,6 @@ export const UNKNOWN_FACTS = [
   "Your account's origin remains anonymous.",
   "There's no reset or recovery option.",
 ];
+
+export const TEST_PASSWORD = "DemoAccount5&";
+export const TEST_PASSCODE = "112324";

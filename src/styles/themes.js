@@ -1,4 +1,5 @@
 const light = {
+  mode: "light",
   colors: {
     primary: "#0171E3",
     link: "#0171E3",
@@ -45,6 +46,7 @@ const light = {
 
 const dark = {
   ...light,
+  mode: "dark",
   colors: {
     primary: "#3B9EFF",
     link: "#3B9EFF",
