@@ -211,6 +211,12 @@ const Token = () => {
     estimateGas();
   }, [recipient, amount, token]);
 
+  useEffect(() => {
+    if (selectedTokenAddress && !token && !loading) {
+      selectToken("");
+    }
+  }, [selectedTokenAddress, token, loading, selectToken]);
+
   const onSuccess = async (txn) => {
     setConfirming(false);
     setTransaction(null);
@@ -234,9 +240,18 @@ const Token = () => {
       <MinedTransaction
         txnHash={txnHash}
         txnLink={account.linkOfTransaction(txnHash)}
-        back={() => setTxnHash("")}
+        back={() => {
+          setTxnHash("");
+          if (!token) {
+            selectToken("");
+          }
+        }}
       />
     );
+  }
+
+  if (!token) {
+    return null;
   }
 
   return (
