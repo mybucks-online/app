@@ -24,7 +24,6 @@ export const EVM_NETWORKS = [
     provider:
       "https://mainnet.infura.io/v3/" + import.meta.env.VITE_INFURA_API_KEY,
     scanner: "https://etherscan.io",
-    wrappedAsset: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
   },
   {
     chainId: 137,
@@ -35,7 +34,6 @@ export const EVM_NETWORKS = [
       "https://polygon-mainnet.infura.io/v3/" +
       import.meta.env.VITE_INFURA_API_KEY,
     scanner: "https://polygonscan.com",
-    wrappedAsset: "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270",
   },
   {
     chainId: 42161,
@@ -46,7 +44,6 @@ export const EVM_NETWORKS = [
       "https://arbitrum-mainnet.infura.io/v3/" +
       import.meta.env.VITE_INFURA_API_KEY,
     scanner: "https://arbiscan.io",
-    wrappedAsset: "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
   },
   {
     chainId: 10,
@@ -57,7 +54,6 @@ export const EVM_NETWORKS = [
       "https://optimism-mainnet.infura.io/v3/" +
       import.meta.env.VITE_INFURA_API_KEY,
     scanner: "https://optimistic.etherscan.io",
-    wrappedAsset: "0x4200000000000000000000000000000000000006",
   },
   {
     chainId: 56,
@@ -66,7 +62,6 @@ export const EVM_NETWORKS = [
     label: "BNB Chain",
     provider: "https://bsc-dataseed.binance.org/",
     scanner: "https://bscscan.com",
-    wrappedAsset: "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
   },
   {
     chainId: 43114,
@@ -77,7 +72,6 @@ export const EVM_NETWORKS = [
       "https://avalanche-mainnet.infura.io/v3/" +
       import.meta.env.VITE_INFURA_API_KEY,
     scanner: "https://snowtrace.io",
-    wrappedAsset: "0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7",
   },
   {
     chainId: 8453,
@@ -88,7 +82,6 @@ export const EVM_NETWORKS = [
       "https://base-mainnet.infura.io/v3/" +
       import.meta.env.VITE_INFURA_API_KEY,
     scanner: "https://basescan.org",
-    wrappedAsset: "0x4200000000000000000000000000000000000006",
   },
 ];
 

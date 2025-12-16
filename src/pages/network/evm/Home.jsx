@@ -153,7 +153,7 @@ const EvmHome = () => {
     chainId,
     updateNetwork,
     reset,
-    nativeTokenName,
+    nativeTokenSymbol,
     nativeTokenBalance,
     tokenBalances,
     tick,
@@ -237,7 +237,7 @@ const EvmHome = () => {
                 ? toFlexible(nativeTokenBalance, 2)
                 : "0"}
           &nbsp;
-          {nativeTokenName}
+          {nativeTokenSymbol}
         </NativeBalance>
       </PrimaryBox>
 
