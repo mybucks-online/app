@@ -1,5 +1,3 @@
-import { Network } from "alchemy-sdk";
-
 export const PASSWORD_MIN_LENGTH = 12;
 export const PASSWORD_MAX_LENGTH = 128;
 export const PASSCODE_MIN_LENGTH = 6;
@@ -18,7 +16,6 @@ export const DEFAULT_CHAIN_ID = 1;
 export const EVM_NETWORKS = [
   {
     chainId: 1,
-    networkId: Network.ETH_MAINNET,
     name: "ethereum",
     label: "Ethereum",
     provider:
@@ -27,7 +24,6 @@ export const EVM_NETWORKS = [
   },
   {
     chainId: 137,
-    networkId: Network.MATIC_MAINNET,
     name: "polygon",
     label: "Polygon",
     provider:
@@ -37,7 +33,6 @@ export const EVM_NETWORKS = [
   },
   {
     chainId: 42161,
-    networkId: Network.ARB_MAINNET,
     name: "arbitrum",
     label: "Arbitrum",
     provider:
@@ -47,7 +42,6 @@ export const EVM_NETWORKS = [
   },
   {
     chainId: 10,
-    networkId: Network.OPT_MAINNET,
     name: "optimism",
     label: "Optimism",
     provider:
@@ -57,7 +51,6 @@ export const EVM_NETWORKS = [
   },
   {
     chainId: 56,
-    networkId: Network.BNB_MAINNET,
     name: "bsc",
     label: "BNB Chain",
     provider: "https://bsc-dataseed.binance.org/",
@@ -65,7 +58,6 @@ export const EVM_NETWORKS = [
   },
   {
     chainId: 43114,
-    networkId: Network.AVAX_MAINNET,
     name: "avalanche",
     label: "Avalanche",
     provider:
@@ -75,7 +67,6 @@ export const EVM_NETWORKS = [
   },
   {
     chainId: 8453,
-    networkId: Network.BASE_MAINNET,
     name: "base",
     label: "Base",
     provider:

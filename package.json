@@ -32,7 +32,6 @@
   "dependencies": {
     "@mybucks.online/core": "^1.0.8",
     "@uniswap/default-token-list": "^13.5.0",
-    "alchemy-sdk": "^3.5.0",
     "buffer": "^6.0.3",
     "clipboard-copy": "^4.0.1",
     "date-fns": "^4.1.0",

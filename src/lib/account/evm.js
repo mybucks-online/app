@@ -4,7 +4,10 @@ import { Contract, ethers } from "ethers";
 
 import { EVM_NETWORKS, NETWORK } from "@mybucks/lib/conf";
 import IERC20 from "@mybucks/lib/erc20.json";
-import { getNativeAndErc20TokenBalances } from "@mybucks/lib/moralis";
+import {
+  getErc20TokenHistory,
+  getNativeAndErc20TokenBalances,
+} from "@mybucks/lib/moralis";
 
 class EvmAccount {
   network = NETWORK.EVM;
@@ -119,54 +122,27 @@ class EvmAccount {
   }
 
   async queryTokenHistory(tokenAddress, decimals, maxCount = 5) {
-    const { transfers: rxTransfers } =
-      await this.alchemyClient.core.getAssetTransfers({
-        category: [tokenAddress ? "erc20" : "external"],
-        order: "desc",
-        withMetadata: true,
-        toAddress: this.address,
-        excludeZeroValue: true,
-        contractAddresses: tokenAddress ? [tokenAddress] : undefined,
-        maxCount,
-      });
-    const { transfers: txTransfers } =
-      await this.alchemyClient.core.getAssetTransfers({
-        category: [tokenAddress ? "erc20" : "external"],
-        order: "desc",
-        withMetadata: true,
-        fromAddress: this.address,
-        excludeZeroValue: true,
-        contractAddresses: tokenAddress ? [tokenAddress] : undefined,
-        maxCount,
-      });
+    if (!tokenAddress) {
+      return [];
+    }
 
-    const transfers = [...rxTransfers, ...txTransfers];
-    transfers.sort(
-      (a, b) => parseInt(b.blockNum, 16) - parseInt(a.blockNum, 16)
+    const transfers = await getErc20TokenHistory(
+      this.address,
+      this.chainId,
+      tokenAddress,
+      maxCount
     );
 
-    return transfers
-      .map(
-        ({
-          from,
-          to,
-          value,
-          hash,
-          blockNum,
-          metadata: { blockTimestamp },
-          rawContract,
-        }) => ({
-          hash,
-          from,
-          to,
-          value:
-            value ||
-            parseFloat(ethers.formatUnits(rawContract.value, decimals)),
-          blockNum,
-          blockTimestamp,
-        })
-      )
-      .slice(0, maxCount);
+    return transfers.map((transfer) => ({
+      hash: transfer.transaction_hash,
+      from: transfer.from_address,
+      to: transfer.to_address,
+      value: parseFloat(
+        ethers.formatUnits(transfer.value, parseInt(transfer.token_decimals))
+      ),
+      blockNum: transfer.block_number.toString(),
+      blockTimestamp: transfer.block_timestamp,
+    }));
 
     /**
      * return format:
