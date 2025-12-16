@@ -21,7 +21,7 @@ import { H3 } from "@mybucks/components/Texts";
 import { StoreContext } from "@mybucks/contexts/Store";
 import useDebounce from "@mybucks/hooks/useDebounce";
 import { LOADING_PLACEHOLDER } from "@mybucks/lib/conf";
-import { formatCurrency } from "@mybucks/lib/utils";
+import { formatBalance, formatCurrency } from "@mybucks/lib/utils";
 import ActivityTable from "@mybucks/pages/network/common/ActivityTable";
 import media from "@mybucks/styles/media";
 
@@ -295,7 +295,7 @@ const Token = () => {
         </LogoAndLink>
 
         <TokenBalance>
-          {loading ? LOADING_PLACEHOLDER : token.balance.toFixed(4)}
+          {loading ? LOADING_PLACEHOLDER : formatBalance(token.balance, 2)}
           &nbsp;
           {token.symbol}
         </TokenBalance>
