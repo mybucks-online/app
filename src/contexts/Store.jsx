@@ -29,7 +29,7 @@ export const StoreContext = createContext({
   showBalances: false,
   setShowBalances: () => {},
 
-  nativeTokenName: "",
+  nativeTokenSymbol: "",
   nativeTokenBalance: 0,
   tokenBalances: [],
   nftBalances: [],
@@ -78,7 +78,7 @@ const StoreProvider = ({ children }) => {
   const [showBalances, setShowBalances] = useState(false);
 
   // balances related
-  const [nativeTokenName, setNativeTokenName] = useState("");
+  const [nativeTokenSymbol, setNativeTokenSymbol] = useState("");
   const [nativeTokenBalance, setNativeTokenBalance] = useState(0);
   const [tokenBalances, setTokenBalances] = useState([]);
   const [nftBalances, setNftBalances] = useState([]);
@@ -103,7 +103,7 @@ const StoreProvider = ({ children }) => {
     if (!account) {
       return;
     }
-    setNativeTokenName("");
+    setNativeTokenSymbol("");
     setTokenBalances([]);
     account.getNetworkStatus().then(() => {
       setTick((_tick) => _tick + 1);
@@ -156,7 +156,7 @@ const StoreProvider = ({ children }) => {
     openMenu(false);
     setShowBalances(false);
 
-    setNativeTokenName("");
+    setNativeTokenSymbol("");
     setNativeTokenBalance(0);
     setTokenBalances([]);
     setNftBalances([]);
@@ -188,7 +188,7 @@ const StoreProvider = ({ children }) => {
     const result = await account.queryBalances();
 
     if (result) {
-      setNativeTokenName(result[0].name);
+      setNativeTokenSymbol(result[0].symbol);
       setNativeTokenBalance(result[0].balance);
       setNativeTokenPrice(result[0].price);
       setTokenBalances(result);
@@ -225,7 +225,7 @@ const StoreProvider = ({ children }) => {
         openMenu,
         showBalances,
         setShowBalances,
-        nativeTokenName,
+        nativeTokenSymbol,
         nativeTokenBalance,
         tokenBalances,
         nftBalances,

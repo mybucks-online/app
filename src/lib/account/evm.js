@@ -1,12 +1,13 @@
 import { getEvmPrivateKey } from "@mybucks.online/core";
 import { tokens as defaultTokensList } from "@uniswap/default-token-list";
-import { Alchemy } from "alchemy-sdk";
 import { Contract, ethers } from "ethers";
 
 import { EVM_NETWORKS, NETWORK } from "@mybucks/lib/conf";
 import IERC20 from "@mybucks/lib/erc20.json";
-
-const alchemyApiKey = import.meta.env.VITE_ALCHEMY_API_KEY;
+import {
+  getErc20TokenHistory,
+  getNativeAndErc20TokenBalances,
+} from "@mybucks/lib/moralis";
 
 class EvmAccount {
   network = NETWORK.EVM;
@@ -25,8 +26,6 @@ class EvmAccount {
   // wei unit
   gasPrice = 0;
 
-  alchemyClient = null;
-
   constructor(hashKey, chainId) {
     this.chainId = chainId;
     this.networkInfo = EVM_NETWORKS.find((n) => n.chainId === chainId);
@@ -35,11 +34,6 @@ class EvmAccount {
     this.signer = getEvmPrivateKey(hashKey);
     this.account = new ethers.Wallet(this.signer, this.provider);
     this.address = this.account.address;
-
-    this.alchemyClient = new Alchemy({
-      network: this.networkInfo.networkId,
-      apiKey: alchemyApiKey,
-    });
   }
 
   isAddress(value) {
@@ -64,72 +58,48 @@ class EvmAccount {
   }
 
   async queryBalances() {
-    // get balances
-    const [nativeBalance, { tokenBalances }] = await Promise.all([
-      this.provider.getBalance(this.address),
-      this.alchemyClient.core.getTokenBalances(this.address),
-    ]);
-    // get balances of native token, erc20 tokens and merge into single array
-    // it uses wrapped asset in order to get the price of native currency
-    tokenBalances.unshift({
-      contractAddress: this.networkInfo.wrappedAsset,
-      tokenBalance: nativeBalance,
-      native: true,
-    });
-    // find token details including name, symbol, decimals
-    // and filter out not-listed(spam) tokens
-    const filteredBalances = tokenBalances
-      .map(({ contractAddress, tokenBalance, native }) => ({
-        ...defaultTokensList.find(
+    const tokenBalances = await getNativeAndErc20TokenBalances(this.address, this.chainId);
+
+    const balances = tokenBalances
+      .filter((token) => {
+        const isNative = token.native_token || false;
+        if (isNative) return true;
+
+        return defaultTokensList.find(
           ({ address }) =>
-            address.toLowerCase() === contractAddress.toLowerCase()
-        ),
-        rawBalance: tokenBalance,
-        native,
-      }))
-      .filter((t) => !!t.address)
-      .map((t) => ({
-        ...t,
-        balance: parseFloat(ethers.formatUnits(t.rawBalance, t.decimals)),
-      }))
+            address.toLowerCase() === token.token_address.toLowerCase()
+        );
+      })
+      .map((token) => {
+        const isNative = token.native_token || false;
+        const address = isNative ? "0x" : token.token_address;
+        const balance = parseFloat(token.balance_formatted || "0");
+        const price = parseFloat(token.usd_price || "0");
+        const quote = balance * price;
+
+        return {
+          chainId: this.chainId,
+          address,
+          name: token.name,
+          symbol: token.symbol,
+          decimals: parseInt(token.decimals),
+          logoURI: token.thumbnail || token.logo,
+          balance,
+          rawBalance: token.balance,
+          price,
+          quote,
+          native: isNative,
+        };
+      })
       .filter((t) => t.native || t.balance > 0);
 
-    // get prices
-    const response = await fetch(
-      `https://api.g.alchemy.com/prices/v1/${alchemyApiKey}/tokens/by-address`,
-      {
-        method: "POST",
-        headers: {
-          accept: "application/json",
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({
-          addresses: filteredBalances.map(({ address }) => ({
-            network: this.networkInfo.networkId,
-            address,
-          })),
-        }),
-      }
-    );
-    const { data: rawPrices } = await response.json();
-    // converts key:value pair of address and latest price
-    const prices = rawPrices
-      .filter((t) => !t.error)
-      .reduce(
-        (acc, t) => ({ ...acc, [t.address.toLowerCase()]: t.prices[0].value }),
-        {}
-      );
+    // Sort: native token first, then by balance descending
+    balances.sort((a, b) => {
+      if (a.native) return -1;
+      if (b.native) return 1;
+      return b.balance - a.balance;
+    });
 
-    const balances = filteredBalances.map((t) => ({
-      ...t,
-      price: parseFloat(prices[t.address.toLowerCase()]),
-      quote: t.balance * parseFloat(prices[t.address.toLowerCase()]),
-    }));
-
-    // remove `wrapped` for native currency
-    balances[0].address = "0x";
-    balances[0].name = balances[0].name.split(" ")[1];
-    balances[0].symbol = balances[0].symbol.slice(1);
     return balances;
 
     /**
@@ -152,54 +122,27 @@ class EvmAccount {
   }
 
   async queryTokenHistory(tokenAddress, decimals, maxCount = 5) {
-    const { transfers: rxTransfers } =
-      await this.alchemyClient.core.getAssetTransfers({
-        category: [tokenAddress ? "erc20" : "external"],
-        order: "desc",
-        withMetadata: true,
-        toAddress: this.address,
-        excludeZeroValue: true,
-        contractAddresses: tokenAddress ? [tokenAddress] : undefined,
-        maxCount,
-      });
-    const { transfers: txTransfers } =
-      await this.alchemyClient.core.getAssetTransfers({
-        category: [tokenAddress ? "erc20" : "external"],
-        order: "desc",
-        withMetadata: true,
-        fromAddress: this.address,
-        excludeZeroValue: true,
-        contractAddresses: tokenAddress ? [tokenAddress] : undefined,
-        maxCount,
-      });
+    if (!tokenAddress) {
+      return [];
+    }
 
-    const transfers = [...rxTransfers, ...txTransfers];
-    transfers.sort(
-      (a, b) => parseInt(b.blockNum, 16) - parseInt(a.blockNum, 16)
+    const transfers = await getErc20TokenHistory(
+      this.address,
+      this.chainId,
+      tokenAddress,
+      maxCount
     );
 
-    return transfers
-      .map(
-        ({
-          from,
-          to,
-          value,
-          hash,
-          blockNum,
-          metadata: { blockTimestamp },
-          rawContract,
-        }) => ({
-          hash,
-          from,
-          to,
-          value:
-            value ||
-            parseFloat(ethers.formatUnits(rawContract.value, decimals)),
-          blockNum,
-          blockTimestamp,
-        })
-      )
-      .slice(0, maxCount);
+    return transfers.map((transfer) => ({
+      hash: transfer.transaction_hash,
+      from: transfer.from_address,
+      to: transfer.to_address,
+      value: parseFloat(
+        ethers.formatUnits(transfer.value, parseInt(transfer.token_decimals))
+      ),
+      blockNum: transfer.block_number.toString(),
+      blockTimestamp: transfer.block_timestamp,
+    }));
 
     /**
      * return format:
