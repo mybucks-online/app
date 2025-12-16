@@ -130,10 +130,11 @@ This is a fully open-source project built with React, Vite, and related third-pa
 - **ethers**  
   A standard library for manipulating EVM accounts.
 
-- **alchemy-sdk**  
+- **moralis**  
   Provides query functions for massive crypto assets in multiple networks.
 
-- **@uniswap/default-token-list**
+- **@uniswap/default-token-list**  
+  ERC20 tokens are filtered to only display those included in the Uniswap default token list.
 
 - **tronweb**
 
@@ -141,7 +142,7 @@ This is a fully open-source project built with React, Vite, and related third-pa
 
 ## How to Run
 
-Please sign up for [Infura](https://infura.io), [Alchemy](https://alchemy.com/) and [Trongrid](https://trongrid.io/), create free API keys, and update the environment variables accordingly.
+Please sign up for [Infura](https://infura.io), [Moralis](https://moralis.com/) and [Trongrid](https://trongrid.io/), create free API keys, and update the environment variables accordingly.
 
 ```bash
 yarn install
