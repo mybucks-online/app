@@ -155,6 +155,13 @@ const ToggleButton = styled.button`
   }
 `;
 
+const TrustpilotWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: ${({ theme }) => theme.sizes.x2l};
+`;
+
 const SignIn = () => {
   const { setup } = useContext(StoreContext);
 
@@ -349,6 +356,28 @@ const SignIn = () => {
             Open
           </Button>
         </Box>
+
+        {/* TrustBox widget - Review Collector */}
+        <TrustpilotWrapper>
+          <div
+            className="trustpilot-widget"
+            data-locale="en-US"
+            data-template-id="56278e9abfbbba0bdcd568bc"
+            data-businessunit-id="69436ea5ae5298305b4ff616"
+            data-style-height="52px"
+            data-style-width="100%"
+            data-token="0df0687a-a683-4773-93b7-a89297053c53"
+          >
+            <a
+              href="https://www.trustpilot.com/review/mybucks.online"
+              target="_blank"
+              rel="noopener"
+            >
+              Trustpilot
+            </a>
+          </div>
+        </TrustpilotWrapper>
+        {/* End TrustBox widget */}
       </Container>
 
       <Modal show={!!progress} width="20rem">
