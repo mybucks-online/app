@@ -20,8 +20,8 @@ It fully runs on your **browser side** without using any storage or invoking any
 
 ## How to Use
 
-1. Visit `app.mybucks.online`.
-2. Input your password, confirmation, and passcode.  
+1. Visit [app.mybucks.online](https://app.mybucks.online).
+2. Input your password and passcode.  
   Test credentials:  
     password: **DemoAccount5&**  
     passcode: **112324**
