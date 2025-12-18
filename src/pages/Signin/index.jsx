@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { generateHash, parseToken } from "@mybucks.online/core";
 import styled from "styled-components";
 
@@ -164,6 +164,7 @@ const TrustpilotWrapper = styled.div`
 
 const SignIn = () => {
   const { setup } = useContext(StoreContext);
+  const trustpilotWidgetRef = useRef(null);
 
   const [password, setPassword] = useState(
     import.meta.env.DEV ? TEST_PASSWORD : ""
@@ -240,6 +241,32 @@ const SignIn = () => {
     };
 
     parseTokenAndSubmit();
+  }, []);
+
+  useEffect(() => {
+    // Re-initialize Trustpilot widget when component mounts
+    // This is needed for SPAs where the widget needs to be reloaded on navigation
+    const initTrustpilot = () => {
+      if (window.Trustpilot && trustpilotWidgetRef.current) {
+        window.Trustpilot.loadFromElement(trustpilotWidgetRef.current, true);
+      } else if (!window.Trustpilot) {
+        // If Trustpilot script hasn't loaded yet, wait for it
+        const checkTrustpilot = setInterval(() => {
+          if (window.Trustpilot && trustpilotWidgetRef.current) {
+            window.Trustpilot.loadFromElement(trustpilotWidgetRef.current, true);
+            clearInterval(checkTrustpilot);
+          }
+        }, 100);
+
+        // Cleanup interval after 5 seconds if Trustpilot never loads
+        setTimeout(() => clearInterval(checkTrustpilot), 5000);
+      }
+    };
+
+    // Small delay to ensure DOM is ready
+    const timeoutId = setTimeout(initTrustpilot, 200);
+
+    return () => clearTimeout(timeoutId);
   }, []);
 
   const onSubmit = async () => {
@@ -360,6 +387,7 @@ const SignIn = () => {
         {/* TrustBox widget - Review Collector */}
         <TrustpilotWrapper>
           <div
+            ref={trustpilotWidgetRef}
             className="trustpilot-widget"
             data-locale="en-US"
             data-template-id="56278e9abfbbba0bdcd568bc"
