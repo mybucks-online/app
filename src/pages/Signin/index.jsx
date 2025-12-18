@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { generateHash, parseToken } from "@mybucks.online/core";
 import styled from "styled-components";
 
@@ -164,6 +164,7 @@ const TrustpilotWrapper = styled.div`
 
 const SignIn = () => {
   const { setup } = useContext(StoreContext);
+  const trustpilotWidgetRef = useRef(null);
 
   const [password, setPassword] = useState(
     import.meta.env.DEV ? TEST_PASSWORD : ""
@@ -240,6 +241,19 @@ const SignIn = () => {
     };
 
     parseTokenAndSubmit();
+  }, []);
+
+  useEffect(() => {
+    // Re-initialize Trustpilot widget when component mounts
+    const initTrustpilot = () => {
+      if (window.Trustpilot && trustpilotWidgetRef.current) {
+        window.Trustpilot.loadFromElement(trustpilotWidgetRef.current, true);
+      }
+    };
+
+    const timeoutId = setTimeout(initTrustpilot, 200);
+
+    return () => clearTimeout(timeoutId);
   }, []);
 
   const onSubmit = async () => {
@@ -360,6 +374,7 @@ const SignIn = () => {
         {/* TrustBox widget - Review Collector */}
         <TrustpilotWrapper>
           <div
+            ref={trustpilotWidgetRef}
             className="trustpilot-widget"
             data-locale="en-US"
             data-template-id="56278e9abfbbba0bdcd568bc"
