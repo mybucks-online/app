@@ -1,14 +1,8 @@
-
-
-
-
-https://github.com/user-attachments/assets/796195c9-fc26-4e35-b9ea-e4cac95bef18
-
-
-
 # mybucks.online
 
 ## Summary
+
+This is a source repository of [app.mybucks.online](https://app.mybucks.online).
 
 Mybucks.online is a **password-only, self-custodial and browser-based cryptocurrency wallet** built with [React.js](https://react.dev). It generates a private key from your password and passcode using an industry-standard, verified **one-way hash function**. Your private key forms your account, allowing you to transfer, receive, and hold your crypto assets permanently.
 
@@ -105,7 +99,7 @@ The core components responsible for hash and private-key generation have been ex
 npm install @mybucks.online/core
 ```
 
-## Transfer Ownership
+## Transfer Ownership 🎁🎁🎁
 
 You can transfer all your holdings to family or friends in a few seconds by sharing your password only.  
 Send this short note to your friend in a private channel.
@@ -116,6 +110,8 @@ mybucks.online / DemoAccount5& : 112324
 
 And you can even transfer wallet itself by using a URL:  
 https://app.mybucks.online/?wallet=VWnsSGRGVtb0FjY291bnQ1JgIxMTIzMjQCb3B0aW1pc20=_wNovT
+
+This might sound complicated, but it's actually quite simple: you're sending someone your cryptocurrency along with the wallet itself. Think of it like putting $5 or $10 cash in an envelope with a gift card - they receive both the money and the card.
 
 You can extract this link in the `Backup` menu.  
 This feature allows you to transfer cryptocurrency `without asking recipient's address`.
@@ -153,45 +149,16 @@ yarn dev
 
 ## Production Environment
 
-The project uses `Github Pages` and `Github Actions` for deployment and is connected to a custom domain.
-You can easily verify releases, deployments, and domain configuration:
+The project is deployed via GitHub Pages and GitHub Actions. You can verify the deployment and DNS configuration:
 
 - [Actions](https://github.com/mybucks-online/app/actions)
 - [Releases](https://github.com/mybucks-online/app/releases)
-- [.github/workflows/main-pipeline.yml](https://github.com/mybucks-online/app/blob/master/.github/workflows/main-pipeline.yml)
-
-To check DNS settings:
-
-```bash
-nslookup
-> app.mybucks.online
-Server:		127.0.0.53
-Address:	127.0.0.53#53
-
-Non-authoritative answer:
-app.mybucks.online	canonical name = mybucks-online.github.io.
-Name:	mybucks-online.github.io
-
-~~~
-```
-
-```bash
-dig app.mybucks.online
-
-;; ANSWER SECTION:
-app.mybucks.online.	5	IN	CNAME	https://mybucks-online.github.io.
-https://mybucks-online.github.io. 5 IN	A	185.199.110.153
-https://mybucks-online.github.io. 5 IN	A	185.199.109.153
-https://mybucks-online.github.io. 5 IN	A	185.199.108.153
-https://mybucks-online.github.io. 5 IN	A	185.199.111.153
-
-~~~
-```
+- DNS: `app.mybucks.online` → `mybucks-online.github.io`
 
 # Quick Links
 
+- App: https://app.mybucks.online
 - Website: https://mybucks.online
-- Wallet: https://app.mybucks.online
 - Docs: https://docs.mybucks.online
 - Github: https://github.com/mybucks-online
 - Discord: https://discord.gg/RTHgTePKgP
