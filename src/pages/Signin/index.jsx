@@ -245,25 +245,12 @@ const SignIn = () => {
 
   useEffect(() => {
     // Re-initialize Trustpilot widget when component mounts
-    // This is needed for SPAs where the widget needs to be reloaded on navigation
     const initTrustpilot = () => {
       if (window.Trustpilot && trustpilotWidgetRef.current) {
         window.Trustpilot.loadFromElement(trustpilotWidgetRef.current, true);
-      } else if (!window.Trustpilot) {
-        // If Trustpilot script hasn't loaded yet, wait for it
-        const checkTrustpilot = setInterval(() => {
-          if (window.Trustpilot && trustpilotWidgetRef.current) {
-            window.Trustpilot.loadFromElement(trustpilotWidgetRef.current, true);
-            clearInterval(checkTrustpilot);
-          }
-        }, 100);
-
-        // Cleanup interval after 5 seconds if Trustpilot never loads
-        setTimeout(() => clearInterval(checkTrustpilot), 5000);
       }
     };
 
-    // Small delay to ensure DOM is ready
     const timeoutId = setTimeout(initTrustpilot, 200);
 
     return () => clearTimeout(timeoutId);
