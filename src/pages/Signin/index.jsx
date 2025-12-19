@@ -7,6 +7,7 @@ import Checkbox from "@mybucks/components/Checkbox";
 import { Box } from "@mybucks/components/Containers";
 import Input from "@mybucks/components/Input";
 import { Label } from "@mybucks/components/Label";
+import Link from "@mybucks/components/Link";
 import Modal from "@mybucks/components/Modal";
 import PasswordToggleIcon from "@mybucks/components/PasswordToggleIcon";
 import Progress from "@mybucks/components/Progress";
@@ -162,6 +163,35 @@ const TrustpilotWrapper = styled.div`
   margin-top: ${({ theme }) => theme.sizes.x2l};
 `;
 
+const TermsCheckboxWrapper = styled.div`
+  display: flex;
+  align-items: flex-start;
+  gap: ${({ theme }) => theme.sizes.xs};
+  margin-bottom: ${({ theme }) => theme.sizes.xl};
+  margin-top: ${({ theme }) => theme.sizes.base};
+`;
+
+const TermsCheckboxInput = styled.input.attrs({
+  type: "checkbox",
+})`
+  margin-top: 0.25rem;
+  cursor: pointer;
+  flex-shrink: 0;
+`;
+
+const TermsCheckboxLabel = styled.label`
+  font-size: ${({ theme }) => theme.sizes.sm};
+  font-weight: ${({ theme }) => theme.weights.regular};
+  line-height: 140%;
+  color: ${({ theme }) => theme.colors.gray400};
+  user-select: none;
+  cursor: pointer;
+
+  a {
+    font-size: inherit;
+  }
+`;
+
 const SignIn = () => {
   const { setup } = useContext(StoreContext);
   const trustpilotWidgetRef = useRef(null);
@@ -178,6 +208,7 @@ const SignIn = () => {
   const [showPasscode, setShowPasscode] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
   const [passcodeFocused, setPasscodeFocused] = useState(false);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
 
   const hasMinLengthPassword = useMemo(
     () => password.length >= PASSWORD_MIN_LENGTH,
@@ -205,8 +236,9 @@ const SignIn = () => {
       !hasUppercase ||
       !hasNumbers ||
       !hasSymbol ||
-      !hasValidPasscodeLength,
-    [password, passcode, disabled, hasMinLengthPassword, hasLowercase, hasUppercase, hasNumbers, hasSymbol, hasValidPasscodeLength]
+      !hasValidPasscodeLength ||
+      !agreedToTerms,
+    [password, passcode, disabled, hasMinLengthPassword, hasLowercase, hasUppercase, hasNumbers, hasSymbol, hasValidPasscodeLength, agreedToTerms]
   );
 
   const unknownFact = useMemo(
@@ -365,6 +397,25 @@ const SignIn = () => {
               Passcode length: {PASSCODE_MIN_LENGTH}~{PASSCODE_MAX_LENGTH}
             </Checkbox>
           </Checkboxes>
+
+          <TermsCheckboxWrapper>
+            <TermsCheckboxInput
+              id="terms-checkbox"
+              checked={agreedToTerms}
+              onChange={(e) => setAgreedToTerms(e.target.checked)}
+              disabled={disabled}
+            />
+            <TermsCheckboxLabel htmlFor="terms-checkbox">
+              I agree to the{" "}
+              <Link
+                href="https://docs.mybucks.online/more/terms-of-use"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Terms of Use
+              </Link>
+            </TermsCheckboxLabel>
+          </TermsCheckboxWrapper>
 
           <Button onClick={onSubmit} disabled={hasInvalidInput} $size="block">
             Open
