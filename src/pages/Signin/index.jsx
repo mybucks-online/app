@@ -22,7 +22,9 @@ import {
   TEST_PASSCODE,
   TEST_PASSWORD,
   UNKNOWN_FACTS,
+  WALLET_URL_PARAM,
 } from "@mybucks/lib/conf";
+import { clearQueryParams } from "@mybucks/lib/utils";
 import media from "@mybucks/styles/media";
 
 import Logo from "./logo.png";
@@ -251,7 +253,7 @@ const SignIn = () => {
       // get "secret" param from URL
       const url = new URL(window.location.href);
       const params = new URLSearchParams(url.search);
-      const secret = params.get("wallet");
+      const secret = params.get(WALLET_URL_PARAM);
       if (!secret) {
         return;
       }
@@ -259,9 +261,15 @@ const SignIn = () => {
       // parse password, passcode, network name from "secret" param
       const [pwd, pc, nn] = parseToken(secret);
       if (!pwd || !pc || !nn) {
+        clearQueryParams();
         return;
       }
       const [network, chainId] = findNetworkByName(nn);
+      if (!chainId) {
+        console.error("Invalid network name");
+        clearQueryParams();
+        return;
+      }
 
       // open wallet
       setDisabled(true);

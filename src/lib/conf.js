@@ -126,5 +126,7 @@ export const UNKNOWN_FACTS = [
   "There's no reset or recovery option.",
 ];
 
+export const WALLET_URL_PARAM = "wallet";
+
 export const TEST_PASSWORD = "DemoAccount5&";
 export const TEST_PASSCODE = "112324";
