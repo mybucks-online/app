@@ -171,7 +171,7 @@ function App() {
       </Main>
 
       <Footer>
-        <h5>&copy; 2025 Mybucks.online MIT Licensed</h5>
+        <h5>&copy; 2026 Mybucks.online MIT Licensed</h5>
 
         <a href="https://codesandbox.io/p/sandbox/mybucks-online-key-generation-sandbox-lt53c3" target="_blank">
           Verify Key Logic
