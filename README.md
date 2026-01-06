@@ -116,7 +116,7 @@ This might sound complicated, but it's actually quite simple: you're sending som
 You can extract this link in the `Backup` menu.  
 This feature allows you to transfer cryptocurrency `without asking recipient's address`.
 
-# Major dependencies
+## Major dependencies
 
 This project uses the following major dependencies:
 
@@ -150,7 +150,7 @@ The project is deployed via GitHub Pages and GitHub Actions. You can verify the 
 - [Releases](https://github.com/mybucks-online/app/releases)
 - DNS: `app.mybucks.online` → `mybucks-online.github.io`
 
-# Quick Links
+## Quick Links
 
 - App: https://app.mybucks.online
 - Website: https://mybucks.online
