@@ -412,7 +412,7 @@ const SignIn = () => {
           </div>
 
           <KeyGenerationComment>
-            <span>Keys are generated locally using scrypt. </span>
+            <span>Keys are generated locally using Scrypt. </span>
 
             <Link
               href="https://codesandbox.io/p/sandbox/mybucks-online-key-generation-sandbox-lt53c3"
