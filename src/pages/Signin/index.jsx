@@ -95,7 +95,7 @@ const Caption = styled.p`
 `;
 
 const Checkboxes = styled.div`
-  margin: 1rem 0;
+  margin-block: ${({ theme }) => `${theme.sizes.base} ${theme.sizes.xl}`};
   display: flex;
   flex-wrap: wrap;
   & > div {
@@ -169,8 +169,6 @@ const TermsCheckboxWrapper = styled.div`
   display: flex;
   align-items: flex-start;
   gap: ${({ theme }) => theme.sizes.xs};
-  margin-bottom: ${({ theme }) => theme.sizes.xl};
-  margin-top: ${({ theme }) => theme.sizes.base};
 `;
 
 const TermsCheckboxInput = styled.input.attrs({
@@ -184,10 +182,21 @@ const TermsCheckboxInput = styled.input.attrs({
 const TermsCheckboxLabel = styled.label`
   font-size: ${({ theme }) => theme.sizes.sm};
   font-weight: ${({ theme }) => theme.weights.regular};
-  line-height: 140%;
   color: ${({ theme }) => theme.colors.gray400};
   user-select: none;
   cursor: pointer;
+
+  a {
+    font-size: inherit;
+  }
+`;
+
+const KeyGenerationComment = styled.div`
+  text-align: left;
+  color: ${({ theme }) => theme.colors.gray200};
+  font-size: ${({ theme }) => theme.sizes.xs};
+  font-weight: ${({ theme }) => theme.weights.regular};
+  margin-bottom: ${({ theme }) => theme.sizes.base};
 
   a {
     font-size: inherit;
@@ -240,7 +249,18 @@ const SignIn = () => {
       !hasSymbol ||
       !hasValidPasscodeLength ||
       !agreedToTerms,
-    [password, passcode, disabled, hasMinLengthPassword, hasLowercase, hasUppercase, hasNumbers, hasSymbol, hasValidPasscodeLength, agreedToTerms]
+    [
+      password,
+      passcode,
+      disabled,
+      hasMinLengthPassword,
+      hasLowercase,
+      hasUppercase,
+      hasNumbers,
+      hasSymbol,
+      hasValidPasscodeLength,
+      agreedToTerms,
+    ]
   );
 
   const unknownFact = useMemo(
@@ -352,7 +372,10 @@ const SignIn = () => {
                 onClick={() => setShowPassword(!showPassword)}
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
-                <PasswordToggleIcon show={showPassword} focused={passwordFocused} />
+                <PasswordToggleIcon
+                  show={showPassword}
+                  focused={passwordFocused}
+                />
               </ToggleButton>
             </PasswordInputWrapper>
           </div>
@@ -380,10 +403,25 @@ const SignIn = () => {
                 onClick={() => setShowPasscode(!showPasscode)}
                 aria-label={showPasscode ? "Hide passcode" : "Show passcode"}
               >
-                <PasswordToggleIcon show={showPasscode} focused={passcodeFocused} />
+                <PasswordToggleIcon
+                  show={showPasscode}
+                  focused={passcodeFocused}
+                />
               </ToggleButton>
             </PasswordInputWrapper>
           </div>
+
+          <KeyGenerationComment>
+            <span>Keys are generated locally using scrypt. </span>
+
+            <Link
+              href="https://codesandbox.io/p/sandbox/mybucks-online-key-generation-sandbox-lt53c3"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Verify Key Logic
+            </Link>
+          </KeyGenerationComment>
 
           <Checkboxes>
             <Checkbox id="uppercase" value={hasUppercase}>
@@ -404,26 +442,26 @@ const SignIn = () => {
             <Checkbox id="passcode-length" value={hasValidPasscodeLength}>
               Passcode length: {PASSCODE_MIN_LENGTH}~{PASSCODE_MAX_LENGTH}
             </Checkbox>
-          </Checkboxes>
 
-          <TermsCheckboxWrapper>
-            <TermsCheckboxInput
-              id="terms-checkbox"
-              checked={agreedToTerms}
-              onChange={(e) => setAgreedToTerms(e.target.checked)}
-              disabled={disabled}
-            />
-            <TermsCheckboxLabel htmlFor="terms-checkbox">
-              I agree to the{" "}
-              <Link
-                href="https://docs.mybucks.online/more/terms-of-use"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Terms of Use
-              </Link>
-            </TermsCheckboxLabel>
-          </TermsCheckboxWrapper>
+            <TermsCheckboxWrapper>
+              <TermsCheckboxInput
+                id="terms-checkbox"
+                checked={agreedToTerms}
+                onChange={(e) => setAgreedToTerms(e.target.checked)}
+                disabled={disabled}
+              />
+              <TermsCheckboxLabel htmlFor="terms-checkbox">
+                I agree to the{" "}
+                <Link
+                  href="https://docs.mybucks.online/more/terms-of-use"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Terms of Use
+                </Link>
+              </TermsCheckboxLabel>
+            </TermsCheckboxWrapper>
+          </Checkboxes>
 
           <Button onClick={onSubmit} disabled={hasInvalidInput} $size="block">
             Open

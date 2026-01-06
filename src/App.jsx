@@ -91,12 +91,6 @@ const Footer = styled.footer`
   }
 
   ${media.md`
-    p {
-      display: none;
-    }
-  `}
-
-  ${media.sm`
     flex-direction: column;
     gap: ${({ theme }) => theme.sizes.xs};
   `}
@@ -179,12 +173,9 @@ function App() {
       <Footer>
         <h5>&copy; 2025 Mybucks.online MIT Licensed</h5>
 
-        <p>
-          Audited by{" "}
-          <a href="https://app.secure3.io/5c92d55acd" target="_blank">
-            <strong>Secure3</strong>
-          </a>
-        </p>
+        <a href="https://codesandbox.io/p/sandbox/mybucks-online-key-generation-sandbox-lt53c3" target="_blank">
+          Verify Key Logic
+        </a>
 
         <nav>
           <ul>
