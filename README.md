@@ -116,24 +116,19 @@ This might sound complicated, but it's actually quite simple: you're sending som
 You can extract this link in the `Backup` menu.  
 This feature allows you to transfer cryptocurrency `without asking recipient's address`.
 
-# About the Project
+# Major dependencies
 
-This is a fully open-source project built with React, Vite, and related third-party libraries such as:
+This project uses the following major dependencies:
 
 - **scrypt-js**  
   Implements the `scrypt` hash function. Please check the npm registry [here](https://www.npmjs.com/package/scrypt-js).
-
 - **ethers**  
   A standard library for manipulating EVM accounts.
-
 - **moralis**  
   Provides query functions for massive crypto assets in multiple networks.
-
 - **@uniswap/default-token-list**  
   ERC20 tokens are filtered to only display those included in the Uniswap default token list.
-
 - **tronweb**
-
 - **styled-components**
 
 ## How to Run
