@@ -1,19 +1,25 @@
 {
   "name": "mybucks-online",
-  "description": "Mybucks.online | Password-only, self-custodial cryptocurrency wallet",
+  "description": "Mybucks.online | seedless, disposable crypto wallet",
   "private": true,
   "version": "1.13",
   "type": "module",
   "keywords": [
-    "crypto",
+    "mybucks.online",
+    "seedless",
+    "disposable",
     "wallet",
-    "password-only",
+    "crypto",
+    "multi-chain",
     "self-custodial",
-    "blockchain",
-    "web3",
+    "browser-based",
     "ethereum",
+    "web3",
     "tron",
-    "opensource"
+    "scrypt",
+    "keccak256",
+    "key-generation",
+    "open-source"
   ],
   "license": "MIT",
   "repository": {
