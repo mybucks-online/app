@@ -150,4 +150,4 @@ The project is deployed via GitHub Pages and GitHub Actions. You can verify the 
 - Github: https://github.com/mybucks-online
 - X: https://x.com/mybucks_online
 - Telegram: https://t.me/mybucks_online
-- Audit report: https://app.secure3.io/5c92d55acd
+- Audit report: [Mybucks_online_Secure3_Audit_Report.pdf](./Mybucks_online_Secure3_Audit_Report.pdf)
