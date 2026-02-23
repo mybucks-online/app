@@ -102,7 +102,7 @@ npm install @mybucks.online/core
 With mybucks.online, you can send cryptocurrency and even **wallet itself via a URL**. The recipient simply clicks the link to open the wallet and take full ownership.
 
 Try this link:  
-https://app.mybucks.online/?wallet=VWnsSGRGVtb0FjY291bnQ1JgIxMTIzMjQCb3B0aW1pc20=_wNovT
+https://app.mybucks.online/#wallet=VWnsSGRGVtb0FjY291bnQ1JgIxMTIzMjQCb3B0aW1pc20=_wNovT
 
 This feature allows you to **create a one-time wallet** and put stablecoins or memecoins into it. You can **transfer full ownership as a gift without ever asking for a recipient's address**. These serve as a "starter" wallet for the recipients, who can then easily withdraw the funds into their own personal pockets or primary wallets.
 
@@ -150,4 +150,4 @@ The project is deployed via GitHub Pages and GitHub Actions. You can verify the 
 - Github: https://github.com/mybucks-online
 - X: https://x.com/mybucks_online
 - Telegram: https://t.me/mybucks_online
-- Audit report: https://app.secure3.io/5c92d55acd
+- Audit report: [Mybucks_online_Secure3_Audit_Report.pdf](./Mybucks_online_Secure3_Audit_Report.pdf)

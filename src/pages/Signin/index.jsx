@@ -271,9 +271,11 @@ const SignIn = () => {
   useEffect(() => {
     const parseTokenAndSubmit = async () => {
       // get "secret" param from URL
-      const url = new URL(window.location.href);
-      const params = new URLSearchParams(url.search);
-      const secret = params.get(WALLET_URL_PARAM);
+      // prefer hash param (#wallet=...) for security, fall back to query param (?wallet=...) for backward compatibility
+      const hashParams = new URLSearchParams(window.location.hash.slice(1));
+      const queryParams = new URLSearchParams(window.location.search);
+      const secret = hashParams.get(WALLET_URL_PARAM) || queryParams.get(WALLET_URL_PARAM);
+
       if (!secret) {
         return;
       }
