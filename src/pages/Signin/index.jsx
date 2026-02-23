@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { generateHash, parseToken } from "@mybucks.online/core";
 import styled from "styled-components";
 
@@ -158,13 +158,6 @@ const ToggleButton = styled.button`
   }
 `;
 
-const TrustpilotWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: ${({ theme }) => theme.sizes.x2l};
-`;
-
 const TermsCheckboxWrapper = styled.div`
   display: flex;
   align-items: flex-start;
@@ -205,7 +198,6 @@ const KeyGenerationComment = styled.div`
 
 const SignIn = () => {
   const { setup } = useContext(StoreContext);
-  const trustpilotWidgetRef = useRef(null);
 
   const [password, setPassword] = useState(
     import.meta.env.DEV ? TEST_PASSWORD : ""
@@ -303,19 +295,6 @@ const SignIn = () => {
     };
 
     parseTokenAndSubmit();
-  }, []);
-
-  useEffect(() => {
-    // Re-initialize Trustpilot widget when component mounts
-    const initTrustpilot = () => {
-      if (window.Trustpilot && trustpilotWidgetRef.current) {
-        window.Trustpilot.loadFromElement(trustpilotWidgetRef.current, true);
-      }
-    };
-
-    const timeoutId = setTimeout(initTrustpilot, 200);
-
-    return () => clearTimeout(timeoutId);
   }, []);
 
   const onSubmit = async () => {
@@ -468,29 +447,6 @@ const SignIn = () => {
             Open
           </Button>
         </Box>
-
-        {/* TrustBox widget - Review Collector */}
-        <TrustpilotWrapper>
-          <div
-            ref={trustpilotWidgetRef}
-            className="trustpilot-widget"
-            data-locale="en-US"
-            data-template-id="56278e9abfbbba0bdcd568bc"
-            data-businessunit-id="69436ea5ae5298305b4ff616"
-            data-style-height="52px"
-            data-style-width="100%"
-            data-token="0df0687a-a683-4773-93b7-a89297053c53"
-          >
-            <a
-              href="https://www.trustpilot.com/review/mybucks.online"
-              target="_blank"
-              rel="noopener"
-            >
-              Trustpilot
-            </a>
-          </div>
-        </TrustpilotWrapper>
-        {/* End TrustBox widget */}
       </Container>
 
       <Modal show={!!progress} width="20rem">
