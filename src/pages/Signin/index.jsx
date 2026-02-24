@@ -7,7 +7,6 @@ import Checkbox from "@mybucks/components/Checkbox";
 import { Box } from "@mybucks/components/Containers";
 import Input from "@mybucks/components/Input";
 import { Label } from "@mybucks/components/Label";
-import Link from "@mybucks/components/Link";
 import Modal from "@mybucks/components/Modal";
 import PasswordToggleIcon from "@mybucks/components/PasswordToggleIcon";
 import Progress from "@mybucks/components/Progress";
@@ -158,18 +157,6 @@ const ToggleButton = styled.button`
   }
 `;
 
-
-const KeyGenerationComment = styled.div`
-  text-align: left;
-  color: ${({ theme }) => theme.colors.gray200};
-  font-size: ${({ theme }) => theme.sizes.xs};
-  font-weight: ${({ theme }) => theme.weights.regular};
-  margin-bottom: ${({ theme }) => theme.sizes.base};
-
-  a {
-    font-size: inherit;
-  }
-`;
 
 const SignIn = () => {
   const { setup } = useContext(StoreContext);
@@ -362,18 +349,6 @@ const SignIn = () => {
               </ToggleButton>
             </PasswordInputWrapper>
           </div>
-
-          <KeyGenerationComment>
-            <span>Keys are generated locally using Scrypt. </span>
-
-            <Link
-              href="https://codesandbox.io/p/sandbox/mybucks-online-key-generation-sandbox-lt53c3"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Verify Key Logic
-            </Link>
-          </KeyGenerationComment>
 
           <Checkboxes>
             <Checkbox id="uppercase" value={hasUppercase}>
