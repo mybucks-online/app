@@ -7,6 +7,7 @@ import Checkbox from "@mybucks/components/Checkbox";
 import { Box } from "@mybucks/components/Containers";
 import Input from "@mybucks/components/Input";
 import { Label } from "@mybucks/components/Label";
+import Link from "@mybucks/components/Link";
 import Modal from "@mybucks/components/Modal";
 import PasswordToggleIcon from "@mybucks/components/PasswordToggleIcon";
 import Progress from "@mybucks/components/Progress";
@@ -14,12 +15,12 @@ import { H1 } from "@mybucks/components/Texts";
 import { StoreContext } from "@mybucks/contexts/Store";
 import {
   findNetworkByName,
-  PIN_MAX_LENGTH,
-  PIN_MIN_LENGTH,
   PASSPHRASE_MAX_LENGTH,
   PASSPHRASE_MIN_LENGTH,
-  TEST_PIN,
+  PIN_MAX_LENGTH,
+  PIN_MIN_LENGTH,
   TEST_PASSPHRASE,
+  TEST_PIN,
   UNKNOWN_FACTS,
   WALLET_URL_PARAM,
 } from "@mybucks/lib/conf";
@@ -94,7 +95,7 @@ const Caption = styled.p`
 `;
 
 const Checkboxes = styled.div`
-  margin-block: ${({ theme }) => `${theme.sizes.base} ${theme.sizes.xl}`};
+  margin-block: ${({ theme }) => `${theme.sizes.base} ${theme.sizes.x3s}`};
   display: flex;
   flex-wrap: wrap;
   & > div {
@@ -157,6 +158,18 @@ const ToggleButton = styled.button`
   }
 `;
 
+
+const TermsNotice = styled.p`
+  text-align: left;
+  font-size: ${({ theme }) => theme.sizes.xs};
+  font-weight: ${({ theme }) => theme.weights.regular};
+  color: ${({ theme }) => theme.colors.gray200};
+  margin-bottom: ${({ theme }) => theme.sizes.base};
+
+  a {
+    font-size: inherit;
+  }
+`;
 
 const SignIn = () => {
   const { setup } = useContext(StoreContext);
@@ -371,6 +384,18 @@ const SignIn = () => {
             </Checkbox>
 
           </Checkboxes>
+
+          <TermsNotice>
+            By clicking Open, you agree to our{" "}
+            <Link
+              href="https://docs.mybucks.online/more/terms-of-use"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Terms of Use
+            </Link>
+            .
+          </TermsNotice>
 
           <Button onClick={onSubmit} disabled={hasInvalidInput} $size="block">
             Open
