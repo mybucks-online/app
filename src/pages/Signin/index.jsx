@@ -158,31 +158,6 @@ const ToggleButton = styled.button`
   }
 `;
 
-const TermsCheckboxWrapper = styled.div`
-  display: flex;
-  align-items: flex-start;
-  gap: ${({ theme }) => theme.sizes.xs};
-`;
-
-const TermsCheckboxInput = styled.input.attrs({
-  type: "checkbox",
-})`
-  margin-top: 0.25rem;
-  cursor: pointer;
-  flex-shrink: 0;
-`;
-
-const TermsCheckboxLabel = styled.label`
-  font-size: ${({ theme }) => theme.sizes.sm};
-  font-weight: ${({ theme }) => theme.weights.regular};
-  color: ${({ theme }) => theme.colors.gray400};
-  user-select: none;
-  cursor: pointer;
-
-  a {
-    font-size: inherit;
-  }
-`;
 
 const KeyGenerationComment = styled.div`
   text-align: left;
@@ -211,7 +186,6 @@ const SignIn = () => {
   const [showPin, setShowPin] = useState(false);
   const [passphraseFocused, setPassphraseFocused] = useState(false);
   const [pinFocused, setPinFocused] = useState(false);
-  const [agreedToTerms, setAgreedToTerms] = useState(false);
 
   const hasMinLengthPassphrase = useMemo(
     () => passphrase.length >= PASSPHRASE_MIN_LENGTH,
@@ -239,8 +213,7 @@ const SignIn = () => {
       !hasUppercase ||
       !hasNumbers ||
       !hasSymbol ||
-      !hasValidPinLength ||
-      !agreedToTerms,
+      !hasValidPinLength,
     [
       passphrase,
       pin,
@@ -251,7 +224,6 @@ const SignIn = () => {
       hasNumbers,
       hasSymbol,
       hasValidPinLength,
-      agreedToTerms,
     ]
   );
 
@@ -423,24 +395,6 @@ const SignIn = () => {
               PIN length: {PIN_MIN_LENGTH}~{PIN_MAX_LENGTH}
             </Checkbox>
 
-            <TermsCheckboxWrapper>
-              <TermsCheckboxInput
-                id="terms-checkbox"
-                checked={agreedToTerms}
-                onChange={(e) => setAgreedToTerms(e.target.checked)}
-                disabled={disabled}
-              />
-              <TermsCheckboxLabel htmlFor="terms-checkbox">
-                I agree to the{" "}
-                <Link
-                  href="https://docs.mybucks.online/more/terms-of-use"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Terms of Use
-                </Link>
-              </TermsCheckboxLabel>
-            </TermsCheckboxWrapper>
           </Checkboxes>
 
           <Button onClick={onSubmit} disabled={hasInvalidInput} $size="block">
