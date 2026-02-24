@@ -121,7 +121,7 @@ export const LOADING_PLACEHOLDER = "-----";
 export const UNKNOWN_FACTS = [
   "Each credential creates a unique account.",
   "It runs only in your browser.",
-  "It never stores or transmits your password.",
+  "It never stores or transmits your credentials.",
   "Your account's origin remains anonymous.",
   "There's no reset or recovery option.",
 ];

@@ -25,7 +25,7 @@ const Title = styled(H3)`
   text-align: center;
 `;
 
-const InvalidPasscode = styled.div`
+const InvalidPin = styled.div`
   color: ${({ theme }) => theme.colors.error};
   font-weight: ${({ theme }) => theme.weights.base};
   font-size: ${({ theme }) => theme.sizes.xs};
@@ -33,23 +33,23 @@ const InvalidPasscode = styled.div`
   margin-bottom: ${({ theme }) => theme.sizes.xs};
 `;
 
-const ConfirmPasscodeModal = ({ show, onSuccess, onFailed }) => {
+const ConfirmPinModal = ({ show, onSuccess, onFailed }) => {
   const [counter, setCounter] = useState(0);
   const [value, setValue] = useState("");
   const [invalid, setInvalid] = useState(false);
-  const { passcode } = useContext(StoreContext);
+  const { pin } = useContext(StoreContext);
 
-  const confirmPasscode = () => {
+  const confirmPin = () => {
     if (value.length < PASSCODE_MIN_LENGTH) {
       return;
     }
 
-    setInvalid(passcode !== value);
+    setInvalid(pin !== value);
 
-    if (passcode !== value) {
+    if (pin !== value) {
       setCounter(counter + 1);
       if (counter + 1 >= PASSCODE_MAX_TRY) {
-        toast("Wrong passcode!");
+        toast("Wrong PIN!");
         onFailed();
       } else {
         return;
@@ -74,7 +74,7 @@ const ConfirmPasscodeModal = ({ show, onSuccess, onFailed }) => {
     setInvalid(false);
 
     if (e.key === "Enter") {
-      confirmPasscode();
+      confirmPin();
     }
   };
 
@@ -87,10 +87,10 @@ const ConfirmPasscodeModal = ({ show, onSuccess, onFailed }) => {
       width="20rem"
     >
       <Wrap>
-        <Title>Confirm Passcode</Title>
+        <Title>Confirm PIN</Title>
         <Input
           type="password"
-          placeholder="Passcode"
+          placeholder="PIN"
           minLength={PASSCODE_MIN_LENGTH}
           maxLength={PASSCODE_MAX_LENGTH}
           value={value}
@@ -98,9 +98,9 @@ const ConfirmPasscodeModal = ({ show, onSuccess, onFailed }) => {
           onKeyDown={onKeyDown}
           onPaste={(e) => e.preventDefault()}
         />
-        {invalid && <InvalidPasscode>Wrong passcode!</InvalidPasscode>}
+        {invalid && <InvalidPin>Wrong PIN!</InvalidPin>}
         <Button
-          onClick={confirmPasscode}
+          onClick={confirmPin}
           disabled={value.length < PASSCODE_MIN_LENGTH}
         >
           Confirm
@@ -110,4 +110,4 @@ const ConfirmPasscodeModal = ({ show, onSuccess, onFailed }) => {
   );
 };
 
-export default ConfirmPasscodeModal;
+export default ConfirmPinModal;

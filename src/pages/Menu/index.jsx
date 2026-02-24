@@ -7,7 +7,7 @@ import styled from "styled-components";
 
 import { BackIcon } from "@mybucks/assets/icons";
 import BaseButton from "@mybucks/components/Button";
-import ConfirmPasscodeModal from "@mybucks/components/ConfirmPasscodeModal";
+import ConfirmPinModal from "@mybucks/components/ConfirmPinModal";
 import { Box as BaseBox, Container } from "@mybucks/components/Containers";
 import { H3 } from "@mybucks/components/Texts";
 import { StoreContext } from "@mybucks/contexts/Store";
@@ -130,7 +130,7 @@ const Menu = () => {
         </Box>
       </Container>
 
-      <ConfirmPasscodeModal
+      <ConfirmPinModal
         show={confirmPin}
         onFailed={() => setConfirmPin(false)}
         onSuccess={onConfirmedPin}
