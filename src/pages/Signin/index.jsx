@@ -15,12 +15,12 @@ import { H1 } from "@mybucks/components/Texts";
 import { StoreContext } from "@mybucks/contexts/Store";
 import {
   findNetworkByName,
-  PASSCODE_MAX_LENGTH,
-  PASSCODE_MIN_LENGTH,
-  PASSWORD_MAX_LENGTH,
-  PASSWORD_MIN_LENGTH,
-  TEST_PASSCODE,
-  TEST_PASSWORD,
+  PIN_MAX_LENGTH,
+  PIN_MIN_LENGTH,
+  PASSPHRASE_MAX_LENGTH,
+  PASSPHRASE_MIN_LENGTH,
+  TEST_PIN,
+  TEST_PASSPHRASE,
   UNKNOWN_FACTS,
   WALLET_URL_PARAM,
 } from "@mybucks/lib/conf";
@@ -200,10 +200,10 @@ const SignIn = () => {
   const { setup } = useContext(StoreContext);
 
   const [passphrase, setPassphrase] = useState(
-    import.meta.env.DEV ? TEST_PASSWORD : ""
+    import.meta.env.DEV ? TEST_PASSPHRASE : ""
   );
   const [pin, setPin] = useState(
-    import.meta.env.DEV ? TEST_PASSCODE : ""
+    import.meta.env.DEV ? TEST_PIN : ""
   );
   const [disabled, setDisabled] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -214,7 +214,7 @@ const SignIn = () => {
   const [agreedToTerms, setAgreedToTerms] = useState(false);
 
   const hasMinLengthPassphrase = useMemo(
-    () => passphrase.length >= PASSWORD_MIN_LENGTH,
+    () => passphrase.length >= PASSPHRASE_MIN_LENGTH,
     [passphrase]
   );
   const hasLowercase = useMemo(() => /[a-z]/.test(passphrase), [passphrase]);
@@ -225,7 +225,7 @@ const SignIn = () => {
     [passphrase]
   );
   const hasValidPinLength = useMemo(
-    () => pin.length >= PASSCODE_MIN_LENGTH,
+    () => pin.length >= PIN_MIN_LENGTH,
     [pin]
   );
 
@@ -339,7 +339,7 @@ const SignIn = () => {
                 placeholder="My-1st-car-was-a-red-Ford-2005!"
                 disabled={disabled}
                 value={passphrase}
-                maxLength={PASSWORD_MAX_LENGTH}
+                maxLength={PASSPHRASE_MAX_LENGTH}
                 onChange={(e) => setPassphrase(e.target.value)}
                 onKeyDown={onKeyDown}
                 onPaste={(e) => e.preventDefault()}
@@ -369,7 +369,7 @@ const SignIn = () => {
                 placeholder="202875"
                 disabled={disabled}
                 value={pin}
-                maxLength={PASSCODE_MAX_LENGTH}
+                maxLength={PIN_MAX_LENGTH}
                 onChange={(e) => setPin(e.target.value)}
                 onKeyDown={onKeyDown}
                 onPaste={(e) => e.preventDefault()}
@@ -417,10 +417,10 @@ const SignIn = () => {
               Symbol
             </Checkbox>
             <Checkbox id="min-length" value={hasMinLengthPassphrase}>
-              Passphrase length: {PASSWORD_MIN_LENGTH}~{PASSWORD_MAX_LENGTH}
+              Passphrase length: {PASSPHRASE_MIN_LENGTH}~{PASSPHRASE_MAX_LENGTH}
             </Checkbox>
             <Checkbox id="pin-length" value={hasValidPinLength}>
-              PIN length: {PASSCODE_MIN_LENGTH}~{PASSCODE_MAX_LENGTH}
+              PIN length: {PIN_MIN_LENGTH}~{PIN_MAX_LENGTH}
             </Checkbox>
 
             <TermsCheckboxWrapper>

@@ -8,9 +8,9 @@ import Modal from "@mybucks/components/Modal";
 import { H3 } from "@mybucks/components/Texts";
 import { StoreContext } from "@mybucks/contexts/Store";
 import {
-  PASSCODE_MAX_LENGTH,
-  PASSCODE_MAX_TRY,
-  PASSCODE_MIN_LENGTH,
+  PIN_MAX_LENGTH,
+  PIN_MAX_TRY,
+  PIN_MIN_LENGTH,
 } from "@mybucks/lib/conf";
 
 const Wrap = styled.div`
@@ -40,7 +40,7 @@ const ConfirmPinModal = ({ show, onSuccess, onFailed }) => {
   const { pin } = useContext(StoreContext);
 
   const confirmPin = () => {
-    if (value.length < PASSCODE_MIN_LENGTH) {
+    if (value.length < PIN_MIN_LENGTH) {
       return;
     }
 
@@ -48,7 +48,7 @@ const ConfirmPinModal = ({ show, onSuccess, onFailed }) => {
 
     if (pin !== value) {
       setCounter(counter + 1);
-      if (counter + 1 >= PASSCODE_MAX_TRY) {
+      if (counter + 1 >= PIN_MAX_TRY) {
         toast("Wrong PIN!");
         onFailed();
       } else {
@@ -91,8 +91,8 @@ const ConfirmPinModal = ({ show, onSuccess, onFailed }) => {
         <Input
           type="password"
           placeholder="PIN"
-          minLength={PASSCODE_MIN_LENGTH}
-          maxLength={PASSCODE_MAX_LENGTH}
+          minLength={PIN_MIN_LENGTH}
+          maxLength={PIN_MAX_LENGTH}
           value={value}
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={onKeyDown}
@@ -101,7 +101,7 @@ const ConfirmPinModal = ({ show, onSuccess, onFailed }) => {
         {invalid && <InvalidPin>Wrong PIN!</InvalidPin>}
         <Button
           onClick={confirmPin}
-          disabled={value.length < PASSCODE_MIN_LENGTH}
+          disabled={value.length < PIN_MIN_LENGTH}
         >
           Confirm
         </Button>
