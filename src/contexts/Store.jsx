@@ -11,8 +11,8 @@ import {
 
 export const StoreContext = createContext({
   connectivity: true,
-  password: "",
-  passcode: "",
+  passphrase: "",
+  pin: "",
   hash: "",
   setup: () => {},
   reset: () => {},
@@ -49,8 +49,8 @@ export const StoreContext = createContext({
 const StoreProvider = ({ children }) => {
   const [connectivity, setConnectivity] = useState(true);
   // key parts
-  const [password, setPassword] = useState("");
-  const [passcode, setPasscode] = useState("");
+  const [passphrase, setPassphrase] = useState("");
+  const [pin, setPin] = useState("");
   const [hash, setHash] = useState("");
 
   // theme related
@@ -145,8 +145,8 @@ const StoreProvider = ({ children }) => {
   }, [selectedTokenAddress]);
 
   const reset = () => {
-    setPassword("");
-    setPasscode("");
+    setPassphrase("");
+    setPin("");
     setHash("");
 
     setNetwork(DEFAULT_NETWORK);
@@ -166,8 +166,8 @@ const StoreProvider = ({ children }) => {
   };
 
   const setup = (pw, pc, hsh, nw, cid) => {
-    setPassword(pw);
-    setPasscode(pc);
+    setPassphrase(pw);
+    setPin(pc);
     setHash(hsh);
 
     if (nw) {
@@ -211,8 +211,8 @@ const StoreProvider = ({ children }) => {
     <StoreContext.Provider
       value={{
         connectivity,
-        password,
-        passcode,
+        passphrase,
+        pin,
         hash,
         reset,
         setup,

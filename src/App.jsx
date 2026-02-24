@@ -173,9 +173,25 @@ function App() {
       <Footer>
         <h5>&copy; 2026 Mybucks.online MIT Licensed</h5>
 
-        <a href="https://codesandbox.io/p/sandbox/mybucks-online-key-generation-sandbox-lt53c3" target="_blank">
-          Verify Key Logic
-        </a>
+        <nav>
+          <ul>
+            <li>
+              <a href="https://docs.mybucks.online/more/terms-of-use" target="_blank">
+                Terms of Use
+              </a>
+            </li>
+            <li>
+              <a href="https://docs.mybucks.online/more/security-audits" target="_blank">
+                Security Audits
+              </a>
+            </li>
+            <li>
+              <a href="https://codesandbox.io/p/sandbox/mybucks-online-key-generation-sandbox-lt53c3" target="_blank">
+                Play on Sandbox
+              </a>
+            </li>
+          </ul>
+        </nav>
 
         <nav>
           <ul>

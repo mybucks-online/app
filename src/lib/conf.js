@@ -1,9 +1,9 @@
-export const PASSWORD_MIN_LENGTH = 12;
-export const PASSWORD_MAX_LENGTH = 128;
-export const PASSCODE_MIN_LENGTH = 6;
-export const PASSCODE_MAX_LENGTH = 16;
+export const PASSPHRASE_MIN_LENGTH = 12;
+export const PASSPHRASE_MAX_LENGTH = 128;
+export const PIN_MIN_LENGTH = 6;
+export const PIN_MAX_LENGTH = 16;
 
-export const PASSCODE_MAX_TRY = 3;
+export const PIN_MAX_TRY = 3;
 
 export const NETWORK = Object.freeze({
   EVM: "ethereum",
@@ -121,12 +121,12 @@ export const LOADING_PLACEHOLDER = "-----";
 export const UNKNOWN_FACTS = [
   "Each credential creates a unique account.",
   "It runs only in your browser.",
-  "It never stores or transmits your password.",
+  "It never stores or transmits your credentials.",
   "Your account's origin remains anonymous.",
   "There's no reset or recovery option.",
 ];
 
 export const WALLET_URL_PARAM = "wallet";
 
-export const TEST_PASSWORD = "DemoAccount5&";
-export const TEST_PASSCODE = "112324";
+export const TEST_PASSPHRASE = "DemoAccount5&";
+export const TEST_PIN = "112324";

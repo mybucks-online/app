@@ -15,12 +15,12 @@ import { H1 } from "@mybucks/components/Texts";
 import { StoreContext } from "@mybucks/contexts/Store";
 import {
   findNetworkByName,
-  PASSCODE_MAX_LENGTH,
-  PASSCODE_MIN_LENGTH,
-  PASSWORD_MAX_LENGTH,
-  PASSWORD_MIN_LENGTH,
-  TEST_PASSCODE,
-  TEST_PASSWORD,
+  PASSPHRASE_MAX_LENGTH,
+  PASSPHRASE_MIN_LENGTH,
+  PIN_MAX_LENGTH,
+  PIN_MIN_LENGTH,
+  TEST_PASSPHRASE,
+  TEST_PIN,
   UNKNOWN_FACTS,
   WALLET_URL_PARAM,
 } from "@mybucks/lib/conf";
@@ -95,7 +95,7 @@ const Caption = styled.p`
 `;
 
 const Checkboxes = styled.div`
-  margin-block: ${({ theme }) => `${theme.sizes.base} ${theme.sizes.xl}`};
+  margin-block: ${({ theme }) => `${theme.sizes.base} ${theme.sizes.x3s}`};
   display: flex;
   flex-wrap: wrap;
   & > div {
@@ -158,37 +158,12 @@ const ToggleButton = styled.button`
   }
 `;
 
-const TermsCheckboxWrapper = styled.div`
-  display: flex;
-  align-items: flex-start;
-  gap: ${({ theme }) => theme.sizes.xs};
-`;
 
-const TermsCheckboxInput = styled.input.attrs({
-  type: "checkbox",
-})`
-  margin-top: 0.25rem;
-  cursor: pointer;
-  flex-shrink: 0;
-`;
-
-const TermsCheckboxLabel = styled.label`
-  font-size: ${({ theme }) => theme.sizes.sm};
-  font-weight: ${({ theme }) => theme.weights.regular};
-  color: ${({ theme }) => theme.colors.gray400};
-  user-select: none;
-  cursor: pointer;
-
-  a {
-    font-size: inherit;
-  }
-`;
-
-const KeyGenerationComment = styled.div`
+const TermsNotice = styled.p`
   text-align: left;
-  color: ${({ theme }) => theme.colors.gray200};
   font-size: ${({ theme }) => theme.sizes.xs};
   font-weight: ${({ theme }) => theme.weights.regular};
+  color: ${({ theme }) => theme.colors.gray200};
   margin-bottom: ${({ theme }) => theme.sizes.base};
 
   a {
@@ -199,59 +174,56 @@ const KeyGenerationComment = styled.div`
 const SignIn = () => {
   const { setup } = useContext(StoreContext);
 
-  const [password, setPassword] = useState(
-    import.meta.env.DEV ? TEST_PASSWORD : ""
+  const [passphrase, setPassphrase] = useState(
+    import.meta.env.DEV ? TEST_PASSPHRASE : ""
   );
-  const [passcode, setPasscode] = useState(
-    import.meta.env.DEV ? TEST_PASSCODE : ""
+  const [pin, setPin] = useState(
+    import.meta.env.DEV ? TEST_PIN : ""
   );
   const [disabled, setDisabled] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [showPassword, setShowPassword] = useState(false);
-  const [showPasscode, setShowPasscode] = useState(false);
-  const [passwordFocused, setPasswordFocused] = useState(false);
-  const [passcodeFocused, setPasscodeFocused] = useState(false);
-  const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [showPassphrase, setShowPassphrase] = useState(false);
+  const [showPin, setShowPin] = useState(false);
+  const [passphraseFocused, setPassphraseFocused] = useState(false);
+  const [pinFocused, setPinFocused] = useState(false);
 
-  const hasMinLengthPassword = useMemo(
-    () => password.length >= PASSWORD_MIN_LENGTH,
-    [password]
+  const hasMinLengthPassphrase = useMemo(
+    () => passphrase.length >= PASSPHRASE_MIN_LENGTH,
+    [passphrase]
   );
-  const hasLowercase = useMemo(() => /[a-z]/.test(password), [password]);
-  const hasUppercase = useMemo(() => /[A-Z]/.test(password), [password]);
-  const hasNumbers = useMemo(() => /\d/.test(password), [password]);
+  const hasLowercase = useMemo(() => /[a-z]/.test(passphrase), [passphrase]);
+  const hasUppercase = useMemo(() => /[A-Z]/.test(passphrase), [passphrase]);
+  const hasNumbers = useMemo(() => /\d/.test(passphrase), [passphrase]);
   const hasSymbol = useMemo(
-    () => /[ !"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]/.test(password),
-    [password]
+    () => /[ !"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]/.test(passphrase),
+    [passphrase]
   );
-  const hasValidPasscodeLength = useMemo(
-    () => passcode.length >= PASSCODE_MIN_LENGTH,
-    [passcode]
+  const hasValidPinLength = useMemo(
+    () => pin.length >= PIN_MIN_LENGTH,
+    [pin]
   );
 
   const hasInvalidInput = useMemo(
     () =>
       disabled ||
-      !password ||
-      !passcode ||
-      !hasMinLengthPassword ||
+      !passphrase ||
+      !pin ||
+      !hasMinLengthPassphrase ||
       !hasLowercase ||
       !hasUppercase ||
       !hasNumbers ||
       !hasSymbol ||
-      !hasValidPasscodeLength ||
-      !agreedToTerms,
+      !hasValidPinLength,
     [
-      password,
-      passcode,
+      passphrase,
+      pin,
       disabled,
-      hasMinLengthPassword,
+      hasMinLengthPassphrase,
       hasLowercase,
       hasUppercase,
       hasNumbers,
       hasSymbol,
-      hasValidPasscodeLength,
-      agreedToTerms,
+      hasValidPinLength,
     ]
   );
 
@@ -272,7 +244,7 @@ const SignIn = () => {
         return;
       }
 
-      // parse password, passcode, network name from "secret" param
+      // parse passphrase, PIN, network name from "secret" param
       const [pwd, pc, nn] = parseToken(secret);
       if (!pwd || !pc || !nn) {
         clearQueryParams();
@@ -299,10 +271,10 @@ const SignIn = () => {
 
   const onSubmit = async () => {
     setDisabled(true);
-    const hash = await generateHash(password, passcode, (p) =>
+    const hash = await generateHash(passphrase, pin, (p) =>
       setProgress(Math.floor(p * 100))
     );
-    setup(password, passcode, hash);
+    setup(passphrase, pin, hash);
     setDisabled(false);
   };
 
@@ -327,81 +299,69 @@ const SignIn = () => {
         <Box>
           <Title>Unlock your wallet</Title>
           <Caption>
-            Enter your password and passcode to open or create a wallet
+            Enter your credentials to open or create a wallet
           </Caption>
 
           <div>
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="passphrase">Passphrase</Label>
             <PasswordInputWrapper>
               <Input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                placeholder="Password"
+                id="passphrase"
+                type={showPassphrase ? "text" : "password"}
+                placeholder="My-1st-car-was-a-red-Ford-2005!"
                 disabled={disabled}
-                value={password}
-                maxLength={PASSWORD_MAX_LENGTH}
-                onChange={(e) => setPassword(e.target.value)}
+                value={passphrase}
+                maxLength={PASSPHRASE_MAX_LENGTH}
+                onChange={(e) => setPassphrase(e.target.value)}
                 onKeyDown={onKeyDown}
                 onPaste={(e) => e.preventDefault()}
-                onFocus={() => setPasswordFocused(true)}
-                onBlur={() => setPasswordFocused(false)}
+                onFocus={() => setPassphraseFocused(true)}
+                onBlur={() => setPassphraseFocused(false)}
               />
               <ToggleButton
                 type="button"
                 disabled={disabled}
-                onClick={() => setShowPassword(!showPassword)}
-                aria-label={showPassword ? "Hide password" : "Show password"}
+                onClick={() => setShowPassphrase(!showPassphrase)}
+                aria-label={showPassphrase ? "Hide passphrase" : "Show passphrase"}
               >
                 <PasswordToggleIcon
-                  show={showPassword}
-                  focused={passwordFocused}
+                  show={showPassphrase}
+                  focused={passphraseFocused}
                 />
               </ToggleButton>
             </PasswordInputWrapper>
           </div>
 
           <div>
-            <Label htmlFor="passcode">Passcode</Label>
+            <Label htmlFor="pin">PIN</Label>
             <PasswordInputWrapper>
               <Input
-                id="passcode"
-                type={showPasscode ? "text" : "password"}
-                placeholder="Passcode"
+                id="pin"
+                type={showPin ? "text" : "password"}
+                placeholder="202875"
                 disabled={disabled}
-                value={passcode}
-                maxLength={PASSCODE_MAX_LENGTH}
-                onChange={(e) => setPasscode(e.target.value)}
+                value={pin}
+                maxLength={PIN_MAX_LENGTH}
+                onChange={(e) => setPin(e.target.value)}
                 onKeyDown={onKeyDown}
                 onPaste={(e) => e.preventDefault()}
                 autoComplete="off"
-                onFocus={() => setPasscodeFocused(true)}
-                onBlur={() => setPasscodeFocused(false)}
+                onFocus={() => setPinFocused(true)}
+                onBlur={() => setPinFocused(false)}
               />
               <ToggleButton
                 type="button"
                 disabled={disabled}
-                onClick={() => setShowPasscode(!showPasscode)}
-                aria-label={showPasscode ? "Hide passcode" : "Show passcode"}
+                onClick={() => setShowPin(!showPin)}
+                aria-label={showPin ? "Hide PIN" : "Show PIN"}
               >
                 <PasswordToggleIcon
-                  show={showPasscode}
-                  focused={passcodeFocused}
+                  show={showPin}
+                  focused={pinFocused}
                 />
               </ToggleButton>
             </PasswordInputWrapper>
           </div>
-
-          <KeyGenerationComment>
-            <span>Keys are generated locally using Scrypt. </span>
-
-            <Link
-              href="https://codesandbox.io/p/sandbox/mybucks-online-key-generation-sandbox-lt53c3"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Verify Key Logic
-            </Link>
-          </KeyGenerationComment>
 
           <Checkboxes>
             <Checkbox id="uppercase" value={hasUppercase}>
@@ -416,32 +376,26 @@ const SignIn = () => {
             <Checkbox id="special" value={hasSymbol}>
               Symbol
             </Checkbox>
-            <Checkbox id="min-length" value={hasMinLengthPassword}>
-              Password length: {PASSWORD_MIN_LENGTH}~{PASSWORD_MAX_LENGTH}
+            <Checkbox id="min-length" value={hasMinLengthPassphrase}>
+              Passphrase length: {PASSPHRASE_MIN_LENGTH}~{PASSPHRASE_MAX_LENGTH}
             </Checkbox>
-            <Checkbox id="passcode-length" value={hasValidPasscodeLength}>
-              Passcode length: {PASSCODE_MIN_LENGTH}~{PASSCODE_MAX_LENGTH}
+            <Checkbox id="pin-length" value={hasValidPinLength}>
+              PIN length: {PIN_MIN_LENGTH}~{PIN_MAX_LENGTH}
             </Checkbox>
 
-            <TermsCheckboxWrapper>
-              <TermsCheckboxInput
-                id="terms-checkbox"
-                checked={agreedToTerms}
-                onChange={(e) => setAgreedToTerms(e.target.checked)}
-                disabled={disabled}
-              />
-              <TermsCheckboxLabel htmlFor="terms-checkbox">
-                I agree to the{" "}
-                <Link
-                  href="https://docs.mybucks.online/more/terms-of-use"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Terms of Use
-                </Link>
-              </TermsCheckboxLabel>
-            </TermsCheckboxWrapper>
           </Checkboxes>
+
+          <TermsNotice>
+            By clicking Open, you agree to our{" "}
+            <Link
+              href="https://docs.mybucks.online/more/terms-of-use"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Terms of Use
+            </Link>
+            .
+          </TermsNotice>
 
           <Button onClick={onSubmit} disabled={hasInvalidInput} $size="block">
             Open

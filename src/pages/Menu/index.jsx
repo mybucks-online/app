@@ -7,7 +7,7 @@ import styled from "styled-components";
 
 import { BackIcon } from "@mybucks/assets/icons";
 import BaseButton from "@mybucks/components/Button";
-import ConfirmPasscodeModal from "@mybucks/components/ConfirmPasscodeModal";
+import ConfirmPinModal from "@mybucks/components/ConfirmPinModal";
 import { Box as BaseBox, Container } from "@mybucks/components/Containers";
 import { H3 } from "@mybucks/components/Texts";
 import { StoreContext } from "@mybucks/contexts/Store";
@@ -52,14 +52,14 @@ const QRCodeWrapper = styled.div`
   display: inline-block;
 `;
 
-const BACKUP_PASSWORD = 1;
+const BACKUP_CREDENTIALS = 1;
 const BACKUP_PRIVATE_KEY = 2;
 const BACKUP_TRANSFER_LINK = 3;
 
 const Menu = () => {
-  const [confirmPasscode, setConfirmPasscode] = useState(false);
+  const [confirmPin, setConfirmPin] = useState(false);
   const [nextStep, setNextStep] = useState(0);
-  const { openMenu, account, password, passcode, network, chainId } =
+  const { openMenu, account, passphrase, pin, network, chainId } =
     useContext(StoreContext);
 
   const backupAddress = () => {
@@ -67,32 +67,32 @@ const Menu = () => {
     toast("Address copied into clipboard.");
   };
 
-  const onClickPassword = () => {
-    setNextStep(BACKUP_PASSWORD);
-    setConfirmPasscode(true);
+  const onClickCredentials = () => {
+    setNextStep(BACKUP_CREDENTIALS);
+    setConfirmPin(true);
   };
 
   const onClickPrivateKey = () => {
     setNextStep(BACKUP_PRIVATE_KEY);
-    setConfirmPasscode(true);
+    setConfirmPin(true);
   };
 
   const onClickGenerateLink = () => {
     setNextStep(BACKUP_TRANSFER_LINK);
-    setConfirmPasscode(true);
+    setConfirmPin(true);
   };
 
-  const onConfirmedPasscode = () => {
-    setConfirmPasscode(false);
-    if (nextStep === BACKUP_PASSWORD) {
-      copy(`${password} : ${passcode}`);
-      toast("Password copied into clipboard.");
+  const onConfirmedPin = () => {
+    setConfirmPin(false);
+    if (nextStep === BACKUP_CREDENTIALS) {
+      copy(`${passphrase} : ${pin}`);
+      toast("Credentials copied into clipboard.");
     } else if (nextStep === BACKUP_PRIVATE_KEY) {
       copy(account.signer);
       toast("Private key copied into clipboard.");
     } else if (nextStep === BACKUP_TRANSFER_LINK) {
       const networkName = findNetworkNameByChainId(network, chainId);
-      const link = generateToken(password, passcode, networkName);
+      const link = generateToken(passphrase, pin, networkName);
       copy(
         window.location.origin + window.location.pathname + "#wallet=" + link
       );
@@ -118,8 +118,8 @@ const Menu = () => {
 
           <Button onClick={backupAddress}>Address</Button>
 
-          <Button onClick={onClickPassword} $variant="danger">
-            Password
+          <Button onClick={onClickCredentials} $variant="danger">
+            Credentials
           </Button>
           <Button onClick={onClickPrivateKey} $variant="danger">
             Private Key
@@ -130,10 +130,10 @@ const Menu = () => {
         </Box>
       </Container>
 
-      <ConfirmPasscodeModal
-        show={confirmPasscode}
-        onFailed={() => setConfirmPasscode(false)}
-        onSuccess={onConfirmedPasscode}
+      <ConfirmPinModal
+        show={confirmPin}
+        onFailed={() => setConfirmPin(false)}
+        onSuccess={onConfirmedPin}
       />
     </>
   );

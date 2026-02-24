@@ -2,11 +2,11 @@
 
 This is a source repository of [app.mybucks.online](https://app.mybucks.online).
 
-[Mybucks.online](https://mybucks.online) is a **seedless, disposable crypto wallet** designed for **speed and convenience**. It generates a private key from your password and passcode using an industry-standard, verified **one-way hash function**. Your private key forms your account, allowing you to transfer, receive, and hold your crypto assets instantly.
+[Mybucks.online](https://mybucks.online) is a **seedless, disposable crypto wallet** designed for **speed and convenience**. It generates a private key from your **passphrase and PIN** using an industry-standard, verified **one-way hash function**. Your private key forms your account, allowing you to transfer, receive, and hold your crypto assets instantly.
 
-As a hash function, the **Scrypt** Key Derivation Function (KDF) increases the computational effort required to crack passwords, effectively delaying **brute-force** attacks and making them impractical.
+As a hash function, the **Scrypt** Key Derivation Function (KDF) increases the computational effort required to crack credentials, effectively delaying **brute-force** attacks and making them impractical.
 
-It fully runs on your **browser side** without using any storage or invoking any 3rd-party APIs for key management. It instantly generates your private key from your password input, and whenever you close or refresh, there is **no footprint**. This absolutely protects your privacy.
+It fully runs on your **browser side** without using any storage or invoking any 3rd-party APIs for key management. It instantly generates your private key from your credentials input, and whenever you close or refresh, there is **no footprint**. This absolutely protects your privacy.
 
 ### Zero Footprint  
 - No servers, no databases, no storage and no tracking.
@@ -17,7 +17,7 @@ It fully runs on your **browser side** without using any storage or invoking any
 ### Fast and Easy
 - No app installs, no browser extensions, no registration and no KYC.
 - You can create or open your wallet in seconds - all you need is your browser.
-- Password is easier to handle and remember than seed phrases
+- Passphrase and PIN are easier to handle and remember than seed phrases
 
 ### 1-Click Gifting
 - Stop asking your friends for their wallet addresses.
@@ -28,10 +28,10 @@ It fully runs on your **browser side** without using any storage or invoking any
 ## How to Use
 
 1. Visit [app.mybucks.online](https://app.mybucks.online).
-2. Input your password and passcode.  
+2. Input your credentials.  
   Test credentials:  
-    password: **DemoAccount5&**  
-    passcode: **112324**
+    passphrase: **DemoAccount5&**  
+    PIN: **112324**
 3. Click `Open`.
 
 (This process is the same for both initial opening and all subsequent uses.)
@@ -51,7 +51,7 @@ The **Scrypt** and **Keccak256** hash functions turn your credentials into a pri
 
 ## Generate the private key
 
-This demonstrates how to generate a private key from your `password` and `passcode` and helps you understand the process.
+This demonstrates how to generate a private key from your `passphrase` and `PIN` and helps you understand the process.
 
 ```javascript
 import { Buffer } from "buffer";
@@ -65,16 +65,16 @@ const HASH_OPTIONS = {
   keyLen: 64,
 };
 
-// password: at least 12 characters user input, lowercase, uppercase, digits, and special characters
-// passcode: at least 6 characters
-async function generatePrivateKey(password, passcode) {
-  const salt = `${password.slice(-4)}${passcode}`
+// passphrase: at least 12 characters user input, lowercase, uppercase, digits, and special characters
+// PIN: at least 6 characters
+async function generatePrivateKey(passphrase, pin) {
+  const salt = `${passphrase.slice(-4)}${pin}`
 
-  const passwordBuffer = Buffer.from(password);
+  const passphraseBuffer = Buffer.from(passphrase);
   const saltBuffer = Buffer.from(salt);
 
   const hashBuffer = await scrypt(
-    passwordBuffer,
+    passphraseBuffer,
     saltBuffer,
     HASH_OPTIONS.N,
     HASH_OPTIONS.r,
