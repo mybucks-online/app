@@ -336,7 +336,7 @@ const SignIn = () => {
               <Input
                 id="passphrase"
                 type={showPassphrase ? "text" : "password"}
-                placeholder="Passphrase"
+                placeholder="My-1st-car-was-a-red-Ford-2005!"
                 disabled={disabled}
                 value={passphrase}
                 maxLength={PASSWORD_MAX_LENGTH}
@@ -366,7 +366,7 @@ const SignIn = () => {
               <Input
                 id="pin"
                 type={showPin ? "text" : "password"}
-                placeholder="PIN"
+                placeholder="202875"
                 disabled={disabled}
                 value={pin}
                 maxLength={PASSCODE_MAX_LENGTH}
