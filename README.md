@@ -70,11 +70,11 @@ const HASH_OPTIONS = {
 async function generatePrivateKey(passphrase, pin) {
   const salt = `${passphrase.slice(-4)}${pin}`
 
-  const passphraseBuffer = Buffer.from(passphrase);
+  const passwordBuffer = Buffer.from(passphrase);
   const saltBuffer = Buffer.from(salt);
 
   const hashBuffer = await scrypt(
-    passphraseBuffer,
+    passwordBuffer,
     saltBuffer,
     HASH_OPTIONS.N,
     HASH_OPTIONS.r,
