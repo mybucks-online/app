@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import { toast } from "react-toastify";
+import { PIN_MAX_LENGTH, PIN_MIN_LENGTH } from "@mybucks.online/core";
 import styled from "styled-components";
 
 import Button from "@mybucks/components/Button";
@@ -7,11 +8,7 @@ import Input from "@mybucks/components/Input";
 import Modal from "@mybucks/components/Modal";
 import { H3 } from "@mybucks/components/Texts";
 import { StoreContext } from "@mybucks/contexts/Store";
-import {
-  PIN_MAX_LENGTH,
-  PIN_MAX_TRY,
-  PIN_MIN_LENGTH,
-} from "@mybucks/lib/conf";
+import { PIN_MAX_TRY } from "@mybucks/lib/conf";
 
 const Wrap = styled.div`
   display: flex;
