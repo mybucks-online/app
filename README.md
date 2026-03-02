@@ -37,6 +37,7 @@ It fully runs on your **browser side** without using any storage or invoking any
 (This process is the same for both initial opening and all subsequent uses.)
 
 ![Sign-in](/screenshots/1.sign-in.png)
+![Sign-in](/screenshots/1.sign-in-valid.png)
 
 <p align="center">
 <img src="screenshots/2.mobile-signin.png" width="32%" alt="Sign-in">
