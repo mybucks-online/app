@@ -18,6 +18,7 @@ import {
   findNetworkByName,
   PASSPHRASE_MAX_LENGTH,
   PIN_MAX_LENGTH,
+  PIN_MIN_LENGTH,
   TEST_PASSPHRASE,
   TEST_PIN,
   UNKNOWN_FACTS,
@@ -184,7 +185,7 @@ const SignIn = () => {
   );
 
   const pinStrength = useMemo(() => {
-    if (!pin) return 0;
+    if (!pin || pin.length < PIN_MIN_LENGTH) return 0;
     const { score } = zxcvbn(pin);
     return score < 2 ? score : 2;
   }, [pin]);
