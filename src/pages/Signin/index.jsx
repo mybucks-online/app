@@ -17,6 +17,7 @@ import { StoreContext } from "@mybucks/contexts/Store";
 import {
   findNetworkByName,
   PASSPHRASE_MAX_LENGTH,
+  PASSPHRASE_MIN_LENGTH,
   PIN_MAX_LENGTH,
   PIN_MIN_LENGTH,
   TEST_PASSPHRASE,
@@ -179,10 +180,14 @@ const SignIn = () => {
   const [passphraseFocused, setPassphraseFocused] = useState(false);
   const [pinFocused, setPinFocused] = useState(false);
 
-  const passphraseStrength = useMemo(
-    () => (passphrase ? zxcvbn(passphrase).score : 0),
-    [passphrase]
-  );
+  const passphraseStrength = useMemo(() => {
+    if (!passphrase) return 0;
+    const { score } = zxcvbn(passphrase);
+    if (passphrase.length < PASSPHRASE_MIN_LENGTH) {
+      return Math.min(score, 2);
+    }
+    return score;
+  }, [passphrase]);
 
   const pinStrength = useMemo(() => {
     if (!pin || pin.length < PIN_MIN_LENGTH) return 0;
