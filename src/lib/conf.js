@@ -1,8 +1,3 @@
-export const PASSPHRASE_MIN_LENGTH = 12;
-export const PASSPHRASE_MAX_LENGTH = 128;
-export const PIN_MIN_LENGTH = 6;
-export const PIN_MAX_LENGTH = 16;
-
 export const PIN_MAX_TRY = 3;
 
 export const NETWORK = Object.freeze({

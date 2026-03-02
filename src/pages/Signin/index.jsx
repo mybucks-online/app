@@ -1,5 +1,12 @@
 import { useContext, useEffect, useMemo, useState } from "react";
-import { generateHash, parseToken } from "@mybucks.online/core";
+import {
+  generateHash,
+  parseToken,
+  PASSPHRASE_MAX_LENGTH,
+  PASSPHRASE_MIN_LENGTH,
+  PIN_MAX_LENGTH,
+  PIN_MIN_LENGTH,
+} from "@mybucks.online/core";
 import styled from "styled-components";
 import zxcvbn from "zxcvbn";
 
@@ -16,10 +23,6 @@ import { H1 } from "@mybucks/components/Texts";
 import { StoreContext } from "@mybucks/contexts/Store";
 import {
   findNetworkByName,
-  PASSPHRASE_MAX_LENGTH,
-  PASSPHRASE_MIN_LENGTH,
-  PIN_MAX_LENGTH,
-  PIN_MIN_LENGTH,
   TEST_PASSPHRASE,
   TEST_PIN,
   UNKNOWN_FACTS,
