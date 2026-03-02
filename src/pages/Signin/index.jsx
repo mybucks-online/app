@@ -164,6 +164,18 @@ const TermsNotice = styled.p`
   }
 `;
 
+const SecurityHint = styled.p`
+  text-align: center;
+  font-size: ${({ theme }) => theme.sizes.xs};
+  font-weight: ${({ theme }) => theme.weights.regular};
+  color: ${({ theme }) => theme.colors.gray200};
+  margin-top: ${({ theme }) => theme.sizes.xl};
+
+  a {
+    font-size: inherit;
+  }
+`;
+
 const SignIn = () => {
   const { setup } = useContext(StoreContext);
 
@@ -358,6 +370,18 @@ const SignIn = () => {
           <Button onClick={onSubmit} disabled={hasInvalidInput} $size="block">
             Open
           </Button>
+
+          <SecurityHint>
+            Review our{" "}
+            <Link
+              href="https://docs.mybucks.online/user-guide/security-notice"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              security tips
+            </Link>
+            .
+          </SecurityHint>
         </Box>
       </Container>
 
