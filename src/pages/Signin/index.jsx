@@ -1,9 +1,9 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import { generateHash, parseToken } from "@mybucks.online/core";
 import styled from "styled-components";
+import zxcvbn from "zxcvbn";
 
 import Button from "@mybucks/components/Button";
-import Checkbox from "@mybucks/components/Checkbox";
 import { Box } from "@mybucks/components/Containers";
 import Input from "@mybucks/components/Input";
 import { Label } from "@mybucks/components/Label";
@@ -11,14 +11,13 @@ import Link from "@mybucks/components/Link";
 import Modal from "@mybucks/components/Modal";
 import PasswordToggleIcon from "@mybucks/components/PasswordToggleIcon";
 import Progress from "@mybucks/components/Progress";
+import StrengthMeter from "@mybucks/components/StrengthMeter";
 import { H1 } from "@mybucks/components/Texts";
 import { StoreContext } from "@mybucks/contexts/Store";
 import {
   findNetworkByName,
   PASSPHRASE_MAX_LENGTH,
-  PASSPHRASE_MIN_LENGTH,
   PIN_MAX_LENGTH,
-  PIN_MIN_LENGTH,
   TEST_PASSPHRASE,
   TEST_PIN,
   UNKNOWN_FACTS,
@@ -94,18 +93,6 @@ const Caption = styled.p`
   `}
 `;
 
-const Checkboxes = styled.div`
-  margin-block: ${({ theme }) => `${theme.sizes.base} ${theme.sizes.x3s}`};
-  display: flex;
-  flex-wrap: wrap;
-  & > div {
-    min-width: 50%;
-  }
-  ${media.sm`
-    flex-direction: column;
-  `}
-`;
-
 const ProgressWrapper = styled.div`
   background: ${({ theme }) => theme.colors.gray25};
   display: flex;
@@ -133,6 +120,10 @@ const Notice = styled.p`
 
 const PasswordInputWrapper = styled.div`
   position: relative;
+`;
+
+const CompactInput = styled(Input)`
+  margin-bottom: ${({ theme }) => theme.sizes.x3s};
 `;
 
 const ToggleButton = styled.button`
@@ -187,44 +178,25 @@ const SignIn = () => {
   const [passphraseFocused, setPassphraseFocused] = useState(false);
   const [pinFocused, setPinFocused] = useState(false);
 
-  const hasMinLengthPassphrase = useMemo(
-    () => passphrase.length >= PASSPHRASE_MIN_LENGTH,
+  const passphraseStrength = useMemo(
+    () => (passphrase ? zxcvbn(passphrase).score : 0),
     [passphrase]
   );
-  const hasLowercase = useMemo(() => /[a-z]/.test(passphrase), [passphrase]);
-  const hasUppercase = useMemo(() => /[A-Z]/.test(passphrase), [passphrase]);
-  const hasNumbers = useMemo(() => /\d/.test(passphrase), [passphrase]);
-  const hasSymbol = useMemo(
-    () => /[ !"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]/.test(passphrase),
-    [passphrase]
-  );
-  const hasValidPinLength = useMemo(
-    () => pin.length >= PIN_MIN_LENGTH,
-    [pin]
-  );
+
+  const pinStrength = useMemo(() => {
+    if (!pin) return 0;
+    const { score } = zxcvbn(pin);
+    return score < 2 ? score : 2;
+  }, [pin]);
 
   const hasInvalidInput = useMemo(
     () =>
       disabled ||
       !passphrase ||
       !pin ||
-      !hasMinLengthPassphrase ||
-      !hasLowercase ||
-      !hasUppercase ||
-      !hasNumbers ||
-      !hasSymbol ||
-      !hasValidPinLength,
-    [
-      passphrase,
-      pin,
-      disabled,
-      hasMinLengthPassphrase,
-      hasLowercase,
-      hasUppercase,
-      hasNumbers,
-      hasSymbol,
-      hasValidPinLength,
-    ]
+      passphraseStrength < 3 ||
+      pinStrength < 1,
+    [passphrase, pin, disabled, passphraseStrength, pinStrength]
   );
 
   const unknownFact = useMemo(
@@ -305,7 +277,7 @@ const SignIn = () => {
           <div>
             <Label htmlFor="passphrase">Passphrase</Label>
             <PasswordInputWrapper>
-              <Input
+              <CompactInput
                 id="passphrase"
                 type={showPassphrase ? "text" : "password"}
                 placeholder="e.g. My-1st-car-was-a-red-Ford-2005!"
@@ -330,12 +302,13 @@ const SignIn = () => {
                 />
               </ToggleButton>
             </PasswordInputWrapper>
+            <StrengthMeter level={passphraseStrength} maxLevel={4} />
           </div>
 
           <div>
             <Label htmlFor="pin">PIN</Label>
             <PasswordInputWrapper>
-              <Input
+              <CompactInput
                 id="pin"
                 type={showPin ? "text" : "password"}
                 placeholder="e.g. 202w875"
@@ -361,29 +334,8 @@ const SignIn = () => {
                 />
               </ToggleButton>
             </PasswordInputWrapper>
+            <StrengthMeter level={pinStrength} maxLevel={2} />
           </div>
-
-          <Checkboxes>
-            <Checkbox id="uppercase" value={hasUppercase}>
-              Uppercase
-            </Checkbox>
-            <Checkbox id="lowercase" value={hasLowercase}>
-              Lowercase
-            </Checkbox>
-            <Checkbox id="number" value={hasNumbers}>
-              Number
-            </Checkbox>
-            <Checkbox id="special" value={hasSymbol}>
-              Symbol
-            </Checkbox>
-            <Checkbox id="min-length" value={hasMinLengthPassphrase}>
-              Passphrase length: {PASSPHRASE_MIN_LENGTH}~{PASSPHRASE_MAX_LENGTH}
-            </Checkbox>
-            <Checkbox id="pin-length" value={hasValidPinLength}>
-              PIN length: {PIN_MIN_LENGTH}~{PIN_MAX_LENGTH}
-            </Checkbox>
-
-          </Checkboxes>
 
           <TermsNotice>
             By clicking Open, you agree to our{" "}
