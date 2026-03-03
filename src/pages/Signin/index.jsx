@@ -227,35 +227,33 @@ const SignIn = () => {
 
   useEffect(() => {
     const parseTokenAndSubmit = async () => {
-      // get "secret" param from URL
-      // prefer hash param (#wallet=...) for security, fall back to query param (?wallet=...) for backward compatibility
+      // get "secret" param from URL hash (#wallet=...)
       const hashParams = new URLSearchParams(window.location.hash.slice(1));
-      const queryParams = new URLSearchParams(window.location.search);
-      const secret = hashParams.get(WALLET_URL_PARAM) || queryParams.get(WALLET_URL_PARAM);
-
+      const secret = hashParams.get(WALLET_URL_PARAM);
       if (!secret) {
         return;
       }
 
       // parse passphrase, PIN, network name from "secret" param
-      const [pwd, pc, nn] = parseToken(secret);
-      if (!pwd || !pc || !nn) {
-        clearQueryParams();
+      const [pphrase, pn, nn] = parseToken(secret);
+      // clear URL params immediately so the secret is not left in the address bar
+      clearQueryParams();
+
+      if (!pphrase || !pn || !nn) {
         return;
       }
       const [network, chainId] = findNetworkByName(nn);
       if (!chainId) {
         console.error("Invalid network name");
-        clearQueryParams();
         return;
       }
 
       // open wallet
       setDisabled(true);
-      const hash = await generateHash(pwd, pc, (p) =>
+      const hash = await generateHash(pphrase, pn, (p) =>
         setProgress(Math.floor(p * 100))
       );
-      setup(pwd, pc, hash, network, chainId);
+      setup(pphrase, pn, hash, network, chainId);
       setDisabled(false);
     };
 
