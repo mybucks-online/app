@@ -43,7 +43,7 @@ const MinedTransaction = ({ txnHash, txnLink, back }) => (
   <Container>
     <NavsWrapper>
       <button onClick={back}>
-        <img src={BackIcon} />
+        <img src={BackIcon} alt="<" />
       </button>
     </NavsWrapper>
 

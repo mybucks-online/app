@@ -10,5 +10,6 @@ export { default as InfoRedIcon } from "./info-red.svg";
 export { default as LockIcon } from "./lock.svg";
 export { default as QrcodeIcon } from "./qrcode.svg";
 export { default as RefreshIcon } from "./refresh.svg";
+export { default as RefreshIcon2 } from "./refresh2.svg";
 export { default as ShowIcon } from "./show.svg";
 export { default as SuccessIcon } from "./success.svg";

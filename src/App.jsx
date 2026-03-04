@@ -26,6 +26,11 @@ const AppWrapper = styled.div`
 
 const Main = styled.main`
   flex: 1;
+  display: flex;
+
+  & > * {
+    width: 100%;
+  }
 `;
 
 const Warning = styled.div`
@@ -54,15 +59,14 @@ const Footer = styled.footer`
   nav ul {
     list-style-type: none;
     display: flex;
+    justify-content: center;
     align-items: center;
-    gap: 0;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
+    gap: ${({ theme }) => `${theme.sizes.xs} ${theme.sizes.base}`};
 
     li {
       display: inline-flex;
       align-items: center;
-      margin: 0 ${({ theme }) => theme.sizes.x2s};
-      flex-shrink: 0;
     }
   }
 
@@ -90,9 +94,9 @@ const Footer = styled.footer`
     }
   }
 
-  ${media.md`
+  ${media.lg`
     flex-direction: column;
-    gap: ${({ theme }) => theme.sizes.xs};
+    gap: ${({ theme }) => theme.sizes.base};
   `}
 `;
 
