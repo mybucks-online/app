@@ -1,8 +1,9 @@
 import styled from "styled-components";
 
-import { BackIcon, SuccessIcon } from "@mybucks/assets/icons";
+import { SuccessIcon } from "@mybucks/assets/icons";
 import { Box as BaseBox, Container } from "@mybucks/components/Containers";
 import Link from "@mybucks/components/Link";
+import { BackButton } from "@mybucks/components/NavButtons";
 import { H3 } from "@mybucks/components/Texts";
 import { truncate } from "@mybucks/lib/utils";
 
@@ -42,9 +43,7 @@ const Hash = styled.p`
 const MinedTransaction = ({ txnHash, txnLink, back }) => (
   <Container>
     <NavsWrapper>
-      <button onClick={back}>
-        <img src={BackIcon} alt="<" />
-      </button>
+      <BackButton onClick={back} />
     </NavsWrapper>
 
     <Box>
