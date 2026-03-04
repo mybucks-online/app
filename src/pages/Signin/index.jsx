@@ -19,7 +19,6 @@ import Modal from "@mybucks/components/Modal";
 import PasswordToggleIcon from "@mybucks/components/PasswordToggleIcon";
 import Progress from "@mybucks/components/Progress";
 import StrengthMeter from "@mybucks/components/StrengthMeter";
-import { H1 } from "@mybucks/components/Texts";
 import { StoreContext } from "@mybucks/contexts/Store";
 import {
   findNetworkByName,
@@ -36,11 +35,11 @@ import Logo from "./logo.png";
 const Container = styled.div`
   max-width: 40.5rem;
   margin: 0 auto;
-  margin-block: ${({ theme }) => `${theme.sizes.x2l} ${theme.sizes.x4l}`};
+  margin-block: ${({ theme }) => `${theme.sizes.x5l} ${theme.sizes.x2l}`};
 
   @media (max-width: 696px) {
     margin: 0 ${({ theme }) => theme.sizes.xl};
-    margin-block: ${({ theme }) => theme.sizes.x2l};
+    margin-block: ${({ theme }) => `${theme.sizes.x5l} ${theme.sizes.x2l}`};
   }
 `;
 
@@ -72,29 +71,6 @@ const LogoTitle = styled.h3`
 
   ${media.sm`
     font-size: ${({ theme }) => theme.sizes.xl};
-  `}
-`;
-
-const Title = styled(H1)`
-  text-align: center;
-  margin-bottom: 4px;
-
-  ${media.sm`
-    font-size: 1.75rem;
-    `}
-`;
-
-const Caption = styled.p`
-  text-align: center;
-  color: ${({ theme }) => theme.colors.gray400};
-  font-size: ${({ theme }) => theme.sizes.base};
-  font-weight: ${({ theme }) => theme.weights.base};
-  line-height: 140%;
-  margin-bottom: ${({ theme }) => theme.sizes.x2l};
-
-  ${media.sm`
-    font-size: ${({ theme }) => theme.sizes.sm};
-    margin-bottom: ${({ theme }) => theme.sizes.xl};
   `}
 `;
 
@@ -160,7 +136,7 @@ const TermsNotice = styled.p`
   font-size: ${({ theme }) => theme.sizes.xs};
   font-weight: ${({ theme }) => theme.weights.regular};
   color: ${({ theme }) => theme.colors.gray200};
-  margin-bottom: ${({ theme }) => theme.sizes.base};
+  margin-bottom: ${({ theme }) => theme.sizes.xl};
 
   a {
     font-size: inherit;
@@ -282,16 +258,11 @@ const SignIn = () => {
   return (
     <>
       <Container>
-        <LogoWrapper href="https://mybucks.online">
-          <img src="/logo-48x48.png" alt="mybucks.online" />
-          <LogoTitle>mybucks.online</LogoTitle>
-        </LogoWrapper>
-
         <Box>
-          <Title>Unlock your wallet</Title>
-          <Caption>
-            Enter your credentials to open or create a wallet
-          </Caption>
+          <LogoWrapper href="https://mybucks.online">
+            <img src="/logo-48x48.png" alt="mybucks.online" />
+            <LogoTitle>mybucks.online</LogoTitle>
+          </LogoWrapper>
 
           <div>
             <Label htmlFor="passphrase">Passphrase</Label>

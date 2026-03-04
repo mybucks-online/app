@@ -11,7 +11,7 @@ import {
   HideIcon,
   LockIcon,
   QrcodeIcon,
-  RefreshIcon,
+  RefreshIcon2,
   ShowIcon,
 } from "@mybucks/assets/icons";
 import BaseButton from "@mybucks/components/Button";
@@ -220,7 +220,7 @@ const EvmHome = () => {
 
           <RefreshAndEyeballs>
             <button onClick={fetchBalances}>
-              <img src={RefreshIcon} />
+              <img src={RefreshIcon2} />
             </button>
             <button onClick={toggleBalancesVisible}>
               <img src={showBalances ? HideIcon : ShowIcon} />

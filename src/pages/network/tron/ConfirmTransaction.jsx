@@ -1,10 +1,11 @@
 import { useContext, useMemo, useState } from "react";
 import styled from "styled-components";
 
-import { BackIcon, InfoRedIcon } from "@mybucks/assets/icons";
+import { InfoRedIcon } from "@mybucks/assets/icons";
 import BaseButton from "@mybucks/components/Button";
 import { Box, Container } from "@mybucks/components/Containers";
 import Link from "@mybucks/components/Link";
+import { BackButton } from "@mybucks/components/NavButtons";
 import { H3 } from "@mybucks/components/Texts";
 import { StoreContext } from "@mybucks/contexts/Store";
 import { TRON_BANDWIDTH_PRICE, TRON_ENERGY_PRICE } from "@mybucks/lib/conf";
@@ -135,9 +136,7 @@ const ConfirmTransaction = ({
   return (
     <Container>
       <NavsWrapper>
-        <button onClick={onReject} disabled={pending}>
-          <img src={BackIcon} />
-        </button>
+        <BackButton onClick={onReject} disabled={pending} />
       </NavsWrapper>
 
       <Box>

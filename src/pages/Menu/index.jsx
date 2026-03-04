@@ -5,10 +5,10 @@ import copy from "clipboard-copy";
 import { QRCodeSVG } from "qrcode.react";
 import styled from "styled-components";
 
-import { BackIcon } from "@mybucks/assets/icons";
 import BaseButton from "@mybucks/components/Button";
 import ConfirmPinModal from "@mybucks/components/ConfirmPinModal";
 import { Box as BaseBox, Container } from "@mybucks/components/Containers";
+import { BackButton } from "@mybucks/components/NavButtons";
 import { H3 } from "@mybucks/components/Texts";
 import { StoreContext } from "@mybucks/contexts/Store";
 import { findNetworkNameByChainId } from "@mybucks/lib/conf";
@@ -38,6 +38,7 @@ const Address = styled.p`
   margin-top: ${({ theme }) => theme.sizes.xs};
   margin-bottom: ${({ theme }) => theme.sizes.x2l};
   color: ${({ theme }) => theme.colors.gray200};
+  overflow-wrap: anywhere;
 `;
 
 const Button = styled(BaseButton)`
@@ -49,7 +50,20 @@ const QRCodeWrapper = styled.div`
   background-color: white;
   padding: ${({ theme }) => theme.sizes.x3s};
   border-radius: ${({ theme }) => theme.radius.sm};
-  display: inline-block;
+  display: block;
+
+  & > svg {
+    display: block;
+  }
+`;
+
+const TransferLinkWarning = styled.p`
+  text-align: center;
+  font-size: ${({ theme }) => theme.sizes.xs};
+  font-weight: ${({ theme }) => theme.weights.regular};
+  color: ${({ theme }) => theme.colors.gray200};
+  line-height: 140%;
+  margin: 0 0 ${({ theme }) => theme.sizes.x2l};
 `;
 
 const BACKUP_CREDENTIALS = 1;
@@ -104,9 +118,7 @@ const Menu = () => {
     <>
       <Container>
         <NavsWrapper>
-          <button onClick={() => openMenu(false)}>
-            <img src={BackIcon} />
-          </button>
+          <BackButton onClick={() => openMenu(false)} />
         </NavsWrapper>
 
         <Box>
@@ -127,6 +139,9 @@ const Menu = () => {
           <Button onClick={onClickGenerateLink} $variant="danger">
             Transfer Link
           </Button>
+          <TransferLinkWarning>
+          ⚠️ Anyone with the transfer-link has full access to your funds!
+          </TransferLinkWarning>
         </Box>
       </Container>
 

@@ -2,9 +2,10 @@ import { useContext, useEffect, useState } from "react";
 import { ethers } from "ethers";
 import styled from "styled-components";
 
-import { BackIcon, InfoGreenIcon, InfoRedIcon } from "@mybucks/assets/icons";
+import { InfoGreenIcon, InfoRedIcon } from "@mybucks/assets/icons";
 import BaseButton from "@mybucks/components/Button";
 import { Box, Container } from "@mybucks/components/Containers";
+import { BackButton } from "@mybucks/components/NavButtons";
 import { H3 } from "@mybucks/components/Texts";
 import { StoreContext } from "@mybucks/contexts/Store";
 import { GAS_PRICE, gasMultiplier } from "@mybucks/lib/conf";
@@ -148,9 +149,7 @@ const ConfirmTransaction = ({ to, value = 0, data, onSuccess, onReject }) => {
   return (
     <Container>
       <NavsWrapper>
-        <button onClick={onReject} disabled={pending}>
-          <img src={BackIcon} />
-        </button>
+        <BackButton onClick={onReject} disabled={pending} />
       </NavsWrapper>
 
       <Box>

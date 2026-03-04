@@ -4,10 +4,8 @@ import styled from "styled-components";
 
 import {
   ArrowUpRightIcon,
-  BackIcon,
   InfoGreenIcon,
   InfoRedIcon,
-  RefreshIcon,
 } from "@mybucks/assets/icons";
 import Avatar from "@mybucks/components/Avatar";
 import Button from "@mybucks/components/Button";
@@ -17,6 +15,7 @@ import {
 } from "@mybucks/components/Containers";
 import Input from "@mybucks/components/Input";
 import { Label } from "@mybucks/components/Label";
+import { BackButton, RefreshButton } from "@mybucks/components/NavButtons";
 import { H3 } from "@mybucks/components/Texts";
 import { StoreContext } from "@mybucks/contexts/Store";
 import useDebounce from "@mybucks/hooks/useDebounce";
@@ -263,13 +262,9 @@ const Token = () => {
   return (
     <Container>
       <NavsWrapper>
-        <button onClick={() => selectToken("")}>
-          <img src={BackIcon} />
-        </button>
+        <BackButton onClick={() => selectToken("")} />
 
-        <button onClick={fetchBalances}>
-          <img src={RefreshIcon} />
-        </button>
+        <RefreshButton onClick={fetchBalances} />
       </NavsWrapper>
 
       <TokenDetails>
