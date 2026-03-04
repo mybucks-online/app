@@ -43,12 +43,20 @@ const Container = styled.div`
   }
 `;
 
+const HeaderRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: ${({ theme }) => theme.sizes.base};
+  margin-bottom: ${({ theme }) => theme.sizes.xl};
+`;
+
 const LogoWrapper = styled.a`
   display: flex;
   justify-content: center;
   align-items: center;
   gap: ${({ theme }) => theme.sizes.base};
-  margin-bottom: ${({ theme }) => theme.sizes.xl};
 
   img {
     width: 3rem;
@@ -61,6 +69,16 @@ const LogoWrapper = styled.a`
       height: 2.5rem;
     }
   `}
+`;
+
+const ModeSelect = styled.select`
+  font-size: ${({ theme }) => theme.sizes.xs};
+  font-weight: ${({ theme }) => theme.weights.regular};
+  padding: ${({ theme }) => `${theme.sizes.x3s} ${theme.sizes.x2s}`};
+  border-radius: ${({ theme }) => theme.radius.base};
+  border: 1px solid ${({ theme }) => theme.colors.gray100};
+  color: ${({ theme }) => theme.colors.gray200};
+  background-color: ${({ theme }) => theme.colors.gray25};
 `;
 
 const LogoTitle = styled.h3`
@@ -259,10 +277,16 @@ const SignIn = () => {
     <>
       <Container>
         <Box>
-          <LogoWrapper href="https://mybucks.online">
-            <img src="/logo-48x48.png" alt="mybucks.online" />
-            <LogoTitle>mybucks.online</LogoTitle>
-          </LogoWrapper>
+          <HeaderRow>
+            <LogoWrapper href="https://mybucks.online">
+              <img src="/logo-48x48.png" alt="mybucks.online" />
+              <LogoTitle>mybucks.online</LogoTitle>
+            </LogoWrapper>
+            <ModeSelect aria-label="Key generation mode" defaultValue="legacy">
+              <option value="legacy">Legacy</option>
+              <option value="new">New</option>
+            </ModeSelect>
+          </HeaderRow>
 
           <div>
             <Label htmlFor="passphrase">Passphrase</Label>
