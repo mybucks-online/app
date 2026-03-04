@@ -57,6 +57,15 @@ const QRCodeWrapper = styled.div`
   }
 `;
 
+const TransferLinkWarning = styled.p`
+  text-align: center;
+  font-size: ${({ theme }) => theme.sizes.xs};
+  font-weight: ${({ theme }) => theme.weights.regular};
+  color: ${({ theme }) => theme.colors.gray200};
+  line-height: 140%;
+  margin: 0 0 ${({ theme }) => theme.sizes.x2l};
+`;
+
 const BACKUP_CREDENTIALS = 1;
 const BACKUP_PRIVATE_KEY = 2;
 const BACKUP_TRANSFER_LINK = 3;
@@ -130,6 +139,9 @@ const Menu = () => {
           <Button onClick={onClickGenerateLink} $variant="danger">
             Transfer Link
           </Button>
+          <TransferLinkWarning>
+          ⚠️ Anyone with the transfer-link has full access to your funds!
+          </TransferLinkWarning>
         </Box>
       </Container>
 
