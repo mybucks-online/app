@@ -368,7 +368,7 @@ const SignIn = () => {
             <label htmlFor="legacy-wallet">
               This wallet was created before March 2026.{" "}
               <Link
-                href="https://docs.mybucks.online/concept/security-consideration/security-deep-dive"
+                href="https://docs.mybucks.online/concept/march-2026-security-update"
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
