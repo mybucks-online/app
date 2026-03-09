@@ -130,7 +130,6 @@ const ToggleButton = styled.button`
   }
 `;
 
-
 const LegacyWalletCheckboxWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -185,11 +184,9 @@ const SignIn = () => {
   const { setup } = useContext(StoreContext);
 
   const [passphrase, setPassphrase] = useState(
-    import.meta.env.DEV ? TEST_PASSPHRASE : ""
+    import.meta.env.DEV ? TEST_PASSPHRASE : "",
   );
-  const [pin, setPin] = useState(
-    import.meta.env.DEV ? TEST_PIN : ""
-  );
+  const [pin, setPin] = useState(import.meta.env.DEV ? TEST_PIN : "");
   const [disabled, setDisabled] = useState(false);
   const [progress, setProgress] = useState(0);
   const [showPassphrase, setShowPassphrase] = useState(false);
@@ -220,12 +217,12 @@ const SignIn = () => {
       !pin ||
       passphraseStrength < 3 ||
       pinStrength < 1,
-    [passphrase, pin, disabled, passphraseStrength, pinStrength]
+    [passphrase, pin, disabled, passphraseStrength, pinStrength],
   );
 
   const unknownFact = useMemo(
     () => UNKNOWN_FACTS[Math.floor(progress / 20)],
-    [progress]
+    [progress],
   );
 
   useEffect(() => {
@@ -238,7 +235,7 @@ const SignIn = () => {
       }
 
       // parse passphrase, PIN, network name from "secret" param
-      const [pphrase, pn, nn] = parseToken(secret);
+      const [pphrase, pn, nn, lgcy] = parseToken(secret);
       // clear URL params immediately so the secret is not left in the address bar
       clearQueryParams();
 
@@ -253,10 +250,13 @@ const SignIn = () => {
 
       // open wallet
       setDisabled(true);
-      const hash = await generateHash(pphrase, pn, (p) =>
-        setProgress(Math.floor(p * 100))
+      const hash = await generateHash(
+        pphrase,
+        pn,
+        (p) => setProgress(Math.floor(p * 100)),
+        lgcy,
       );
-      setup(pphrase, pn, hash, network, chainId);
+      setup(pphrase, pn, lgcy, hash, network, chainId);
       setDisabled(false);
     };
 
@@ -265,10 +265,13 @@ const SignIn = () => {
 
   const onSubmit = async () => {
     setDisabled(true);
-    const hash = await generateHash(passphrase, pin, (p) =>
-      setProgress(Math.floor(p * 100))
+    const hash = await generateHash(
+      passphrase,
+      pin,
+      (p) => setProgress(Math.floor(p * 100)),
+      legacySelected,
     );
-    setup(passphrase, pin, hash);
+    setup(passphrase, pin, legacySelected, hash);
     setDisabled(false);
   };
 
@@ -311,7 +314,9 @@ const SignIn = () => {
                 type="button"
                 disabled={disabled}
                 onClick={() => setShowPassphrase(!showPassphrase)}
-                aria-label={showPassphrase ? "Hide passphrase" : "Show passphrase"}
+                aria-label={
+                  showPassphrase ? "Hide passphrase" : "Show passphrase"
+                }
               >
                 <PasswordToggleIcon
                   show={showPassphrase}
@@ -345,10 +350,7 @@ const SignIn = () => {
                 onClick={() => setShowPin(!showPin)}
                 aria-label={showPin ? "Hide PIN" : "Show PIN"}
               >
-                <PasswordToggleIcon
-                  show={showPin}
-                  focused={pinFocused}
-                />
+                <PasswordToggleIcon show={showPin} focused={pinFocused} />
               </ToggleButton>
             </PasswordInputWrapper>
             <StrengthMeter level={pinStrength} maxLevel={2} />
