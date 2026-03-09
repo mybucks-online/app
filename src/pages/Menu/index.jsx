@@ -8,6 +8,7 @@ import styled from "styled-components";
 import BaseButton from "@mybucks/components/Button";
 import ConfirmPinModal from "@mybucks/components/ConfirmPinModal";
 import { Box as BaseBox, Container } from "@mybucks/components/Containers";
+import Link from "@mybucks/components/Link";
 import { BackButton } from "@mybucks/components/NavButtons";
 import { H3 } from "@mybucks/components/Texts";
 import { StoreContext } from "@mybucks/contexts/Store";
@@ -64,6 +65,10 @@ const TransferLinkWarning = styled.p`
   color: ${({ theme }) => theme.colors.gray200};
   line-height: 140%;
   margin: 0 0 ${({ theme }) => theme.sizes.x2l};
+
+  a {
+    font-size: inherit;
+  }
 `;
 
 const LegacyBadge = styled.span`
@@ -149,7 +154,14 @@ const Menu = () => {
             Transfer Link
           </Button>
           <TransferLinkWarning>
-            ⚠️ Anyone with the transfer-link has full access to your funds!
+            ⚠️ Anyone with the transfer-link has full access to your funds!{" "}
+            <Link
+              href="https://docs.mybucks.online/user-guide/security-notice"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Learn more
+            </Link>
           </TransferLinkWarning>
         </Box>
       </Container>

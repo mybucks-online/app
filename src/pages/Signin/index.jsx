@@ -250,6 +250,7 @@ const SignIn = () => {
 
       // open wallet
       setDisabled(true);
+      setLegacySelected(lgcy);
       const hash = await generateHash(
         pphrase,
         pn,
