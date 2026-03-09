@@ -14,6 +14,7 @@ export const StoreContext = createContext({
   passphrase: "",
   pin: "",
   hash: "",
+  legacy: false,
   setup: () => {},
   reset: () => {},
 
@@ -52,6 +53,7 @@ const StoreProvider = ({ children }) => {
   const [passphrase, setPassphrase] = useState("");
   const [pin, setPin] = useState("");
   const [hash, setHash] = useState("");
+  const [legacy, setLegacy] = useState(false);
 
   // theme related
   const [theme, setTheme] = useState(() => {
@@ -148,6 +150,7 @@ const StoreProvider = ({ children }) => {
     setPassphrase("");
     setPin("");
     setHash("");
+    setLegacy(false);
 
     setNetwork(DEFAULT_NETWORK);
     setChainId(DEFAULT_CHAIN_ID);
@@ -165,9 +168,10 @@ const StoreProvider = ({ children }) => {
     selectToken("");
   };
 
-  const setup = (pw, pc, hsh, nw, cid) => {
+  const setup = (pw, pc, lgcy, hsh, nw, cid) => {
     setPassphrase(pw);
     setPin(pc);
+    setLegacy(lgcy);
     setHash(hsh);
 
     if (nw) {
@@ -214,6 +218,7 @@ const StoreProvider = ({ children }) => {
         passphrase,
         pin,
         hash,
+        legacy,
         reset,
         setup,
         network,

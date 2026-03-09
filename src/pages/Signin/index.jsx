@@ -130,6 +130,31 @@ const ToggleButton = styled.button`
   }
 `;
 
+const LegacyWalletCheckboxWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.sizes.xs};
+  margin-bottom: ${({ theme }) => theme.sizes.base};
+
+  input[type="checkbox"] {
+    width: 1rem;
+    height: 1rem;
+    accent-color: ${({ theme }) => theme.colors.primary};
+    cursor: pointer;
+  }
+
+  label {
+    font-size: ${({ theme }) => theme.sizes.xs};
+    font-weight: ${({ theme }) => theme.weights.regular};
+    color: ${({ theme }) => theme.colors.gray200};
+    cursor: pointer;
+    user-select: none;
+  }
+
+  a {
+    font-size: inherit;
+  }
+`;
 
 const TermsNotice = styled.p`
   text-align: left;
@@ -159,17 +184,16 @@ const SignIn = () => {
   const { setup } = useContext(StoreContext);
 
   const [passphrase, setPassphrase] = useState(
-    import.meta.env.DEV ? TEST_PASSPHRASE : ""
+    import.meta.env.DEV ? TEST_PASSPHRASE : "",
   );
-  const [pin, setPin] = useState(
-    import.meta.env.DEV ? TEST_PIN : ""
-  );
+  const [pin, setPin] = useState(import.meta.env.DEV ? TEST_PIN : "");
   const [disabled, setDisabled] = useState(false);
   const [progress, setProgress] = useState(0);
   const [showPassphrase, setShowPassphrase] = useState(false);
   const [showPin, setShowPin] = useState(false);
   const [passphraseFocused, setPassphraseFocused] = useState(false);
   const [pinFocused, setPinFocused] = useState(false);
+  const [legacySelected, setLegacySelected] = useState(false);
 
   const passphraseStrength = useMemo(() => {
     if (!passphrase) return 0;
@@ -193,12 +217,12 @@ const SignIn = () => {
       !pin ||
       passphraseStrength < 3 ||
       pinStrength < 1,
-    [passphrase, pin, disabled, passphraseStrength, pinStrength]
+    [passphrase, pin, disabled, passphraseStrength, pinStrength],
   );
 
   const unknownFact = useMemo(
     () => UNKNOWN_FACTS[Math.floor(progress / 20)],
-    [progress]
+    [progress],
   );
 
   useEffect(() => {
@@ -211,7 +235,7 @@ const SignIn = () => {
       }
 
       // parse passphrase, PIN, network name from "secret" param
-      const [pphrase, pn, nn] = parseToken(secret);
+      const [pphrase, pn, nn, lgcy] = parseToken(secret);
       // clear URL params immediately so the secret is not left in the address bar
       clearQueryParams();
 
@@ -226,10 +250,14 @@ const SignIn = () => {
 
       // open wallet
       setDisabled(true);
-      const hash = await generateHash(pphrase, pn, (p) =>
-        setProgress(Math.floor(p * 100))
+      setLegacySelected(lgcy);
+      const hash = await generateHash(
+        pphrase,
+        pn,
+        (p) => setProgress(Math.floor(p * 100)),
+        lgcy,
       );
-      setup(pphrase, pn, hash, network, chainId);
+      setup(pphrase, pn, lgcy, hash, network, chainId);
       setDisabled(false);
     };
 
@@ -238,10 +266,13 @@ const SignIn = () => {
 
   const onSubmit = async () => {
     setDisabled(true);
-    const hash = await generateHash(passphrase, pin, (p) =>
-      setProgress(Math.floor(p * 100))
+    const hash = await generateHash(
+      passphrase,
+      pin,
+      (p) => setProgress(Math.floor(p * 100)),
+      legacySelected,
     );
-    setup(passphrase, pin, hash);
+    setup(passphrase, pin, legacySelected, hash);
     setDisabled(false);
   };
 
@@ -284,7 +315,9 @@ const SignIn = () => {
                 type="button"
                 disabled={disabled}
                 onClick={() => setShowPassphrase(!showPassphrase)}
-                aria-label={showPassphrase ? "Hide passphrase" : "Show passphrase"}
+                aria-label={
+                  showPassphrase ? "Hide passphrase" : "Show passphrase"
+                }
               >
                 <PasswordToggleIcon
                   show={showPassphrase}
@@ -318,14 +351,32 @@ const SignIn = () => {
                 onClick={() => setShowPin(!showPin)}
                 aria-label={showPin ? "Hide PIN" : "Show PIN"}
               >
-                <PasswordToggleIcon
-                  show={showPin}
-                  focused={pinFocused}
-                />
+                <PasswordToggleIcon show={showPin} focused={pinFocused} />
               </ToggleButton>
             </PasswordInputWrapper>
             <StrengthMeter level={pinStrength} maxLevel={2} />
           </div>
+
+          <LegacyWalletCheckboxWrapper>
+            <input
+              type="checkbox"
+              id="legacy-wallet"
+              checked={legacySelected}
+              onChange={(e) => setLegacySelected(e.target.checked)}
+              disabled={disabled}
+            />
+            <label htmlFor="legacy-wallet">
+              This wallet was created before March 2026.{" "}
+              <Link
+                href="https://docs.mybucks.online/concept/security-consideration/security-deep-dive"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+              >
+                Learn more
+              </Link>
+            </label>
+          </LegacyWalletCheckboxWrapper>
 
           <TermsNotice>
             By clicking Open, you agree to our{" "}

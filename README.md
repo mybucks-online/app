@@ -60,19 +60,25 @@ import { ethers } from "ethers";
 import { scrypt } from "scrypt-js";
 
 const HASH_OPTIONS = {
-  N: 32768, // CPU/memory cost parameter, 2^15
+  N: 131072, // CPU/memory cost parameter, 2^17, OWASP recommendation
   r: 8, // block size parameter
-  p: 5, // parallelization parameter
+  p: 1, // parallelization parameter
   keyLen: 64,
 };
+const KDF_DOMAIN_SEPARATOR = "mybucks.online-core.generateHash.v2";
 
-// passphrase: at least 12 characters user input, lowercase, uppercase, digits, and special characters
-// PIN: at least 6 characters
+// passphrase: at least 12 characters user input, zxcvbn score >= 3
+// PIN: at least 6 characters, zxcvbn score >= 1
 async function generatePrivateKey(passphrase, pin) {
   const salt = `${passphrase.slice(-4)}${pin}`
 
   const passwordBuffer = Buffer.from(passphrase);
-  const saltBuffer = Buffer.from(salt);
+  const encoded = abi.encode(
+    ["string", "string", "string"],
+    [KDF_DOMAIN_SEPARATOR, passphrase, pin],
+  );
+  const saltHash = ethers.keccak256(encoded);
+  const saltBuffer = Buffer.from(saltHash.slice(2), "hex");
 
   const hashBuffer = await scrypt(
     passwordBuffer,
@@ -103,7 +109,7 @@ npm install @mybucks.online/core
 With mybucks.online, you can send cryptocurrency and even **wallet itself via a URL**. The recipient simply clicks the link to open the wallet and take full ownership.
 
 Try this link:  
-https://app.mybucks.online/#wallet=VWnsSGRGVtb0FjY291bnQ1JgIxMTIzMjQCb3B0aW1pc20=_wNovT
+https://app.mybucks.online/#wallet=VWnsSGRGVtb0FjY291bnQ1JgIxMTIzMjQCb3B0aW1pc20=_wNovT (legacy)
 
 This feature allows you to **create a one-time wallet** and put stablecoins or memecoins into it. You can **transfer full ownership as a gift without ever asking for a recipient's address**. These serve as a "starter" wallet for the recipients, who can then easily withdraw the funds into their own personal pockets or primary wallets.
 
@@ -113,6 +119,8 @@ This is a powerful tool for **bulk distribution** and **massive airdrops** to ma
 
 This project uses the following major dependencies:
 
+- **@mybucks.online/core**  
+  Core module of mybucks.online involving hashing, private-key generation, generate and parse transfer-link token.
 - **scrypt-js**  
   Implements the `scrypt` hash function. Please check the npm registry [here](https://www.npmjs.com/package/scrypt-js).
 - **ethers**  

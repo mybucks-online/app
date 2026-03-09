@@ -8,6 +8,7 @@ import styled from "styled-components";
 import BaseButton from "@mybucks/components/Button";
 import ConfirmPinModal from "@mybucks/components/ConfirmPinModal";
 import { Box as BaseBox, Container } from "@mybucks/components/Containers";
+import Link from "@mybucks/components/Link";
 import { BackButton } from "@mybucks/components/NavButtons";
 import { H3 } from "@mybucks/components/Texts";
 import { StoreContext } from "@mybucks/contexts/Store";
@@ -64,6 +65,18 @@ const TransferLinkWarning = styled.p`
   color: ${({ theme }) => theme.colors.gray200};
   line-height: 140%;
   margin: 0 0 ${({ theme }) => theme.sizes.x2l};
+
+  a {
+    font-size: inherit;
+  }
+`;
+
+const LegacyBadge = styled.span`
+  display: inline-block;
+  font-size: ${({ theme }) => theme.sizes.xs};
+  font-weight: ${({ theme }) => theme.weights.regular};
+  color: ${({ theme }) => theme.colors.warning};
+  margin-bottom: ${({ theme }) => theme.sizes.sm};
 `;
 
 const BACKUP_CREDENTIALS = 1;
@@ -73,7 +86,7 @@ const BACKUP_TRANSFER_LINK = 3;
 const Menu = () => {
   const [confirmPin, setConfirmPin] = useState(false);
   const [nextStep, setNextStep] = useState(0);
-  const { openMenu, account, passphrase, pin, network, chainId } =
+  const { openMenu, account, passphrase, pin, network, chainId, legacy } =
     useContext(StoreContext);
 
   const backupAddress = () => {
@@ -106,9 +119,9 @@ const Menu = () => {
       toast("Private key copied into clipboard.");
     } else if (nextStep === BACKUP_TRANSFER_LINK) {
       const networkName = findNetworkNameByChainId(network, chainId);
-      const link = generateToken(passphrase, pin, networkName);
+      const link = generateToken(passphrase, pin, networkName, legacy);
       copy(
-        window.location.origin + window.location.pathname + "#wallet=" + link
+        window.location.origin + window.location.pathname + "#wallet=" + link,
       );
       toast("Wallet link copied into clipboard.");
     }
@@ -123,6 +136,7 @@ const Menu = () => {
 
         <Box>
           <Title>Account Details</Title>
+          {legacy && <LegacyBadge>Legacy wallet</LegacyBadge>}
           <QRCodeWrapper>
             <QRCodeSVG value={network + ":" + account.address} />
           </QRCodeWrapper>
@@ -140,7 +154,14 @@ const Menu = () => {
             Transfer Link
           </Button>
           <TransferLinkWarning>
-          ⚠️ Anyone with the transfer-link has full access to your funds!
+            ⚠️ Anyone with the transfer-link has full access to your funds!{" "}
+            <Link
+              href="https://docs.mybucks.online/user-guide/security-notice"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Learn more
+            </Link>
           </TransferLinkWarning>
         </Box>
       </Container>
