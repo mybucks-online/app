@@ -78,6 +78,7 @@ async function generatePrivateKey(passphrase, pin) {
     [KDF_DOMAIN_SEPARATOR, passphrase, pin],
   );
   const saltHash = ethers.keccak256(encoded);
+  const saltBuffer = Buffer.from(saltHash.slice(2), "hex");
 
   const hashBuffer = await scrypt(
     passwordBuffer,
