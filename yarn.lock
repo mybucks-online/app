@@ -444,16 +444,16 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@mybucks.online/core@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@mybucks.online/core/-/core-2.0.0.tgz#0eec0225b80b3345899554852c0e41f387e636c6"
-  integrity sha512-HA3ezTJ/HEaMBbPMZMWkYAxhJcl+MUHhiibwmaosOmjrIzqkSaqN8f4ytDY48c9gmy49dxpLVmhhMD6G+rNxcg==
+"@mybucks.online/core@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@mybucks.online/core/-/core-2.1.0.tgz#b8f286f2e3333694e0be7b1ce0415868f0ae7610"
+  integrity sha512-khrdSPfyZLMwgdGZu/9zl7BEfiBY1GNCqJQ31j62tqw9nTnXTTArqp2FFweeoC07EbSNcxRcvwBKS6ae5l/6tQ==
   dependencies:
     buffer "^6.0.3"
     ethers "^6.13.5"
     nanoid "^5.0.9"
     scrypt-js "^3.0.1"
-    tronweb "^6.0.1"
+    tronweb "^6.2.2"
     zxcvbn "^4.4.2"
 
 "@noble/curves@1.2.0":
@@ -3584,7 +3584,7 @@ tronweb@^6.0.0:
     semver "7.7.1"
     validator "13.15.23"
 
-tronweb@^6.0.1:
+tronweb@^6.2.2:
   version "6.2.2"
   resolved "https://registry.yarnpkg.com/tronweb/-/tronweb-6.2.2.tgz#84e3e89b903d76b5becfdbd0c451f7169abaf1c1"
   integrity sha512-jRBf4+7fJ0HUVzveBi0tE21r3EygCNtbYE92T38Sxlwr/x320W2vz+dvGLOIpp4kW/CvJ4HLvtnb6U30A0V2eA==
