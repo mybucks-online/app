@@ -131,6 +131,32 @@ const ToggleButton = styled.button`
 `;
 
 
+const LegacyWalletCheckboxWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.sizes.xs};
+  margin-bottom: ${({ theme }) => theme.sizes.base};
+
+  input[type="checkbox"] {
+    width: 1rem;
+    height: 1rem;
+    accent-color: ${({ theme }) => theme.colors.primary};
+    cursor: pointer;
+  }
+
+  label {
+    font-size: ${({ theme }) => theme.sizes.xs};
+    font-weight: ${({ theme }) => theme.weights.regular};
+    color: ${({ theme }) => theme.colors.gray200};
+    cursor: pointer;
+    user-select: none;
+  }
+
+  a {
+    font-size: inherit;
+  }
+`;
+
 const TermsNotice = styled.p`
   text-align: left;
   font-size: ${({ theme }) => theme.sizes.xs};
@@ -170,6 +196,7 @@ const SignIn = () => {
   const [showPin, setShowPin] = useState(false);
   const [passphraseFocused, setPassphraseFocused] = useState(false);
   const [pinFocused, setPinFocused] = useState(false);
+  const [legacySelected, setLegacySelected] = useState(false);
 
   const passphraseStrength = useMemo(() => {
     if (!passphrase) return 0;
@@ -326,6 +353,27 @@ const SignIn = () => {
             </PasswordInputWrapper>
             <StrengthMeter level={pinStrength} maxLevel={2} />
           </div>
+
+          <LegacyWalletCheckboxWrapper>
+            <input
+              type="checkbox"
+              id="legacy-wallet"
+              checked={legacySelected}
+              onChange={(e) => setLegacySelected(e.target.checked)}
+              disabled={disabled}
+            />
+            <label htmlFor="legacy-wallet">
+              This wallet was created before March 2026.{" "}
+              <Link
+                href="https://docs.mybucks.online/concept/security-consideration/security-deep-dive"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+              >
+                Learn more
+              </Link>
+            </label>
+          </LegacyWalletCheckboxWrapper>
 
           <TermsNotice>
             By clicking Open, you agree to our{" "}
