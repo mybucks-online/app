@@ -947,15 +947,6 @@ available-typed-arrays@^1.0.7:
   dependencies:
     possible-typed-array-names "^1.0.0"
 
-axios@1.12.2:
-  version "1.12.2"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.12.2.tgz#6c307390136cf7a2278d09cec63b136dfc6e6da7"
-  integrity sha512-vMJzPewAlRyOgxV2dU0Cuz2O8zzzx9VYtbJOaBgXFeLc4IV/Eg50n4LowmehOOR61S8ZMpc2K5Sa7g6A4jfkUw==
-  dependencies:
-    follow-redirects "^1.15.6"
-    form-data "^4.0.4"
-    proxy-from-env "^1.1.0"
-
 axios@1.13.5:
   version "1.13.5"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.13.5.tgz#5e464688fa127e11a660a2c49441c009f6567a43"
@@ -1947,7 +1938,7 @@ focus-trap@^7.5.4:
   dependencies:
     tabbable "^6.2.0"
 
-follow-redirects@^1.15.11, follow-redirects@^1.15.6:
+follow-redirects@^1.15.11:
   version "1.15.11"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.11.tgz#777d73d72a92f8ec4d2e410eb47352a56b8e8340"
   integrity sha512-deG2P0JfjrTxl50XGCDyfI97ZGVCxIpfKYmfyrQ54n5FO/0gfIES8C/Psl6kWVDolizcaaxZJnTS0QSMxvnsBQ==
@@ -1959,7 +1950,7 @@ for-each@^0.3.3, for-each@^0.3.5:
   dependencies:
     is-callable "^1.2.7"
 
-form-data@^4.0.4, form-data@^4.0.5:
+form-data@^4.0.5:
   version "4.0.5"
   resolved "https://registry.yarnpkg.com/form-data/-/form-data-4.0.5.tgz#b49e48858045ff4cbf6b03e1805cebcad3679053"
   integrity sha512-8RipRLol37bNs2bhoV67fiTEvdTrbMUYcFTiy3+wuuOnUog2QBHCZWXDRijWQfAkhBj2Uf5UnVaiWwA5vdd82w==
@@ -3568,21 +3559,6 @@ toflexible@^1.1.0:
   version "1.1.0"
   resolved "https://registry.npmjs.org/toflexible/-/toflexible-1.1.0.tgz"
   integrity sha512-g2HrWTTMASYLemuSbHE7rqY1hKZBLRJUGwWPeddnp4KmDyx6zJnzWGW/vZLm0eVzSxnOM81LfwdGfOIW7omzTg==
-
-tronweb@^6.0.0:
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/tronweb/-/tronweb-6.2.0.tgz#1b023ab9f287010973ec48d75fafdae6d906077b"
-  integrity sha512-09kyW6mqiFuSYXkR35ndxCeNF5rW1O18hKAClCLtVHP2xBFPYSGx3lDYC2hRKcuLiq6iLPxOVCrhzoKNGlFuQQ==
-  dependencies:
-    "@babel/runtime" "7.26.10"
-    axios "1.12.2"
-    bignumber.js "9.1.2"
-    ethereum-cryptography "2.2.1"
-    ethers "6.13.5"
-    eventemitter3 "5.0.1"
-    google-protobuf "3.21.4"
-    semver "7.7.1"
-    validator "13.15.23"
 
 tronweb@^6.2.2:
   version "6.2.2"
