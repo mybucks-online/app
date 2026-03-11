@@ -190,7 +190,7 @@ function App() {
               </a>
             </li>
             <li>
-              <a href="https://codesandbox.io/p/sandbox/mybucks-online-key-generation-sandbox-lt53c3" target="_blank">
+              <a href="https://codesandbox.io/p/sandbox/mybucks-online-key-generation-sandbox-default-7jktdl" target="_blank">
                 Play on Sandbox
               </a>
             </li>
