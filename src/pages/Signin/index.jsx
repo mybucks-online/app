@@ -2,6 +2,8 @@ import { useContext, useEffect, useMemo, useState } from "react";
 import {
   generateHash,
   parseToken,
+  randomPassphrase,
+  randomPIN,
   PASSPHRASE_MAX_LENGTH,
   PASSPHRASE_MIN_LENGTH,
   PASSPHRASE_MIN_ZXCVBN_SCORE,
@@ -19,6 +21,7 @@ import { Label } from "@mybucks/components/Label";
 import Link from "@mybucks/components/Link";
 import Modal from "@mybucks/components/Modal";
 import PasswordToggleIcon from "@mybucks/components/PasswordToggleIcon";
+import RefreshIconButton from "@mybucks/components/RefreshIconButton";
 import Progress from "@mybucks/components/Progress";
 import StrengthMeter from "@mybucks/components/StrengthMeter";
 import { StoreContext } from "@mybucks/contexts/Store";
@@ -101,12 +104,35 @@ const Notice = styled.p`
   color: ${({ theme }) => theme.colors.gray200};
 `;
 
-const PasswordInputWrapper = styled.div`
+const CredentialInputWrapper = styled.div`
   position: relative;
 `;
 
 const CompactInput = styled(Input)`
   margin-bottom: ${({ theme }) => theme.sizes.x3s};
+`;
+
+const RefreshButton = styled.button`
+  position: absolute;
+  right: 2.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
 `;
 
 const ToggleButton = styled.button`
@@ -282,6 +308,10 @@ const SignIn = () => {
     setDisabled(false);
   };
 
+  const onRandomPassphrase = () => setPassphrase(randomPassphrase());
+
+  const onRandomPin = () => setPin(randomPIN());
+
   const onKeyDown = (e) => {
     if (hasInvalidInput) {
       return;
@@ -303,7 +333,7 @@ const SignIn = () => {
 
           <div>
             <Label htmlFor="passphrase">Passphrase</Label>
-            <PasswordInputWrapper>
+            <CredentialInputWrapper>
               <CompactInput
                 id="passphrase"
                 type={showPassphrase ? "text" : "password"}
@@ -317,6 +347,14 @@ const SignIn = () => {
                 onFocus={() => setPassphraseFocused(true)}
                 onBlur={() => setPassphraseFocused(false)}
               />
+              <RefreshButton
+                type="button"
+                disabled={disabled}
+                aria-label="Generate passphrase"
+                onClick={onRandomPassphrase}
+              >
+                <RefreshIconButton focused={passphraseFocused} />
+              </RefreshButton>
               <ToggleButton
                 type="button"
                 disabled={disabled}
@@ -330,13 +368,13 @@ const SignIn = () => {
                   focused={passphraseFocused}
                 />
               </ToggleButton>
-            </PasswordInputWrapper>
+            </CredentialInputWrapper>
             <StrengthMeter level={passphraseStrength} maxLevel={4} />
           </div>
 
           <div>
             <Label htmlFor="pin">PIN</Label>
-            <PasswordInputWrapper>
+            <CredentialInputWrapper>
               <CompactInput
                 id="pin"
                 type={showPin ? "text" : "password"}
@@ -351,6 +389,14 @@ const SignIn = () => {
                 onFocus={() => setPinFocused(true)}
                 onBlur={() => setPinFocused(false)}
               />
+              <RefreshButton
+                type="button"
+                disabled={disabled}
+                aria-label="Generate PIN"
+                onClick={onRandomPin}
+              >
+                <RefreshIconButton focused={pinFocused} />
+              </RefreshButton>
               <ToggleButton
                 type="button"
                 disabled={disabled}
@@ -359,7 +405,7 @@ const SignIn = () => {
               >
                 <PasswordToggleIcon show={showPin} focused={pinFocused} />
               </ToggleButton>
-            </PasswordInputWrapper>
+            </CredentialInputWrapper>
             <StrengthMeter level={pinStrength} maxLevel={2} />
           </div>
 
