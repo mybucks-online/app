@@ -1,15 +1,16 @@
 import { useContext, useEffect, useMemo, useState } from "react";
+import { toast } from "react-toastify";
 import {
   generateHash,
   parseToken,
-  randomPassphrase,
-  randomPIN,
   PASSPHRASE_MAX_LENGTH,
   PASSPHRASE_MIN_LENGTH,
   PASSPHRASE_MIN_ZXCVBN_SCORE,
   PIN_MAX_LENGTH,
   PIN_MIN_LENGTH,
   PIN_MIN_ZXCVBN_SCORE,
+  randomPassphrase,
+  randomPIN,
 } from "@mybucks.online/core";
 import styled from "styled-components";
 import zxcvbn from "zxcvbn";
@@ -21,8 +22,8 @@ import { Label } from "@mybucks/components/Label";
 import Link from "@mybucks/components/Link";
 import Modal from "@mybucks/components/Modal";
 import PasswordToggleIcon from "@mybucks/components/PasswordToggleIcon";
-import RefreshIconButton from "@mybucks/components/RefreshIconButton";
 import Progress from "@mybucks/components/Progress";
+import RefreshIconButton from "@mybucks/components/RefreshIconButton";
 import StrengthMeter from "@mybucks/components/StrengthMeter";
 import { StoreContext } from "@mybucks/contexts/Store";
 import {
@@ -308,9 +309,19 @@ const SignIn = () => {
     setDisabled(false);
   };
 
-  const onRandomPassphrase = () => setPassphrase(randomPassphrase());
+  const onRandomPassphrase = () => {
+    const value = randomPassphrase();
+    setPassphrase(value);
+    setShowPassphrase(true);
+    toast("No recovery available. Back it up!");
+  };
 
-  const onRandomPin = () => setPin(randomPIN());
+  const onRandomPin = () => {
+    const value = randomPIN(7);
+    setPin(value);
+    setShowPin(true);
+    toast("No recovery available. Back it up!");
+  };
 
   const onKeyDown = (e) => {
     if (hasInvalidInput) {
