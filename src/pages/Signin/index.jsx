@@ -298,6 +298,7 @@ const SignIn = () => {
   }, []);
 
   const onSubmit = async () => {
+    navigator.clipboard.writeText("");
     setDisabled(true);
     const hash = await generateHash(
       passphrase,
