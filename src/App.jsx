@@ -38,12 +38,13 @@ const Warning = styled.div`
   padding: 0.5rem;
   background-color: ${({ theme }) => theme.colors.error};
   color: ${({ theme }) => theme.colors.gray25};
-  font-size: ${({ theme }) => theme.sizes.base};
+  font-size: ${({ theme }) => theme.sizes.sm};
   font-weight: ${({ theme }) => theme.weights.regular};
 
   a {
     text-decoration: underline;
     font-weight: ${({ theme }) => theme.weights.highlight};
+    font-size: inherit;
   }
 `;
 

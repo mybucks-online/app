@@ -395,13 +395,13 @@ const SignIn = () => {
           </Button>
 
           <SecurityHint>
-            Review our{" "}
+            To stay safe, review our{" "}
             <Link
               href="https://docs.mybucks.online/user-guide/security-notice"
               target="_blank"
               rel="noopener noreferrer"
             >
-              security tips
+              security notice
             </Link>
             .
           </SecurityHint>
