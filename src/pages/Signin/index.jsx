@@ -170,6 +170,10 @@ const TermsNotice = styled.p`
   }
 `;
 
+const CommitHash = styled.span`
+  display: none;
+`;
+
 const SecurityHint = styled.p`
   text-align: center;
   font-size: ${({ theme }) => theme.sizes.xs};
@@ -411,7 +415,7 @@ const SignIn = () => {
       </Container>
 
       {import.meta.env.VITE_COMMIT_HASH && (
-        <SecurityHint data-commit={import.meta.env.VITE_COMMIT_HASH} />
+        <CommitHash data-commit={import.meta.env.VITE_COMMIT_HASH} />
       )}
 
       <Modal show={!!progress} width="20rem">
