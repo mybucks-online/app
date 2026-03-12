@@ -410,6 +410,10 @@ const SignIn = () => {
         </Box>
       </Container>
 
+      {import.meta.env.VITE_COMMIT_HASH && (
+        <SecurityHint data-commit={import.meta.env.VITE_COMMIT_HASH} />
+      )}
+
       <Modal show={!!progress} width="20rem">
         <ProgressWrapper>
           <GreetingIcon src={Logo} alt="Hi" loading="lazy" />

@@ -42,6 +42,7 @@ jobs:
           VITE_INFURA_API_KEY: ${{ secrets.VITE_INFURA_API_KEY }}
           VITE_TRONGRID_API_KEY: ${{ secrets.VITE_TRONGRID_API_KEY }}
           VITE_MORALIS_API_KEY: ${{ secrets.VITE_MORALIS_API_KEY }}
+          VITE_COMMIT_HASH: ${{ github.sha }}
         run: yarn build
       - name: Setup Pages
         uses: actions/configure-pages@v4
