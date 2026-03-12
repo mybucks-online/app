@@ -314,6 +314,7 @@ const SignIn = () => {
     const value = randomPassphrase();
     setPassphrase(value);
     setShowPassphrase(true);
+    navigator.clipboard.writeText(value);
     toast("No recovery available. Back it up!");
   };
 
@@ -321,6 +322,7 @@ const SignIn = () => {
     const value = randomPIN(7);
     setPin(value);
     setShowPin(true);
+    navigator.clipboard.writeText(value);
     toast("No recovery available. Back it up!");
   };
 
@@ -355,7 +357,6 @@ const SignIn = () => {
                 maxLength={PASSPHRASE_MAX_LENGTH}
                 onChange={(e) => setPassphrase(e.target.value)}
                 onKeyDown={onKeyDown}
-                onPaste={(e) => e.preventDefault()}
                 onFocus={() => setPassphraseFocused(true)}
                 onBlur={() => setPassphraseFocused(false)}
               />
@@ -396,7 +397,6 @@ const SignIn = () => {
                 maxLength={PIN_MAX_LENGTH}
                 onChange={(e) => setPin(e.target.value)}
                 onKeyDown={onKeyDown}
-                onPaste={(e) => e.preventDefault()}
                 autoComplete="off"
                 onFocus={() => setPinFocused(true)}
                 onBlur={() => setPinFocused(false)}
