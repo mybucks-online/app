@@ -459,10 +459,10 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@mybucks.online/core@^2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@mybucks.online/core/-/core-2.1.0.tgz#b8f286f2e3333694e0be7b1ce0415868f0ae7610"
-  integrity sha512-khrdSPfyZLMwgdGZu/9zl7BEfiBY1GNCqJQ31j62tqw9nTnXTTArqp2FFweeoC07EbSNcxRcvwBKS6ae5l/6tQ==
+"@mybucks.online/core@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@mybucks.online/core/-/core-2.2.0.tgz#6327bb3f7507c80f6f0abf5ce58f7480dd547f72"
+  integrity sha512-NIaNXTgu41/X8anY75R8sKVZKSaeWCZ+cmOiySI0E78sUQve7mdunUvZ5D6H6+3xn9+RJETq05vVygKAwqeKoA==
   dependencies:
     buffer "^6.0.3"
     ethers "^6.13.5"

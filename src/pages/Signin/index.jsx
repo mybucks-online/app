@@ -4,8 +4,10 @@ import {
   parseToken,
   PASSPHRASE_MAX_LENGTH,
   PASSPHRASE_MIN_LENGTH,
+  PASSPHRASE_MIN_ZXCVBN_SCORE,
   PIN_MAX_LENGTH,
   PIN_MIN_LENGTH,
+  PIN_MIN_ZXCVBN_SCORE,
 } from "@mybucks.online/core";
 import styled from "styled-components";
 import zxcvbn from "zxcvbn";
@@ -199,7 +201,7 @@ const SignIn = () => {
     if (!passphrase) return 0;
     const { score } = zxcvbn(passphrase);
     if (passphrase.length < PASSPHRASE_MIN_LENGTH) {
-      return Math.min(score, 2);
+      return Math.min(score, PASSPHRASE_MIN_ZXCVBN_SCORE - 1);
     }
     return score;
   }, [passphrase]);
@@ -215,8 +217,8 @@ const SignIn = () => {
       disabled ||
       !passphrase ||
       !pin ||
-      passphraseStrength < 3 ||
-      pinStrength < 1,
+      passphraseStrength < PASSPHRASE_MIN_ZXCVBN_SCORE ||
+      pinStrength < PIN_MIN_ZXCVBN_SCORE,
     [passphrase, pin, disabled, passphraseStrength, pinStrength],
   );
 
