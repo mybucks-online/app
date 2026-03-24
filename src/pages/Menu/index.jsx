@@ -154,7 +154,7 @@ const Menu = () => {
             Transfer Link
           </Button>
           <TransferLinkWarning>
-            ⚠️ Anyone with the transfer-link has full access to your funds!{" "}
+            ⚠️ Anyone with your credentials, private-key or <br/>transfer-link has full access to your funds!{" "}
             <Link
               href="https://docs.mybucks.online/user-guide/security-notice"
               target="_blank"
