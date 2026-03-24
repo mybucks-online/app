@@ -190,12 +190,22 @@ class EvmAccount {
   }
 
   async execute({ to, data, value = 0, gasPrice = null, gasLimit = null }) {
+    // Some RPC providers fail on "pending" nonce lookups.
+    // Pre-populate nonce from "latest" to avoid ethers fallback path.
+    let nonce = null;
+    try {
+      nonce = await this.provider.getTransactionCount(this.account.address, "latest");
+    } catch (_e) {
+      // Keep null and let ethers resolve nonce using provider defaults.
+    }
+
     const tx = await this.account.sendTransaction({
       to,
       value,
       data,
       gasPrice,
       gasLimit,
+      nonce,
     });
     return await tx.wait();
   }
