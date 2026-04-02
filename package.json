@@ -29,6 +29,7 @@
   "homepage": "https://mybucks.online",
   "scripts": {
     "dev": "vite",
+    "dev:pwa": "VITE_PWA_DEV=true vite",
     "build": "vite build",
     "serve": "vite serve",
     "lint": "eslint . --ext .js,.jsx",
@@ -65,6 +66,7 @@
     "eslint-plugin-react-refresh": "^0.4.6",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "vite": "^7.3.1",
-    "vite-plugin-node-polyfills": "^0.22.0"
+    "vite-plugin-node-polyfills": "^0.22.0",
+    "vite-plugin-pwa": "^1.2.0"
   }
 }

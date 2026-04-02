@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import ReactDOM from "react-dom/client";
 import { ThemeProvider } from "styled-components";
+import { registerSW } from "virtual:pwa-register";
 
 import StoreProvider, { StoreContext } from "@mybucks/contexts/Store";
 import GlobalStyle from "@mybucks/styles/global.js";
@@ -8,6 +9,8 @@ import themes from "@mybucks/styles/themes.js";
 
 import App from "./App.jsx";
 import "@mybucks/styles/font.css";
+
+registerSW({ immediate: true });
 
 function ThemedApp() {
   const { theme } = useContext(StoreContext);
