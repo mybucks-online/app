@@ -37,7 +37,7 @@ export default defineConfig({
       ],
       manifest: {
         name: "Mybucks.online | Seedless, Disposable Crypto Wallet with 1-Click Gifting",
-        short_name: "mybucks.online",
+        short_name: "Mybucks.online",
         description:
           "No servers, no database, no app installs. Fully decentralized. Send crypto by 1-click URL.",
         start_url: "/",
