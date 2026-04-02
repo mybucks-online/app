@@ -29,6 +29,7 @@
   "homepage": "https://mybucks.online",
   "scripts": {
     "dev": "vite",
+    "dev:pwa": "VITE_PWA_DEV=true vite",
     "build": "vite build",
     "serve": "vite serve",
     "lint": "eslint . --ext .js,.jsx",
