@@ -1,5 +1,9 @@
 export const PIN_MAX_TRY = 3;
 
+/** Token activity via Moralis. Default off; set `VITE_ENABLE_TOKEN_HISTORY=true` to enable. */
+export const ENABLE_TOKEN_HISTORY =
+  import.meta.env.VITE_ENABLE_TOKEN_HISTORY === "true";
+
 export const NETWORK = Object.freeze({
   EVM: "ethereum",
   TRON: "tron",

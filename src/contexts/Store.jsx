@@ -5,6 +5,7 @@ import TronAccount from "@mybucks/lib/account/tron";
 import {
   DEFAULT_CHAIN_ID,
   DEFAULT_NETWORK,
+  ENABLE_TOKEN_HISTORY,
   NETWORK,
   REFRESH_STATUS_DURATION,
 } from "@mybucks/lib/conf";
@@ -133,6 +134,10 @@ const StoreProvider = ({ children }) => {
 
   useEffect(() => {
     if (!selectedTokenAddress) {
+      setTransfers([]);
+      return;
+    }
+    if (!ENABLE_TOKEN_HISTORY) {
       setTransfers([]);
       return;
     }
