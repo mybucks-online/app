@@ -273,11 +273,12 @@ const SignIn = () => {
       clearQueryParams();
 
       if (!pphrase || !pn || !nn) {
+        toast.error("Invalid wallet link.");
         return;
       }
       const [network, chainId] = findNetworkByName(nn);
       if (!chainId) {
-        console.error("Invalid network name");
+        toast.error("Unknown network in link.");
         return;
       }
 
