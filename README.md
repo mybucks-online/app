@@ -17,7 +17,7 @@ It fully runs on your **browser side** without using any storage or invoking any
 ### Fast and Easy
 - No app installs, no browser extensions, no registration and no KYC.
 - You can create or open your wallet in seconds - all you need is your browser.
-- Passphrase and PIN are easier to handle and remember than seed phrases
+- Passphrase and PIN are easier to handle and remember than seed phrases.
 
 ### 1-Click Gifting
 - Stop asking your friends for their wallet addresses.
