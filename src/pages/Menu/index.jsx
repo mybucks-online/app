@@ -58,7 +58,7 @@ const QRCodeWrapper = styled.div`
   }
 `;
 
-const TransferLinkWarning = styled.p`
+const GiftingLinkWarning = styled.p`
   text-align: center;
   font-size: ${({ theme }) => theme.sizes.xs};
   font-weight: ${({ theme }) => theme.weights.regular};
@@ -151,10 +151,10 @@ const Menu = () => {
             Private Key
           </Button>
           <Button onClick={onClickGenerateLink} $variant="danger">
-            Transfer Link
+            Gifting Link
           </Button>
-          <TransferLinkWarning>
-            ⚠️ Anyone with your credentials, private-key or <br/>transfer-link has full access to your funds!{" "}
+          <GiftingLinkWarning>
+            ⚠️ Anyone with your credentials, private-key or <br/>gifting-link has full access to your funds!{" "}
             <Link
               href="https://docs.mybucks.online/user-guide/security-notice"
               target="_blank"
@@ -162,7 +162,7 @@ const Menu = () => {
             >
               Learn more
             </Link>
-          </TransferLinkWarning>
+          </GiftingLinkWarning>
         </Box>
       </Container>
 
