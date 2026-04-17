@@ -1291,10 +1291,10 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@mybucks.online/core@^2.2.2":
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/@mybucks.online/core/-/core-2.2.2.tgz#4a090b21099825457c0e9d11cd770429a25cb887"
-  integrity sha512-Fawv9Nvc4rg9z5lrVu/V86wsNYQbeXoeVd75HQ0eewlaC3NbTE7opdLkBWuLwt9A6cgMcSZwxBc7txA3XhxspQ==
+"@mybucks.online/core@^2.2.3":
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/@mybucks.online/core/-/core-2.2.3.tgz#105c015ef428454a93a1c82bbedc67f1016508f5"
+  integrity sha512-BkN72x++deHHg66bzOBhdgP5TmXo9t0IgYsdz0kPmvZP3LPCwfWz96SiAMiuZvE6Mkl5o921KjLaFkYK1G43cA==
   dependencies:
     buffer "^6.0.3"
     ethers "^6.13.5"
@@ -4149,9 +4149,9 @@ nanoid@^3.3.11, nanoid@^3.3.7:
   integrity sha512-N8SpfPUnUp1bK+PMYW8qSWdl9U+wwNWI4QKxOYDy9JAro3WMX7p2OeVRF9v+347pnakNevPmiHhNmZ2HbFA76w==
 
 nanoid@^5.0.9:
-  version "5.1.7"
-  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-5.1.7.tgz#a9f09a4ce73ba0b88830af36ee49666bad7827b6"
-  integrity sha512-ua3NDgISf6jdwezAheMOk4mbE1LXjm1DfMUDMuJf4AqxLFK3ccGpgWizwa5YV7Yz9EpXwEaWoRXSb/BnV0t5dQ==
+  version "5.1.9"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-5.1.9.tgz#aac959acf7d685269fb1be7f70a90d9db0848948"
+  integrity sha512-ZUvP7KeBLe3OZ1ypw6dI/TzYJuvHP77IM4Ry73waSQTLn8/g8rpdjfyVAh7t1/+FjBtG4lCP42MEbDxOsRpBMw==
 
 natural-compare@^1.4.0:
   version "1.4.0"
