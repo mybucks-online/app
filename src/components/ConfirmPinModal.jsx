@@ -96,10 +96,7 @@ const ConfirmPinModal = ({ show, onSuccess, onFailed }) => {
           onPaste={(e) => e.preventDefault()}
         />
         {invalid && <InvalidPin>Wrong PIN!</InvalidPin>}
-        <Button
-          onClick={confirmPin}
-          disabled={value.length < PIN_MIN_LENGTH}
-        >
+        <Button onClick={confirmPin} disabled={value.length < PIN_MIN_LENGTH}>
           Confirm
         </Button>
       </Wrap>

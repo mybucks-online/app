@@ -1,9 +1,7 @@
 {
   "compilerOptions": {
     "paths": {
-      "@mybucks/*": [
-        "./src/*"
-      ]
+      "@mybucks/*": ["./src/*"]
     }
   }
 }

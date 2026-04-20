@@ -108,9 +108,9 @@ const ConfirmTransaction = ({
   const trxBurntEstimation = useMemo(
     () =>
       account.tronweb.fromSun(
-        bandwidth * TRON_BANDWIDTH_PRICE + energy * TRON_ENERGY_PRICE
+        bandwidth * TRON_BANDWIDTH_PRICE + energy * TRON_ENERGY_PRICE,
       ),
-    [bandwidth, energy]
+    [bandwidth, energy],
   );
 
   const confirm = async () => {
@@ -147,8 +147,7 @@ const ConfirmTransaction = ({
           </p>
 
           <p>
-            <TransactionItem>Value:</TransactionItem> {amount}{" "}
-            {token.symbol}
+            <TransactionItem>Value:</TransactionItem> {amount} {token.symbol}
           </p>
         </TransactionDetails>
         <TransactionDetails>

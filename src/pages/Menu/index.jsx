@@ -154,7 +154,8 @@ const Menu = () => {
             Gifting Link
           </Button>
           <GiftingLinkWarning>
-            ⚠️ Anyone with your credentials, private-key or <br/>gifting-link has full access to your funds!{" "}
+            ⚠️ Anyone with your credentials, private-key or <br />
+            gifting-link has full access to your funds!{" "}
             <Link
               href="https://docs.mybucks.online/user-guide/security-notice"
               target="_blank"

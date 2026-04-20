@@ -15,7 +15,7 @@ const useDebounce = () => {
       if (!timeout.current) return;
       clearTimeout(timeout.current);
     },
-    []
+    [],
   );
 
   return { debounce };

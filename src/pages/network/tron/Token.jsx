@@ -204,14 +204,14 @@ const Token = () => {
       const txData = await account.populateTransferToken(
         token.native ? "" : selectedTokenAddress,
         recipient,
-        ethers.parseUnits(amount.toString(), token.native ? 6 : token.decimals)
+        ethers.parseUnits(amount.toString(), token.native ? 6 : token.decimals),
       );
       setTransaction(txData);
 
       const [bandwidth, energy] = await account.estimateGas(
         token.native ? "" : selectedTokenAddress,
         recipient,
-        ethers.parseUnits(amount.toString(), token.native ? 6 : token.decimals)
+        ethers.parseUnits(amount.toString(), token.native ? 6 : token.decimals),
       );
       setBandwidthEstimation(bandwidth);
       setEnergyEstimation(energy);
