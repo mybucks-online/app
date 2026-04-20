@@ -27,6 +27,9 @@
     "url": "https://github.com/mybucks-online/app.git"
   },
   "homepage": "https://mybucks.online",
+  "resolutions": {
+    "**/axios": "^1.15.0"
+  },
   "scripts": {
     "dev": "vite",
     "dev:pwa": "VITE_PWA_DEV=true vite",
