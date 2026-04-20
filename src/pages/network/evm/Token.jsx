@@ -191,7 +191,7 @@ const Token = () => {
       const txData = await account.populateTransferToken(
         token.native ? "" : selectedTokenAddress,
         recipient,
-        ethers.parseUnits(amount.toString(), token.decimals)
+        ethers.parseUnits(amount.toString(), token.decimals),
       );
       setTransaction(txData);
 

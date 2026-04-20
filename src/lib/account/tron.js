@@ -142,7 +142,7 @@ class TronAccount {
       return await this.tronweb.transactionBuilder.sendTrx(
         to,
         value,
-        this.address
+        this.address,
       );
     }
 
@@ -158,7 +158,7 @@ class TronAccount {
           { type: "address", value: to },
           { type: "uint256", value },
         ],
-        this.hexAddress
+        this.hexAddress,
       );
     return transaction;
   }
@@ -168,7 +168,7 @@ class TronAccount {
     const unsignedTxn = await this.populateTransferToken(token, to, value);
     const { raw_data_hex, signature } = await this.tronweb.trx.sign(
       unsignedTxn,
-      this.tronweb.defaultPrivateKey
+      this.tronweb.defaultPrivateKey,
     );
     const bandwidth =
       9 +
@@ -191,7 +191,7 @@ class TronAccount {
           { type: "address", value: to },
           { type: "uint256", value },
         ],
-        this.hexAddress
+        this.hexAddress,
       );
 
     return [bandwidth, energy_used];
@@ -200,7 +200,7 @@ class TronAccount {
   async execute(rawTxn) {
     const signedTxn = await this.tronweb.trx.sign(
       rawTxn,
-      this.tronweb.defaultPrivateKey
+      this.tronweb.defaultPrivateKey,
     );
     const result = await this.tronweb.trx.sendRawTransaction(signedTxn);
     return result;

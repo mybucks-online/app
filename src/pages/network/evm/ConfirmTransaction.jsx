@@ -112,8 +112,8 @@ const ConfirmTransaction = ({ to, value = 0, data, onSuccess, onReject }) => {
       const gas = Number(
         ethers.formatUnits(
           (account.gasPrice * gasMultiplier(gasOption) * gasAmount) / 100n,
-          18
-        )
+          18,
+        ),
       );
 
       const gasInUsd = gas * nativeTokenPrice;

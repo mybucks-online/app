@@ -23,8 +23,8 @@ export const Box = styled.div`
     $variant === "xs"
       ? `${theme.sizes.base} ${theme.sizes.base}`
       : $variant === "sm"
-      ? `${theme.sizes.base} ${theme.sizes.xl}`
-      : `${theme.sizes.x2l} ${theme.sizes.x4l}`};
+        ? `${theme.sizes.base} ${theme.sizes.xl}`
+        : `${theme.sizes.x2l} ${theme.sizes.x4l}`};
 
   ${media.sm`
       padding: ${({ theme, $variant }) =>

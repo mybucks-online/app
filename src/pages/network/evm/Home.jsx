@@ -162,7 +162,7 @@ const EvmHome = () => {
   } = useContext(StoreContext);
   const gasPrice = useMemo(
     () => toFlexible(parseFloat(ethers.formatUnits(account.gasPrice, 9)), 2),
-    [tick, account]
+    [tick, account],
   );
 
   const copyAddress = () => {

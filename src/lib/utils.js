@@ -6,7 +6,7 @@ export const truncate = (str, len = 12) =>
 export const queryPrice = async (base, quote = "USD") => {
   try {
     const resp = await fetch(
-      `https://api.blockchain.info/price/index?base=${base}&quote=${quote}`
+      `https://api.blockchain.info/price/index?base=${base}&quote=${quote}`,
     );
     const { price } = await resp.json();
     return price;
@@ -22,9 +22,9 @@ export const clearQueryParams = () => {
 
 export const formatCurrency = (
   amount,
-  locale = 'en',
-  currency = 'USD',
-  maximumFractionDigits = 2
+  locale = "en",
+  currency = "USD",
+  maximumFractionDigits = 2,
 ) =>
   Intl.NumberFormat(locale, {
     currency,
@@ -34,4 +34,4 @@ export const formatCurrency = (
 
 export const formatBalance = (balance, decimals = 2) => {
   return toFlexible(balance, decimals) || "0.00";
-}
+};

@@ -27,5 +27,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <StoreProvider>
       <ThemedApp />
     </StoreProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

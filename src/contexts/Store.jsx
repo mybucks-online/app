@@ -72,7 +72,7 @@ const StoreProvider = ({ children }) => {
         : network === NETWORK.EVM
           ? new EvmAccount(hash, chainId)
           : new TronAccount(hash),
-    [hash, network, chainId]
+    [hash, network, chainId],
   );
 
   // common
@@ -96,7 +96,7 @@ const StoreProvider = ({ children }) => {
   const [selectedTokenAddress, selectToken] = useState("");
   const token = useMemo(
     () => tokenBalances.find((t) => t.address === selectedTokenAddress),
-    [tokenBalances, selectedTokenAddress]
+    [tokenBalances, selectedTokenAddress],
   );
 
   // unique counter that increments regularly
@@ -144,7 +144,7 @@ const StoreProvider = ({ children }) => {
     account
       .queryTokenHistory(
         token.native ? "" : selectedTokenAddress,
-        token.decimals
+        token.decimals,
       )
       .then((result) => {
         setTransfers(result);

@@ -43,7 +43,12 @@ const StrengthMeter = ({ level = 0, maxLevel = 4 }) => {
         : "weak";
 
   return (
-    <Track role="meter" aria-valuenow={filledCount} aria-valuemin={0} aria-valuemax={segments}>
+    <Track
+      role="meter"
+      aria-valuenow={filledCount}
+      aria-valuemin={0}
+      aria-valuemax={segments}
+    >
       {Array.from({ length: segments }, (_, i) => (
         <Segment key={i} $filled={i < filledCount} $tier={tier} />
       ))}

@@ -58,7 +58,10 @@ class EvmAccount {
   }
 
   async queryBalances() {
-    const tokenBalances = await getNativeAndErc20TokenBalances(this.address, this.chainId);
+    const tokenBalances = await getNativeAndErc20TokenBalances(
+      this.address,
+      this.chainId,
+    );
 
     const balances = tokenBalances
       .filter((token) => {
@@ -67,7 +70,7 @@ class EvmAccount {
 
         return defaultTokensList.find(
           ({ address }) =>
-            address.toLowerCase() === token.token_address.toLowerCase()
+            address.toLowerCase() === token.token_address.toLowerCase(),
         );
       })
       .map((token) => {
@@ -130,7 +133,7 @@ class EvmAccount {
       this.address,
       this.chainId,
       tokenAddress,
-      maxCount
+      maxCount,
     );
 
     return transfers.map((transfer) => ({
@@ -138,7 +141,7 @@ class EvmAccount {
       from: transfer.from_address,
       to: transfer.to_address,
       value: parseFloat(
-        ethers.formatUnits(transfer.value, parseInt(transfer.token_decimals))
+        ethers.formatUnits(transfer.value, parseInt(transfer.token_decimals)),
       ),
       blockNum: transfer.block_number.toString(),
       blockTimestamp: transfer.block_timestamp,
@@ -194,7 +197,10 @@ class EvmAccount {
     // Pre-populate nonce from "latest" to avoid ethers fallback path.
     let nonce = null;
     try {
-      nonce = await this.provider.getTransactionCount(this.account.address, "latest");
+      nonce = await this.provider.getTransactionCount(
+        this.account.address,
+        "latest",
+      );
     } catch (_e) {
       // Keep null and let ethers resolve nonce using provider defaults.
     }

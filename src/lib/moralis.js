@@ -70,7 +70,7 @@ export async function getNativeAndErc20TokenBalances(address, chainId) {
         "X-API-Key": moralisApiKey,
         accept: "application/json",
       },
-    }
+    },
   );
   const { result } = await data.json();
   return result || [];
@@ -119,7 +119,7 @@ export async function getErc20TokenHistory(
   address,
   chainId,
   tokenAddress,
-  maxCount = 5
+  maxCount = 5,
 ) {
   if (!tokenAddress) {
     return [];
@@ -133,7 +133,7 @@ export async function getErc20TokenHistory(
         "X-API-Key": moralisApiKey,
         accept: "application/json",
       },
-    }
+    },
   );
   const { result } = await data.json();
   return result || [];
