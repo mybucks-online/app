@@ -182,10 +182,10 @@ function App() {
           <ul>
             <li>
               <a
-                href="https://docs.mybucks.online/more/terms-of-use"
+                href="https://docs.mybucks.online/more/whitepaper"
                 target="_blank"
               >
-                Terms of Use
+                Whitepaper
               </a>
             </li>
             <li>
