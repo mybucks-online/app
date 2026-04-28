@@ -211,6 +211,20 @@ function App() {
           <ul>
             <li>
               <a
+                href="https://x.com/mybucks_online"
+                title="Twitter"
+                target="_blank"
+              >
+                <svg width="24" height="24">
+                  <path
+                    d="M3.45996 3L10.5684 13.3633L3.11426 22H4.70312L11.2725 14.3887L16.4932 22H21.5L14.0615 11.1562L21.1016 3H19.5137L13.3584 10.1309L8.4668 3H3.45996Z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </a>
+            </li>
+            <li>
+              <a
                 href="https://t.me/mybucks_online"
                 title="Telegram"
                 target="_blank"
