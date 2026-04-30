@@ -75,7 +75,7 @@
     "react-dom": "^18.2.0",
     "react-idle-timer": "^5.7.2",
     "react-toastify": "^10.0.5",
-    "styled-components": "^6.1.11",
+    "styled-components": "^6.4.1",
     "styled-normalize": "^8.1.1",
     "toflexible": "^1.1.0",
     "tronweb": "^6.2.2",
