@@ -39,7 +39,7 @@ export default defineConfig({
         name: "Mybucks.online | Seedless, Disposable Crypto Wallet with 1-Click Gifting",
         short_name: "Mybucks.online",
         description:
-          "No servers, no database, no app installs. Fully decentralized. Send crypto by 1-click URL.",
+          "Mybucks.online is a seedless wallet and gifting wallet: create a disposable gift wallet, fund it, and share a secure 1-click URL. Browser-only—no servers, database, or install. Ideal for airdrops, giveaways, campaigns, and instant onboarding.",
         start_url: "/",
         scope: "/",
         display: "standalone",
