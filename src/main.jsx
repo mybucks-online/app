@@ -1,3 +1,4 @@
+import "./polyfills.js";
 import React, { useContext } from "react";
 import ReactDOM from "react-dom/client";
 import { ThemeProvider } from "styled-components";

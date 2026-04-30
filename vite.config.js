@@ -2,7 +2,6 @@ import react from "@vitejs/plugin-react";
 import path from "path";
 import { fileURLToPath } from "url";
 import { defineConfig } from "vite";
-import { nodePolyfills } from "vite-plugin-node-polyfills";
 import { VitePWA } from "vite-plugin-pwa";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -15,11 +14,6 @@ export default defineConfig({
   },
   plugins: [
     react(),
-    nodePolyfills({
-      globals: {
-        Buffer: true, // Polyfill the Buffer global
-      },
-    }),
     VitePWA({
       registerType: "autoUpdate",
       manifestFilename: "site.webmanifest",
@@ -97,6 +91,7 @@ export default defineConfig({
     alias: {
       "@mybucks": path.resolve(__dirname, "./src"),
     },
+    dedupe: ["react", "react-dom"],
   },
   optimizeDeps: {
     exclude: ["js-big-decimal"],

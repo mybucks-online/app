@@ -50,7 +50,8 @@
   },
   "homepage": "https://mybucks.online",
   "resolutions": {
-    "**/axios": "^1.15.0"
+    "**/axios": "^1.15.0",
+    "vite": "npm:rolldown-vite@latest"
   },
   "scripts": {
     "dev": "vite",
@@ -93,8 +94,7 @@
     "eslint-plugin-react-refresh": "^0.5.2",
     "eslint-plugin-simple-import-sort": "^13.0.0",
     "prettier": "^3.8.3",
-    "vite": "^7.3.1",
-    "vite-plugin-node-polyfills": "^0.26.0",
+    "rolldown-vite": "latest",
     "vite-plugin-pwa": "^1.2.0"
   }
 }
