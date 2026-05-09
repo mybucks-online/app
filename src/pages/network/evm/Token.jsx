@@ -334,7 +334,7 @@ const Token = () => {
             <img src={InfoRedIcon} />
             <span>Invalid transfer</span>
           </InvalidTransfer>
-        ) : gasEstimation > 0 ? (
+        ) : gasEstimationValue > 0 ? (
           <EstimatedGasFee>
             <img src={InfoGreenIcon} />
             <span>
