@@ -268,7 +268,12 @@ const SignIn = () => {
       }
 
       // parse passphrase, PIN, network name from "secret" param
-      const [pphrase, pn, nn, lgcy] = parseToken(secret);
+      const {
+        passphrase: pphrase,
+        pin: pn,
+        network: nn,
+        legacy: lgcy,
+      } = parseToken(secret);
       // clear URL params immediately so the secret is not left in the address bar
       clearQueryParams();
 
