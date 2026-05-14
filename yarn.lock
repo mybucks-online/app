@@ -1940,10 +1940,10 @@ available-typed-arrays@^1.0.7:
   dependencies:
     possible-typed-array-names "^1.0.0"
 
-axios@1.13.5, axios@1.15.0, axios@^1.15.0:
-  version "1.15.1"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.15.1.tgz#075420b785da8adbdf545785b69f90c926b28542"
-  integrity sha512-WOG+Jj8ZOvR0a3rAn+Tuf1UQJRxw5venr6DgdbJzngJE3qG7X0kL83CZGpdHMxEm+ZK3seAbvFsw4FfOfP9vxg==
+axios@1.15.0, axios@1.15.2:
+  version "1.15.2"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.15.2.tgz#eb8fb6d30349abace6ade5b4cb4d9e8a0dc23e5b"
+  integrity sha512-wLrXxPtcrPTsNlJmKjkPnNPK2Ihe0hn0wGSaTEiHRPxwjvJwT3hKmXF4dpqxmPO9SoNb2FsYXj/xEo0gHN+D5A==
   dependencies:
     follow-redirects "^1.15.11"
     form-data "^4.0.5"
@@ -5321,21 +5321,6 @@ tr46@^1.0.1:
   integrity sha512-dTpowEjclQ7Kgx5SdBkqRzVhERQXov8/l9Ft9dVM9fmg0W0KQSVaXX9T4i6twCPNtYiZM53lpSSUAwJbFPOHxA==
   dependencies:
     punycode "^2.1.0"
-
-tronweb@^6.2.2:
-  version "6.2.2"
-  resolved "https://registry.yarnpkg.com/tronweb/-/tronweb-6.2.2.tgz#84e3e89b903d76b5becfdbd0c451f7169abaf1c1"
-  integrity sha512-jRBf4+7fJ0HUVzveBi0tE21r3EygCNtbYE92T38Sxlwr/x320W2vz+dvGLOIpp4kW/CvJ4HLvtnb6U30A0V2eA==
-  dependencies:
-    "@babel/runtime" "7.26.10"
-    axios "1.13.5"
-    bignumber.js "9.1.2"
-    ethereum-cryptography "2.2.1"
-    ethers "6.13.5"
-    eventemitter3 "5.0.1"
-    google-protobuf "3.21.4"
-    semver "7.7.1"
-    validator "13.15.23"
 
 tronweb@^6.3.0:
   version "6.3.0"
