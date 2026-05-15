@@ -13,7 +13,7 @@ import {
   ShowIcon,
 } from "@mybucks/assets/icons";
 import BaseButton from "@mybucks/components/Button";
-import { Box, Container } from "@mybucks/components/Containers";
+import { Container } from "@mybucks/components/Containers";
 import { Label } from "@mybucks/components/Label";
 import Link from "@mybucks/components/Link";
 import NetworkSelector from "@mybucks/components/NetworkSelector";
@@ -22,6 +22,14 @@ import { BALANCE_PLACEHOLDER, LOADING_PLACEHOLDER } from "@mybucks/lib/conf";
 import { clearQueryParams, truncate } from "@mybucks/lib/utils";
 import TokenBalanceRow from "@mybucks/pages/network/common/TokenBalanceRow";
 import media from "@mybucks/styles/media";
+
+const HomeContainer = styled(Container)`
+  margin-top: 2rem;
+
+  ${media.md`
+    margin-top: 0;
+  `}
+`;
 
 const NetworkAndFeatures = styled.div`
   display: flex;
@@ -57,7 +65,7 @@ const CloseButton = styled(BaseButton).attrs({ $size: "small" })`
   padding: 6px 8px;
 `;
 
-const PrimaryBox = styled(Box).attrs({ $variant: "sm" })`
+const PrimaryBox = styled.div`
   margin-bottom: ${({ theme }) => theme.sizes.x2l};
 
   ${media.md`
@@ -119,7 +127,7 @@ const NativeBalance = styled.h3`
   font-weight: ${({ theme }) => theme.weights.highlight};
   font-size: ${({ theme }) => theme.sizes.x2l};
   margin-bottom: ${({ theme }) => theme.sizes.xl};
-  color: ${({ theme }) => theme.colors.gray400};
+  color: ${({ theme }) => theme.colors.textStrong};
 
   ${media.sm`
     font-size: ${({ theme }) => theme.sizes.xl};
@@ -131,7 +139,7 @@ const BandwidthAndEnergy = styled.div`
   align-items: center;
   gap: ${({ theme }) => theme.sizes.base};
   padding-top: ${({ theme }) => theme.sizes.xs};
-  border-top: 1px solid ${({ theme }) => theme.colors.gray200};
+  border-top: 1px solid ${({ theme }) => theme.colors.border};
   ${media.sm`
     flex-direction: column;
     gap: ${({ theme }) => theme.sizes.x3s};
@@ -149,11 +157,11 @@ const Bandwidth = styled.div`
 const BandwidthLabel = styled(Label)`
   display: inline;
   margin-bottom: 0;
-  color: ${({ theme }) => theme.colors.gray200};
+  color: ${({ theme }) => theme.colors.textMuted};
 `;
 
 const BandwidthValue = styled(BandwidthLabel)`
-  color: ${({ theme }) => theme.colors.gray400};
+  color: ${({ theme }) => theme.colors.textStrong};
 `;
 
 const TokensList = styled.div`
@@ -195,7 +203,7 @@ const TronHome = () => {
   };
 
   return (
-    <Container>
+    <HomeContainer>
       <NetworkAndFeatures>
         <NetworkWrapper>
           <NetworkSelector
@@ -294,7 +302,7 @@ const TronHome = () => {
           />
         ))}
       </TokensList>
-    </Container>
+    </HomeContainer>
   );
 };
 

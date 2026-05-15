@@ -15,7 +15,7 @@ import {
   ShowIcon,
 } from "@mybucks/assets/icons";
 import BaseButton from "@mybucks/components/Button";
-import { Box, Container } from "@mybucks/components/Containers";
+import { Container } from "@mybucks/components/Containers";
 import Link from "@mybucks/components/Link";
 import NetworkSelector from "@mybucks/components/NetworkSelector";
 import { StoreContext } from "@mybucks/contexts/Store";
@@ -23,6 +23,14 @@ import { BALANCE_PLACEHOLDER, LOADING_PLACEHOLDER } from "@mybucks/lib/conf";
 import { clearQueryParams, truncate } from "@mybucks/lib/utils";
 import TokenBalanceRow from "@mybucks/pages/network/common/TokenBalanceRow";
 import media from "@mybucks/styles/media";
+
+const HomeContainer = styled(Container)`
+  margin-top: 2rem;
+
+  ${media.md`
+    margin-top: 0;
+  `}
+`;
 
 const NetworkAndFeatures = styled.div`
   display: flex;
@@ -52,7 +60,7 @@ const GasPriceWrapper = styled.div`
   visibility: ${({ $show }) => ($show ? "visible" : "hidden")};
   font-weight: ${({ theme }) => theme.weights.regular};
   font-size: ${({ theme }) => theme.sizes.sm};
-  color: ${({ theme }) => theme.colors.gray400};
+  color: ${({ theme }) => theme.colors.textStrong};
 `;
 
 const MenuButton = styled(BaseButton).attrs({ $size: "small" })`
@@ -68,7 +76,7 @@ const CloseButton = styled(BaseButton).attrs({ $size: "small" })`
   padding: 6px 8px;
 `;
 
-const PrimaryBox = styled(Box).attrs({ $variant: "sm" })`
+const PrimaryBox = styled.div`
   margin-bottom: ${({ theme }) => theme.sizes.x2l};
 
   ${media.md`
@@ -129,7 +137,7 @@ const NativeBalance = styled.h3`
   text-align: center;
   font-weight: ${({ theme }) => theme.weights.highlight};
   font-size: ${({ theme }) => theme.sizes.x2l};
-  color: ${({ theme }) => theme.colors.gray400};
+  color: ${({ theme }) => theme.colors.textStrong};
 
   ${media.sm`
     font-size: ${({ theme }) => theme.sizes.xl};
@@ -180,7 +188,7 @@ const EvmHome = () => {
   };
 
   return (
-    <Container>
+    <HomeContainer>
       <NetworkAndFeatures>
         <NetworkWrapper>
           <NetworkSelector
@@ -258,7 +266,7 @@ const EvmHome = () => {
           />
         ))}
       </TokensList>
-    </Container>
+    </HomeContainer>
   );
 };
 

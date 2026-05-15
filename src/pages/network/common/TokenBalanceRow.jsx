@@ -26,7 +26,7 @@ const Wrap = styled.div`
   cursor: pointer;
   border-radius: ${({ theme }) => theme.radius.base};
   padding: ${({ theme }) => theme.sizes.base};
-  background-color: ${({ theme }) => theme.colors.gray25};
+  background-color: ${({ theme }) => theme.colors.card};
   border: 2px solid transparent;
 
   &:hover {
@@ -40,7 +40,7 @@ const SymbolAndNameWrap = styled.div`
 `;
 
 const Symbol = styled.p`
-  color: ${({ theme }) => theme.colors.gray400};
+  color: ${({ theme }) => theme.colors.textStrong};
   font-size: ${({ theme }) => theme.sizes.base};
   font-weight: ${({ theme }) => theme.weights.highlight};
   line-height: 150%;
@@ -48,7 +48,7 @@ const Symbol = styled.p`
 `;
 
 const Name = styled.p`
-  color: ${({ theme }) => theme.colors.gray200};
+  color: ${({ theme }) => theme.colors.textMuted};
   font-size: ${({ theme }) => theme.sizes.xs};
   font-weight: ${({ theme }) => theme.weights.regular};
   line-height: 150%;
@@ -57,7 +57,7 @@ const Name = styled.p`
 const BalanceAndValueWrap = styled.div``;
 
 const Balance = styled.p`
-  color: ${({ theme }) => theme.colors.gray400};
+  color: ${({ theme }) => theme.colors.textStrong};
   font-size: ${({ theme }) => theme.sizes.base};
   font-weight: ${({ theme }) => theme.weights.highlight};
   line-height: 150%;
@@ -66,7 +66,7 @@ const Balance = styled.p`
 `;
 
 const Value = styled.p`
-  color: ${({ theme }) => theme.colors.gray400};
+  color: ${({ theme }) => theme.colors.textStrong};
   font-size: ${({ theme }) => theme.sizes.sm};
   font-weight: ${({ theme }) => theme.weights.regular};
   line-height: 150%;

@@ -9,10 +9,7 @@ import {
 } from "@mybucks/assets/icons";
 import Avatar from "@mybucks/components/Avatar";
 import Button from "@mybucks/components/Button";
-import {
-  Box as BaseBox,
-  Container as BaseContainer,
-} from "@mybucks/components/Containers";
+import { Container } from "@mybucks/components/Containers";
 import Input from "@mybucks/components/Input";
 import { Label } from "@mybucks/components/Label";
 import { BackButton, RefreshButton } from "@mybucks/components/NavButtons";
@@ -27,15 +24,15 @@ import media from "@mybucks/styles/media";
 import ConfirmTransaction from "./ConfirmTransaction";
 import MinedTransaction from "./MinedTransaction";
 
-const Container = styled(BaseContainer)`
+const TokenLayout = styled(Container)`
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: ${({ theme }) => theme.sizes.xl};
-`;
 
-const Box = styled(BaseBox)`
-  width: 100%;
+  & > * + * {
+    margin-top: 0;
+  }
 `;
 
 const NavsWrapper = styled.div`
@@ -79,14 +76,14 @@ const TokenBalance = styled.h5`
   font-weight: ${({ theme }) => theme.weights.regular};
   line-height: 120%;
   text-align: center;
-  color: ${({ theme }) => theme.colors.gray400};
+  color: ${({ theme }) => theme.colors.textStrong};
 `;
 
 const TokenValue = styled.h6`
   font-size: ${({ theme }) => theme.sizes.base};
   font-weight: ${({ theme }) => theme.weights.highlight};
   line-height: 150%;
-  color: ${({ theme }) => theme.colors.gray400};
+  color: ${({ theme }) => theme.colors.textStrong};
 `;
 
 const AmountWrapper = styled.div`
@@ -254,7 +251,7 @@ const Token = () => {
   }
 
   return (
-    <Container>
+    <TokenLayout>
       <NavsWrapper>
         <BackButton onClick={() => selectToken("")} />
 
@@ -300,7 +297,7 @@ const Token = () => {
         )}
       </TokenDetails>
 
-      <Box>
+      <div style={{ alignSelf: "stretch" }}>
         <H3>Send token to</H3>
 
         <Label htmlFor="recipient">Recipient</Label>
@@ -352,12 +349,12 @@ const Token = () => {
         >
           Submit
         </Submit>
-      </Box>
+      </div>
 
       {transfers.length > 0 && (
         <ActivityTable account={account} history={transfers} />
       )}
-    </Container>
+    </TokenLayout>
   );
 };
 

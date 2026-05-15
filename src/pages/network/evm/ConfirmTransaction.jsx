@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 import { InfoGreenIcon, InfoRedIcon } from "@mybucks/assets/icons";
 import BaseButton from "@mybucks/components/Button";
-import { Box, Container } from "@mybucks/components/Containers";
+import { Container } from "@mybucks/components/Containers";
 import { BackButton } from "@mybucks/components/NavButtons";
 import { H3 } from "@mybucks/components/Texts";
 import { StoreContext } from "@mybucks/contexts/Store";
@@ -23,12 +23,12 @@ const TransactionDetails = styled.div`
   font-size: ${({ theme }) => theme.sizes.sm};
   font-weight: ${({ theme }) => theme.weights.base};
   line-height: 140%;
-  color: ${({ theme }) => theme.colors.gray200};
+  color: ${({ theme }) => theme.colors.textMuted};
 `;
 
 const TransactionItem = styled.span`
   font-weight: ${({ theme }) => theme.weights.highlight};
-  color: ${({ theme }) => theme.colors.gray400};
+  color: ${({ theme }) => theme.colors.textStrong};
 `;
 
 const OptionsWrapper = styled.fieldset`
@@ -36,14 +36,14 @@ const OptionsWrapper = styled.fieldset`
   font-weight: ${({ theme }) => theme.weights.regular};
   line-height: 130%;
   margin-bottom: ${({ theme }) => theme.sizes.xl};
-  color: ${({ theme }) => theme.colors.gray400};
+  color: ${({ theme }) => theme.colors.textStrong};
 
   legend {
-    color: ${({ theme }) => theme.colors.gray400};
+    color: ${({ theme }) => theme.colors.textStrong};
   }
 
   label {
-    color: ${({ theme }) => theme.colors.gray400};
+    color: ${({ theme }) => theme.colors.textStrong};
   }
 `;
 
@@ -152,7 +152,7 @@ const ConfirmTransaction = ({ to, value = 0, data, onSuccess, onReject }) => {
         <BackButton onClick={onReject} disabled={pending} />
       </NavsWrapper>
 
-      <Box>
+      <div>
         <H3>Confirm transaction</H3>
 
         <TransactionDetails>
@@ -236,7 +236,7 @@ const ConfirmTransaction = ({ to, value = 0, data, onSuccess, onReject }) => {
             Reject
           </Button>
         </ButtonsWrapper>
-      </Box>
+      </div>
     </Container>
   );
 };

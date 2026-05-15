@@ -14,7 +14,7 @@ const IconWrapper = styled.div`
 
   path {
     stroke: ${({ theme, $focused }) =>
-      $focused ? theme.colors.primary : theme.colors.gray400};
+      $focused ? theme.colors.primary : theme.colors.textMuted};
     transition: stroke 0.2s ease;
   }
 `;

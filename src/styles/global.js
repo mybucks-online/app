@@ -62,21 +62,27 @@ const GlobalStyle = createGlobalStyle`
   }
   html {
     scroll-behavior: smooth;
+    height: 100%;
     @media (prefers-reduced-motion: reduce) {
       scroll-behavior: auto;
     }
   }
   body {
-    background-color: ${({ theme }) => theme.colors.gray50};
-    font-family: ${({ theme }) =>
-      theme.fonts.inter}, -apple-system, BlinkMacSystemFont, "Segoe UI",
-      "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
-      "Helvetica Neue", sans-serif;
+    height: 100%;
+    margin: 0;
+    background-color: ${({ theme }) => theme.colors.shellBg};
+    font-family: ${({ theme }) => theme.fonts.sans};
     font-size: ${({ theme }) => theme.sizes.base};
     font-weight: ${({ theme }) => theme.weights.base};
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     -webkit-tap-highlight-color: transparent;
+  }
+  #root {
+    height: 100%;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
   }
   .scroll-lock {
     max-height: 100vh;

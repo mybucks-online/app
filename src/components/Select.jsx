@@ -23,14 +23,14 @@ const SelectWrapper = styled.div`
   &::before {
     border-left: var(--size) solid transparent;
     border-right: var(--size) solid transparent;
-    border-bottom: var(--size) solid ${({ theme }) => theme.colors.gray400};
+    border-bottom: var(--size) solid ${({ theme }) => theme.colors.textMuted};
     top: 40%;
   }
 
   &::after {
     border-left: var(--size) solid transparent;
     border-right: var(--size) solid transparent;
-    border-top: var(--size) solid ${({ theme }) => theme.colors.gray400};
+    border-top: var(--size) solid ${({ theme }) => theme.colors.textMuted};
     top: 55%;
   }
 
@@ -51,8 +51,8 @@ const SelectComponent = styled.select`
   -moz-appearance: none;
   width: 100%;
 
-  background-color: ${({ theme }) => theme.colors.gray25};
-  border: 1px solid ${({ theme }) => theme.colors.gray200};
+  background-color: ${({ theme }) => theme.colors.card};
+  border: 1px solid ${({ theme }) => theme.colors.border};
   outline: none;
   border-radius: ${({ theme }) => theme.radius.base};
   padding: ${({ theme }) => `${theme.sizes.x3s} ${theme.sizes.base}`};
@@ -60,7 +60,7 @@ const SelectComponent = styled.select`
   font-weight: ${({ theme }) => theme.weights.highlight};
   line-height: 130%;
   cursor: pointer;
-  color: ${({ theme }) => theme.colors.gray400};
+  color: ${({ theme }) => theme.colors.textStrong};
 
   &:focus,
   &:hover {

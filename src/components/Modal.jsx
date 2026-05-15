@@ -8,8 +8,7 @@ import useOnClickOutside from "@mybucks/hooks/useOnClickOutside";
 export const Overlay = styled.div`
   position: fixed;
   inset: 0;
-  background-color: ${({ theme }) =>
-    theme.mode === "light" ? "rgba(0, 0, 0, 0.7)" : "rgba(0, 0, 0, 0.8)"};
+  background-color: ${({ theme }) => theme.colors.modalBackdrop};
   transition: background-color ease 0.3s;
   z-index: 10;
   display: flex;
@@ -19,9 +18,9 @@ export const Overlay = styled.div`
 `;
 
 export const Container = styled.div`
-  background-color: ${({ theme }) => theme.colors.gray25};
+  background-color: ${({ theme }) => theme.colors.card};
   border-radius: ${({ theme }) => theme.radius.lg};
-  max-width: ${({ theme }) => theme.sizes.x9l};
+  max-width: ${({ theme }) => theme.sizes.cardMaxWidth};
   width: ${({ $width }) => $width || "60%"};
   max-height: 100vh;
   overflow-y: auto;

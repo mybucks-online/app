@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { InfoRedIcon } from "@mybucks/assets/icons";
 import BaseButton from "@mybucks/components/Button";
-import { Box, Container } from "@mybucks/components/Containers";
+import { Container } from "@mybucks/components/Containers";
 import Link from "@mybucks/components/Link";
 import { BackButton } from "@mybucks/components/NavButtons";
 import { H3 } from "@mybucks/components/Texts";
@@ -23,12 +23,12 @@ const TransactionDetails = styled.div`
   font-size: ${({ theme }) => theme.sizes.sm};
   font-weight: ${({ theme }) => theme.weights.base};
   line-height: 140%;
-  color: ${({ theme }) => theme.colors.gray200};
+  color: ${({ theme }) => theme.colors.textMuted};
 `;
 
 const TransactionItem = styled.span`
   font-weight: ${({ theme }) => theme.weights.highlight};
-  color: ${({ theme }) => theme.colors.gray400};
+  color: ${({ theme }) => theme.colors.textStrong};
 `;
 
 const ResourcesWarning = styled.div`
@@ -38,7 +38,7 @@ const ResourcesWarning = styled.div`
   font-size: ${({ theme }) => theme.sizes.sm};
   font-weight: ${({ theme }) => theme.weights.base};
   line-height: 160%;
-  color: ${({ theme }) => theme.colors.gray200};
+  color: ${({ theme }) => theme.colors.textMuted};
 `;
 
 const InvalidTransfer = styled.div`
@@ -139,7 +139,7 @@ const ConfirmTransaction = ({
         <BackButton onClick={onReject} disabled={pending} />
       </NavsWrapper>
 
-      <Box>
+      <div>
         <H3>Confirm transaction</H3>
         <TransactionDetails>
           <p>
@@ -222,7 +222,7 @@ const ConfirmTransaction = ({
             Reject
           </Button>
         </ButtonsWrapper>
-      </Box>
+      </div>
     </Container>
   );
 };
