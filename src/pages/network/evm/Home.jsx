@@ -24,14 +24,6 @@ import { clearQueryParams, truncate } from "@mybucks/lib/utils";
 import TokenBalanceRow from "@mybucks/pages/network/common/TokenBalanceRow";
 import media from "@mybucks/styles/media";
 
-const HomeContainer = styled(Container)`
-  margin-top: 2rem;
-
-  ${media.md`
-    margin-top: 0;
-  `}
-`;
-
 const NetworkAndFeatures = styled.div`
   display: flex;
   align-items: center;
@@ -61,6 +53,12 @@ const GasPriceWrapper = styled.div`
   font-weight: ${({ theme }) => theme.weights.regular};
   font-size: ${({ theme }) => theme.sizes.sm};
   color: ${({ theme }) => theme.colors.textStrong};
+
+  ${media.xs`
+    img {
+      display: none;
+    }
+  `}
 `;
 
 const MenuButton = styled(BaseButton).attrs({ $size: "small" })`
@@ -188,7 +186,7 @@ const EvmHome = () => {
   };
 
   return (
-    <HomeContainer>
+    <Container>
       <NetworkAndFeatures>
         <NetworkWrapper>
           <NetworkSelector
@@ -266,7 +264,7 @@ const EvmHome = () => {
           />
         ))}
       </TokensList>
-    </HomeContainer>
+    </Container>
   );
 };
 

@@ -23,14 +23,6 @@ import { clearQueryParams, truncate } from "@mybucks/lib/utils";
 import TokenBalanceRow from "@mybucks/pages/network/common/TokenBalanceRow";
 import media from "@mybucks/styles/media";
 
-const HomeContainer = styled(Container)`
-  margin-top: 2rem;
-
-  ${media.md`
-    margin-top: 0;
-  `}
-`;
-
 const NetworkAndFeatures = styled.div`
   display: flex;
   align-items: center;
@@ -203,7 +195,7 @@ const TronHome = () => {
   };
 
   return (
-    <HomeContainer>
+    <Container>
       <NetworkAndFeatures>
         <NetworkWrapper>
           <NetworkSelector
@@ -302,7 +294,7 @@ const TronHome = () => {
           />
         ))}
       </TokensList>
-    </HomeContainer>
+    </Container>
   );
 };
 

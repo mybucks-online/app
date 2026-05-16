@@ -395,7 +395,7 @@ function App() {
       </AppShell>
 
       <ToastContainer
-        position="top-center"
+        position="top-right"
         hideProgressBar={false}
         theme={theme}
       />

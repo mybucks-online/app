@@ -38,12 +38,11 @@ import media from "@mybucks/styles/media";
 
 import Logo from "./logo.png";
 
-const NarrowContainer = styled(Container)`
-  max-width: 42rem;
-  margin-top: 4rem;
+const SigninContainer = styled(Container)`
+  margin-top: 3rem;
 
   ${media.md`
-    margin-top: 0;
+    margin-top: 2rem;
   `}
 `;
 
@@ -201,15 +200,11 @@ const LegacyWalletCheckboxWrapper = styled.div`
 
 const TermsNotice = styled.p`
   text-align: left;
-  font-size: ${({ theme }) => theme.fontSize.xs};
+  font-size: ${({ theme }) => theme.fontSize.sm};
   font-weight: ${({ theme }) => theme.weights.regular};
   color: ${({ theme }) => theme.colors.textMuted};
   margin: 0;
   line-height: 1.45;
-
-  ${media.sm`
-    font-size: ${({ theme }) => theme.fontSize.sm};
-  `}
 
   a {
     font-size: inherit;
@@ -346,7 +341,6 @@ const SignIn = () => {
     setPassphrase(value);
     setShowPassphrase(true);
     navigator.clipboard.writeText(value);
-    toast("No recovery available. Back it up!");
   };
 
   const onRandomPin = () => {
@@ -354,7 +348,6 @@ const SignIn = () => {
     setPin(value);
     setShowPin(true);
     navigator.clipboard.writeText(value);
-    toast("No recovery available. Back it up!");
   };
 
   const onKeyDown = (e) => {
@@ -369,7 +362,7 @@ const SignIn = () => {
 
   return (
     <>
-      <NarrowContainer>
+      <SigninContainer>
         <LogoWrapper href="https://mybucks.online">
           <img src="/logo-48x48.png" alt="mybucks.online" />
           <LogoTitle>mybucks.online</LogoTitle>
@@ -501,7 +494,7 @@ const SignIn = () => {
           </Link>
           .
         </SecurityHint>
-      </NarrowContainer>
+      </SigninContainer>
 
       {import.meta.env.VITE_COMMIT_HASH && (
         <CommitHash data-commit={import.meta.env.VITE_COMMIT_HASH} />
