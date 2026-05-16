@@ -30,19 +30,28 @@ import {
   findNetworkByName,
   TEST_PASSPHRASE,
   TEST_PIN,
-  UNKNOWN_FACTS,
   WALLET_URL_PARAM,
 } from "@mybucks/lib/conf";
 import { clearQueryParams } from "@mybucks/lib/utils";
 import media from "@mybucks/styles/media";
-
-import Logo from "./logo.png";
 
 const SigninContainer = styled(Container)`
   margin-top: 3rem;
 
   ${media.md`
     margin-top: 2rem;
+  `}
+`;
+
+const LogoImage = styled.img`
+  width: calc(${({ theme }) => theme.sizes.x4l} * 1.2);
+  height: calc(${({ theme }) => theme.sizes.x4l} * 1.2);
+  object-fit: contain;
+  flex-shrink: 0;
+
+  ${media.sm`
+    width: ${({ theme }) => theme.sizes.x2l};
+    height: ${({ theme }) => theme.sizes.x2l};
   `}
 `;
 
@@ -53,18 +62,6 @@ const LogoWrapper = styled.a`
   gap: ${({ theme }) => theme.sizes.base};
   margin-top: 1rem;
   margin-bottom: ${({ theme }) => theme.sizes.xl};
-
-  img {
-    width: 3rem;
-    height: 3rem;
-  }
-
-  ${media.sm`
-    img {
-      width: 2.5rem;
-      height: 2.5rem;
-    }
-  `}
 `;
 
 const LogoTitle = styled.h2`
@@ -79,34 +76,31 @@ const LogoTitle = styled.h2`
   `}
 `;
 
+const PROGRESS_MODAL_SIZE = "10rem";
+
 const ProgressWrapper = styled.div`
-  background: ${({ theme }) => theme.colors.card};
+  box-sizing: border-box;
+  width: ${PROGRESS_MODAL_SIZE};
+  height: ${PROGRESS_MODAL_SIZE};
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: ${({ theme }) => theme.sizes.base};
-  padding: ${({ theme }) => `${theme.sizes.xl} ${theme.sizes.base}`};
+  padding: ${({ theme }) => theme.sizes.xl};
+  background: ${({ theme }) => theme.colors.card};
 
   progress {
-    max-width: 16rem;
+    width: 100%;
+    max-width: 100%;
   }
 `;
 
 const GreetingIcon = styled.img`
-  width: 4.5rem;
-  height: 4.5rem;
-`;
-
-const Notice = styled.p`
-  text-align: center;
-  max-width: 16rem;
-  font-size: ${({ theme }) => theme.fontSize.sm};
-  color: ${({ theme }) => theme.colors.textMuted};
-
-  ${media.sm`
-    font-size: ${({ theme }) => theme.fontSize.base};
-  `}
+  width: calc(${PROGRESS_MODAL_SIZE} * 0.4);
+  height: calc(${PROGRESS_MODAL_SIZE} * 0.4);
+  object-fit: contain;
+  flex-shrink: 0;
 `;
 
 const CredentialInputWrapper = styled.div`
@@ -273,11 +267,6 @@ const SignIn = () => {
     [passphrase, pin, disabled, passphraseStrength, pinStrength],
   );
 
-  const unknownFact = useMemo(
-    () => UNKNOWN_FACTS[Math.floor(progress / 20)],
-    [progress],
-  );
-
   useEffect(() => {
     const parseTokenAndSubmit = async () => {
       // get "secret" param from URL hash (#wallet=...)
@@ -364,7 +353,7 @@ const SignIn = () => {
     <>
       <SigninContainer>
         <LogoWrapper href="https://mybucks.online">
-          <img src="/logo-48x48.png" alt="mybucks.online" />
+          <LogoImage src="/logo-72x72.png" alt="mybucks.online" />
           <LogoTitle>mybucks.online</LogoTitle>
         </LogoWrapper>
 
@@ -500,10 +489,13 @@ const SignIn = () => {
         <CommitHash data-commit={import.meta.env.VITE_COMMIT_HASH} />
       )}
 
-      <Modal show={!!progress} width="20rem">
+      <Modal show={!!progress} width={PROGRESS_MODAL_SIZE}>
         <ProgressWrapper>
-          <GreetingIcon src={Logo} alt="Hi" loading="lazy" />
-          <Notice>{unknownFact}</Notice>
+          <GreetingIcon
+            src="/logo-72x72.png"
+            alt="mybucks.online"
+            loading="lazy"
+          />
           <Progress value={progress} max="100" />
         </ProgressWrapper>
       </Modal>

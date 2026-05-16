@@ -25,7 +25,7 @@ export const Container = styled.div`
   max-height: 100vh;
   overflow-y: auto;
   position: relative;
-  top: -10rem;
+  top: ${({ $centered }) => ($centered ? 0 : "-10rem")};
 `;
 
 export const CloseButton = styled.img`
@@ -42,6 +42,7 @@ const Modal = ({
   showCloseIcon = false,
   focusTrap = false,
   width,
+  centered = false,
 }) => {
   const modalNode = useRef(null);
   useOnClickOutside(modalNode, close);
@@ -64,7 +65,12 @@ const Modal = ({
   return (
     <FocusTrap active={focusTrap}>
       <Overlay>
-        <Container $width={width} className={className} ref={modalNode}>
+        <Container
+          $width={width}
+          $centered={centered}
+          className={className}
+          ref={modalNode}
+        >
           {showCloseIcon && <CloseButton src={CloseIcon} alt="close" />}
           {children}
         </Container>
