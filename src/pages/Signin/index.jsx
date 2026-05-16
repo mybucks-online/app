@@ -16,7 +16,7 @@ import styled from "styled-components";
 import zxcvbn from "zxcvbn";
 
 import Button from "@mybucks/components/Button";
-import { Box } from "@mybucks/components/Containers";
+import { Container } from "@mybucks/components/Containers";
 import Input from "@mybucks/components/Input";
 import { Label } from "@mybucks/components/Label";
 import Link from "@mybucks/components/Link";
@@ -30,23 +30,29 @@ import {
   findNetworkByName,
   TEST_PASSPHRASE,
   TEST_PIN,
-  UNKNOWN_FACTS,
   WALLET_URL_PARAM,
 } from "@mybucks/lib/conf";
 import { clearQueryParams } from "@mybucks/lib/utils";
 import media from "@mybucks/styles/media";
 
-import Logo from "./logo.png";
+const SigninContainer = styled(Container)`
+  margin-top: 3rem;
 
-const Container = styled.div`
-  max-width: 40.5rem;
-  margin: 0 auto;
-  margin-block: ${({ theme }) => `${theme.sizes.x5l} ${theme.sizes.x2l}`};
+  ${media.md`
+    margin-top: 2rem;
+  `}
+`;
 
-  @media (max-width: 696px) {
-    margin: 0 ${({ theme }) => theme.sizes.xl};
-    margin-block: ${({ theme }) => `${theme.sizes.x5l} ${theme.sizes.x2l}`};
-  }
+const LogoImage = styled.img`
+  width: calc(${({ theme }) => theme.sizes.x4l} * 1.2);
+  height: calc(${({ theme }) => theme.sizes.x4l} * 1.2);
+  object-fit: contain;
+  flex-shrink: 0;
+
+  ${media.sm`
+    width: ${({ theme }) => theme.sizes.x2l};
+    height: ${({ theme }) => theme.sizes.x2l};
+  `}
 `;
 
 const LogoWrapper = styled.a`
@@ -54,55 +60,47 @@ const LogoWrapper = styled.a`
   justify-content: center;
   align-items: center;
   gap: ${({ theme }) => theme.sizes.base};
+  margin-top: 1rem;
   margin-bottom: ${({ theme }) => theme.sizes.xl};
-
-  img {
-    width: 3rem;
-    height: 3rem;
-  }
-
-  ${media.sm`
-    img {
-      width: 2.5rem;
-      height: 2.5rem;
-    }
-  `}
 `;
 
-const LogoTitle = styled.h3`
-  font-size: ${({ theme }) => theme.sizes.xl};
-  font-weight: ${({ theme }) => theme.weights.highlight};
-  color: ${({ theme }) => theme.colors.gray400};
+const LogoTitle = styled.h2`
+  font-size: ${({ theme }) => theme.fontSize.x4l};
+  font-weight: ${({ theme }) => theme.weights.bold};
+  color: ${({ theme }) => theme.colors.textStrong};
   line-height: 150%;
+  margin: 0;
 
   ${media.sm`
-    font-size: ${({ theme }) => theme.sizes.xl};
+    font-size: ${({ theme }) => theme.fontSize.x2l};
   `}
 `;
+
+const PROGRESS_MODAL_SIZE = "10rem";
 
 const ProgressWrapper = styled.div`
-  background: ${({ theme }) => theme.colors.gray25};
+  box-sizing: border-box;
+  width: ${PROGRESS_MODAL_SIZE};
+  height: ${PROGRESS_MODAL_SIZE};
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: ${({ theme }) => theme.sizes.base};
-  padding: ${({ theme }) => `${theme.sizes.xl} ${theme.sizes.base}`};
+  padding: ${({ theme }) => theme.sizes.xl};
+  background: ${({ theme }) => theme.colors.card};
 
   progress {
-    max-width: 16rem;
+    width: 100%;
+    max-width: 100%;
   }
 `;
 
 const GreetingIcon = styled.img`
-  width: 4.5rem;
-  height: 4.5rem;
-`;
-
-const Notice = styled.p`
-  text-align: center;
-  max-width: 16rem;
-  color: ${({ theme }) => theme.colors.gray200};
+  width: calc(${PROGRESS_MODAL_SIZE} * 0.4);
+  height: calc(${PROGRESS_MODAL_SIZE} * 0.4);
+  object-fit: contain;
+  flex-shrink: 0;
 `;
 
 const CredentialInputWrapper = styled.div`
@@ -159,25 +157,34 @@ const ToggleButton = styled.button`
   }
 `;
 
+const SigninLegalSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.sizes.base};
+  width: 100%;
+`;
+
 const LegacyWalletCheckboxWrapper = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: ${({ theme }) => theme.sizes.xs};
-  margin-bottom: ${({ theme }) => theme.sizes.base};
 
   input[type="checkbox"] {
     width: 1rem;
     height: 1rem;
+    margin-top: 0.2rem;
+    flex-shrink: 0;
     accent-color: ${({ theme }) => theme.colors.primary};
     cursor: pointer;
   }
 
   label {
-    font-size: ${({ theme }) => theme.sizes.xs};
+    font-size: ${({ theme }) => theme.fontSize.sm};
     font-weight: ${({ theme }) => theme.weights.regular};
-    color: ${({ theme }) => theme.colors.gray200};
+    color: ${({ theme }) => theme.colors.textMuted};
     cursor: pointer;
     user-select: none;
+    line-height: 1.45;
   }
 
   a {
@@ -187,10 +194,11 @@ const LegacyWalletCheckboxWrapper = styled.div`
 
 const TermsNotice = styled.p`
   text-align: left;
-  font-size: ${({ theme }) => theme.sizes.xs};
+  font-size: ${({ theme }) => theme.fontSize.sm};
   font-weight: ${({ theme }) => theme.weights.regular};
-  color: ${({ theme }) => theme.colors.gray200};
-  margin-bottom: ${({ theme }) => theme.sizes.xl};
+  color: ${({ theme }) => theme.colors.textMuted};
+  margin: 0;
+  line-height: 1.45;
 
   a {
     font-size: inherit;
@@ -203,10 +211,16 @@ const CommitHash = styled.span`
 
 const SecurityHint = styled.p`
   text-align: center;
-  font-size: ${({ theme }) => theme.sizes.xs};
+  font-size: ${({ theme }) => theme.fontSize.xs};
   font-weight: ${({ theme }) => theme.weights.regular};
-  color: ${({ theme }) => theme.colors.gray200};
-  margin-top: ${({ theme }) => theme.sizes.xl};
+  color: ${({ theme }) => theme.colors.textMuted};
+  margin: 0;
+  margin-top: ${({ theme }) => theme.sizes.x2l};
+  line-height: 1.45;
+
+  ${media.sm`
+    font-size: ${({ theme }) => theme.fontSize.sm};
+  `}
 
   a {
     font-size: inherit;
@@ -251,11 +265,6 @@ const SignIn = () => {
       passphraseStrength < PASSPHRASE_MIN_ZXCVBN_SCORE ||
       pinStrength < PIN_MIN_ZXCVBN_SCORE,
     [passphrase, pin, disabled, passphraseStrength, pinStrength],
-  );
-
-  const unknownFact = useMemo(
-    () => UNKNOWN_FACTS[Math.floor(progress / 20)],
-    [progress],
   );
 
   useEffect(() => {
@@ -321,7 +330,6 @@ const SignIn = () => {
     setPassphrase(value);
     setShowPassphrase(true);
     navigator.clipboard.writeText(value);
-    toast("No recovery available. Back it up!");
   };
 
   const onRandomPin = () => {
@@ -329,7 +337,6 @@ const SignIn = () => {
     setPin(value);
     setShowPin(true);
     navigator.clipboard.writeText(value);
-    toast("No recovery available. Back it up!");
   };
 
   const onKeyDown = (e) => {
@@ -344,89 +351,89 @@ const SignIn = () => {
 
   return (
     <>
-      <Container>
-        <Box>
-          <LogoWrapper href="https://mybucks.online">
-            <img src="/logo-48x48.png" alt="mybucks.online" />
-            <LogoTitle>mybucks.online</LogoTitle>
-          </LogoWrapper>
+      <SigninContainer>
+        <LogoWrapper href="https://mybucks.online">
+          <LogoImage src="/logo-72x72.png" alt="mybucks.online" />
+          <LogoTitle>mybucks.online</LogoTitle>
+        </LogoWrapper>
 
-          <div>
-            <Label htmlFor="passphrase">Passphrase</Label>
-            <CredentialInputWrapper>
-              <CompactInput
-                id="passphrase"
-                type={showPassphrase ? "text" : "password"}
-                placeholder="e.g. My-1st-car-was-a-red-Ford-2005!"
-                disabled={disabled}
-                value={passphrase}
-                maxLength={PASSPHRASE_MAX_LENGTH}
-                onChange={(e) => setPassphrase(e.target.value)}
-                onKeyDown={onKeyDown}
-                onFocus={() => setPassphraseFocused(true)}
-                onBlur={() => setPassphraseFocused(false)}
+        <div>
+          <Label htmlFor="passphrase">Passphrase</Label>
+          <CredentialInputWrapper>
+            <CompactInput
+              id="passphrase"
+              type={showPassphrase ? "text" : "password"}
+              placeholder="e.g. My-1st-car-was-a-red-Ford-2005!"
+              disabled={disabled}
+              value={passphrase}
+              maxLength={PASSPHRASE_MAX_LENGTH}
+              onChange={(e) => setPassphrase(e.target.value)}
+              onKeyDown={onKeyDown}
+              onFocus={() => setPassphraseFocused(true)}
+              onBlur={() => setPassphraseFocused(false)}
+            />
+            <RefreshButton
+              type="button"
+              disabled={disabled}
+              aria-label="Generate passphrase"
+              onClick={onRandomPassphrase}
+            >
+              <RefreshIconButton focused={passphraseFocused} />
+            </RefreshButton>
+            <ToggleButton
+              type="button"
+              disabled={disabled}
+              onClick={() => setShowPassphrase(!showPassphrase)}
+              aria-label={
+                showPassphrase ? "Hide passphrase" : "Show passphrase"
+              }
+            >
+              <PasswordToggleIcon
+                show={showPassphrase}
+                focused={passphraseFocused}
               />
-              <RefreshButton
-                type="button"
-                disabled={disabled}
-                aria-label="Generate passphrase"
-                onClick={onRandomPassphrase}
-              >
-                <RefreshIconButton focused={passphraseFocused} />
-              </RefreshButton>
-              <ToggleButton
-                type="button"
-                disabled={disabled}
-                onClick={() => setShowPassphrase(!showPassphrase)}
-                aria-label={
-                  showPassphrase ? "Hide passphrase" : "Show passphrase"
-                }
-              >
-                <PasswordToggleIcon
-                  show={showPassphrase}
-                  focused={passphraseFocused}
-                />
-              </ToggleButton>
-            </CredentialInputWrapper>
-            <StrengthMeter level={passphraseStrength} maxLevel={4} />
-          </div>
+            </ToggleButton>
+          </CredentialInputWrapper>
+          <StrengthMeter level={passphraseStrength} maxLevel={4} />
+        </div>
 
-          <div>
-            <Label htmlFor="pin">PIN</Label>
-            <CredentialInputWrapper>
-              <CompactInput
-                id="pin"
-                type={showPin ? "text" : "password"}
-                placeholder="e.g. 202w875"
-                disabled={disabled}
-                value={pin}
-                maxLength={PIN_MAX_LENGTH}
-                onChange={(e) => setPin(e.target.value)}
-                onKeyDown={onKeyDown}
-                autoComplete="off"
-                onFocus={() => setPinFocused(true)}
-                onBlur={() => setPinFocused(false)}
-              />
-              <RefreshButton
-                type="button"
-                disabled={disabled}
-                aria-label="Generate PIN"
-                onClick={onRandomPin}
-              >
-                <RefreshIconButton focused={pinFocused} />
-              </RefreshButton>
-              <ToggleButton
-                type="button"
-                disabled={disabled}
-                onClick={() => setShowPin(!showPin)}
-                aria-label={showPin ? "Hide PIN" : "Show PIN"}
-              >
-                <PasswordToggleIcon show={showPin} focused={pinFocused} />
-              </ToggleButton>
-            </CredentialInputWrapper>
-            <StrengthMeter level={pinStrength} maxLevel={2} />
-          </div>
+        <div>
+          <Label htmlFor="pin">PIN</Label>
+          <CredentialInputWrapper>
+            <CompactInput
+              id="pin"
+              type={showPin ? "text" : "password"}
+              placeholder="e.g. 202w875"
+              disabled={disabled}
+              value={pin}
+              maxLength={PIN_MAX_LENGTH}
+              onChange={(e) => setPin(e.target.value)}
+              onKeyDown={onKeyDown}
+              autoComplete="off"
+              onFocus={() => setPinFocused(true)}
+              onBlur={() => setPinFocused(false)}
+            />
+            <RefreshButton
+              type="button"
+              disabled={disabled}
+              aria-label="Generate PIN"
+              onClick={onRandomPin}
+            >
+              <RefreshIconButton focused={pinFocused} />
+            </RefreshButton>
+            <ToggleButton
+              type="button"
+              disabled={disabled}
+              onClick={() => setShowPin(!showPin)}
+              aria-label={showPin ? "Hide PIN" : "Show PIN"}
+            >
+              <PasswordToggleIcon show={showPin} focused={pinFocused} />
+            </ToggleButton>
+          </CredentialInputWrapper>
+          <StrengthMeter level={pinStrength} maxLevel={2} />
+        </div>
 
+        <SigninLegalSection>
           <LegacyWalletCheckboxWrapper>
             <input
               type="checkbox"
@@ -459,33 +466,36 @@ const SignIn = () => {
             </Link>
             .
           </TermsNotice>
+        </SigninLegalSection>
 
-          <Button onClick={onSubmit} disabled={hasInvalidInput} $size="block">
-            Open
-          </Button>
+        <Button onClick={onSubmit} disabled={hasInvalidInput} $size="block">
+          Open
+        </Button>
 
-          <SecurityHint>
-            To stay safe, review our{" "}
-            <Link
-              href="https://docs.mybucks.online/user-guide/security-notice"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              security notice
-            </Link>
-            .
-          </SecurityHint>
-        </Box>
-      </Container>
+        <SecurityHint>
+          To stay safe, review our{" "}
+          <Link
+            href="https://docs.mybucks.online/user-guide/security-notice"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            security notice
+          </Link>
+          .
+        </SecurityHint>
+      </SigninContainer>
 
       {import.meta.env.VITE_COMMIT_HASH && (
         <CommitHash data-commit={import.meta.env.VITE_COMMIT_HASH} />
       )}
 
-      <Modal show={!!progress} width="20rem">
+      <Modal show={!!progress} width={PROGRESS_MODAL_SIZE}>
         <ProgressWrapper>
-          <GreetingIcon src={Logo} alt="Hi" loading="lazy" />
-          <Notice>{unknownFact}</Notice>
+          <GreetingIcon
+            src="/logo-72x72.png"
+            alt="mybucks.online"
+            loading="lazy"
+          />
           <Progress value={progress} max="100" />
         </ProgressWrapper>
       </Modal>

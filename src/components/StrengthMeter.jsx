@@ -6,7 +6,7 @@ const Track = styled.div`
   height: 4px;
   gap: 2px;
   border-radius: 2px;
-  background: ${({ theme }) => theme.colors.gray100};
+  background: ${({ theme }) => theme.colors.disabled};
   padding: 0 1px;
   margin-bottom: ${({ theme }) => theme.sizes.xs};
   box-sizing: border-box;

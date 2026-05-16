@@ -36,14 +36,11 @@ It fully runs on your **browser side** without using any storage or invoking any
 
 (This process is the same for both initial opening and all subsequent uses.)
 
-![Sign-in](/screenshots/1.sign-in.png)
-![Sign-in](/screenshots/1.sign-in-valid.png)
+![Sign-in](/screenshots/1-signin.png)
+![Home](/screenshots/2-home.png)
+![Send Token](/screenshots/3-send.png)
 
-<p align="center">
-<img src="screenshots/2.mobile-signin.png" width="32%" alt="Sign-in">
-<img src="screenshots/3.mobile-home.png" width="32%" alt="Dashboard">
-<img src="screenshots/4.mobile-transfer.png" width="32%" alt="Transfer">
-</p>
+![Mobile Sign-in](/screenshots/4-mobile.png)
 
 ## How it works?
 The **Scrypt** and **Keccak256** hash functions turn your credentials into a private key. The Scrypt KDF(Key Derivation Function) requires significant memory to compute, making brute-force attacks computationally expensive and impractical.
@@ -153,10 +150,10 @@ The project is deployed via GitHub Pages and GitHub Actions. You can verify the 
 
 ## Quick Links
 
-- App: https://app.mybucks.online
-- Website: https://mybucks.online
-- Docs: https://docs.mybucks.online
-- Github: https://github.com/mybucks-online
-- X: https://x.com/mybucks_online
-- Telegram: https://t.me/mybucks_online
-- Audit report: [Mybucks_online_Secure3_Audit_Report.pdf](./Mybucks_online_Secure3_Audit_Report.pdf)
+- [App](https://app.mybucks.online)
+- [Website](https://mybucks.online)
+- [Whitepaper](https://docs.mybucks.online/more/whitepaper)
+- [Docs](https://docs.mybucks.online)
+- [Github](https://github.com/mybucks-online)
+- [X](https://x.com/mybucks_online)
+- [Telegram](https://t.me/mybucks_online)

@@ -11,13 +11,13 @@ const Progress = styled.progress`
     border: none;
     height: 6px;
     border-radius: 3px;
-    background-color: ${({ theme }) => theme.colors.gray100};
+    background-color: ${({ theme }) => theme.colors.disabled};
   }
   &::-webkit-progress-value {
     border: none;
     height: 6px;
     border-radius: 3px;
-    background-color: ${({ theme }) => theme.colors.gray400};
+    background-color: ${({ theme }) => theme.colors.textStrong};
   }
 `;
 

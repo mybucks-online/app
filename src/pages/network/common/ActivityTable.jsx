@@ -4,15 +4,10 @@ import styled from "styled-components";
 import toFlexible from "toflexible";
 
 import { CopyIcon } from "@mybucks/assets/icons";
-import { Box as BaseBox } from "@mybucks/components/Containers";
 import Link from "@mybucks/components/Link";
 import { H3 } from "@mybucks/components/Texts";
 import { truncate } from "@mybucks/lib/utils";
 import media from "@mybucks/styles/media";
-
-const Box = styled(BaseBox)`
-  width: 100%;
-`;
 
 const TableWrapper = styled.table`
   width: 100%;
@@ -36,7 +31,7 @@ const AmountTd = styled.td`
 `;
 
 const DateTimeTd = styled.td`
-  color: ${({ theme }) => theme.colors.gray400};
+  color: ${({ theme }) => theme.colors.textStrong};
 `;
 
 const AddressTd = styled.td`
@@ -69,7 +64,7 @@ const CopyButton = styled.img.attrs({
 `;
 
 const ActivityTable = ({ account, history }) => (
-  <Box>
+  <div style={{ alignSelf: "stretch" }}>
     <H3>Recent transactions</H3>
 
     <TableWrapper>
@@ -119,7 +114,7 @@ const ActivityTable = ({ account, history }) => (
           ))}
       </tbody>
     </TableWrapper>
-  </Box>
+  </div>
 );
 
 export default ActivityTable;

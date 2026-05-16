@@ -14,7 +14,7 @@ const CheckboxLabel = styled.label`
   font-size: ${({ theme }) => theme.sizes.xs};
   font-weight: ${({ theme }) => theme.weights.regular};
   line-height: 120%;
-  color: ${({ theme }) => theme.colors.gray400};
+  color: ${({ theme }) => theme.colors.textStrong};
   user-select: none;
 `;
 

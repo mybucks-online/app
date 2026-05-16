@@ -7,18 +7,12 @@ import styled from "styled-components";
 
 import BaseButton from "@mybucks/components/Button";
 import ConfirmPinModal from "@mybucks/components/ConfirmPinModal";
-import { Box as BaseBox, Container } from "@mybucks/components/Containers";
+import { Container, Stack } from "@mybucks/components/Containers";
 import Link from "@mybucks/components/Link";
 import { BackButton } from "@mybucks/components/NavButtons";
 import { H3 } from "@mybucks/components/Texts";
 import { StoreContext } from "@mybucks/contexts/Store";
 import { findNetworkNameByChainId } from "@mybucks/lib/conf";
-
-const Box = styled(BaseBox)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
 
 const NavsWrapper = styled.div`
   width: 100%;
@@ -38,13 +32,13 @@ const Address = styled.p`
   line-height: 140%;
   margin-top: ${({ theme }) => theme.sizes.xs};
   margin-bottom: ${({ theme }) => theme.sizes.x2l};
-  color: ${({ theme }) => theme.colors.gray200};
+  color: ${({ theme }) => theme.colors.textMuted};
   overflow-wrap: anywhere;
 `;
 
 const Button = styled(BaseButton)`
   min-width: 12rem;
-  margin-bottom: ${({ theme }) => theme.sizes.x2l};
+  margin-bottom: ${({ theme }) => theme.sizes.xl};
 `;
 
 const QRCodeWrapper = styled.div`
@@ -62,7 +56,7 @@ const GiftingLinkWarning = styled.p`
   text-align: center;
   font-size: ${({ theme }) => theme.sizes.xs};
   font-weight: ${({ theme }) => theme.weights.regular};
-  color: ${({ theme }) => theme.colors.gray200};
+  color: ${({ theme }) => theme.colors.textMuted};
   line-height: 140%;
   margin: 0 0 ${({ theme }) => theme.sizes.x2l};
 
@@ -134,7 +128,7 @@ const Menu = () => {
           <BackButton onClick={() => openMenu(false)} />
         </NavsWrapper>
 
-        <Box>
+        <Stack>
           <Title>Account Details</Title>
           {legacy && <LegacyBadge>Legacy wallet</LegacyBadge>}
           <QRCodeWrapper>
@@ -164,7 +158,7 @@ const Menu = () => {
               Learn more
             </Link>
           </GiftingLinkWarning>
-        </Box>
+        </Stack>
       </Container>
 
       <ConfirmPinModal

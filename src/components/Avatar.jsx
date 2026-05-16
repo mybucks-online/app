@@ -10,7 +10,7 @@ const LetterWrap = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: ${({ theme }) => theme.colors.gray25};
+  color: ${({ theme }) => theme.colors.textInverse};
   width: 51px;
   height: 51px;
   border-radius: 50%;
