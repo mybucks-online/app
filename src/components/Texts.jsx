@@ -11,13 +11,13 @@ export const H1 = styled.h1`
 
 export const H3 = styled.h3`
   color: ${({ theme }) => theme.colors.textStrong};
-  font-size: ${({ theme }) => theme.sizes.xl};
+  font-size: ${({ theme }) => theme.fontSize.x2l};
   font-weight: ${({ theme }) => theme.weights.bold};
   line-height: 150%;
   margin-bottom: ${({ theme }) => theme.sizes.base};
 
   ${media.sm`
-    font-size: ${({ theme }) => theme.sizes.base};
+    font-size: ${({ theme }) => theme.fontSize.xl};
     margin-bottom: ${({ theme }) => theme.sizes.xl};
-    `}
+  `}
 `;
