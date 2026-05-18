@@ -24,16 +24,27 @@ const Title = styled(H3)`
   margin-bottom: ${({ theme }) => theme.sizes.sm};
 `;
 
-const Address = styled.p`
+const AddressButton = styled.button`
+  display: block;
   width: 100%;
   text-align: center;
   font-size: ${({ theme }) => theme.sizes.sm};
-  font-weight: ${({ theme }) => theme.weights.regular};
+  font-weight: ${({ theme }) => theme.weights.highlight};
+  font-family: inherit;
   line-height: 140%;
-  margin-top: ${({ theme }) => theme.sizes.xs};
-  margin-bottom: ${({ theme }) => theme.sizes.x2l};
-  color: ${({ theme }) => theme.colors.textMuted};
+  margin: ${({ theme }) => `${theme.sizes.xs} 0 ${theme.sizes.x2l}`};
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: ${({ theme }) => theme.colors.primary};
   overflow-wrap: anywhere;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+
+  &:hover {
+    opacity: 0.85;
+  }
 `;
 
 const Button = styled(BaseButton)`
@@ -83,7 +94,7 @@ const Menu = () => {
   const { openMenu, account, passphrase, pin, network, chainId, legacy } =
     useContext(StoreContext);
 
-  const backupAddress = () => {
+  const copyAddress = () => {
     copy(account.address);
     toast("Address copied into clipboard.");
   };
@@ -134,9 +145,13 @@ const Menu = () => {
           <QRCodeWrapper>
             <QRCodeSVG value={network + ":" + account.address} />
           </QRCodeWrapper>
-          <Address>{account.address}</Address>
-
-          <Button onClick={backupAddress}>Address</Button>
+          <AddressButton
+            type="button"
+            onClick={copyAddress}
+            aria-label="Copy address"
+          >
+            {account.address}
+          </AddressButton>
 
           <Button onClick={onClickCredentials} $variant="danger">
             Credentials

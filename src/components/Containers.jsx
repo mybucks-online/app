@@ -39,7 +39,7 @@ export const Container = styled.div`
   `}
 
   ${media.sm`
-    padding: ${({ theme }) => theme.sizes.base};
+    padding: ${({ theme }) => `${theme.sizes.x2l} ${theme.sizes.base}`};
     margin-bottom: ${({ theme }) => theme.sizes.x3l};
   `}
 
