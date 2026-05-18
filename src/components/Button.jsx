@@ -23,8 +23,8 @@ const Button = styled.button`
             padding: ${({ theme }) => `${theme.sizes.base} ${theme.sizes.x2l}`};
 
             ${media.sm`
-              font-size: ${({ theme }) => theme.fontSize.lg};
-              padding: ${({ theme }) => `${theme.sizes.lg} ${theme.sizes.x2l}`};
+              font-size: ${({ theme }) => theme.fontSize.sm};
+              padding: ${({ theme }) => `${theme.sizes.sm} ${theme.sizes.xl}`};
             `}
           `
         : css`
