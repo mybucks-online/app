@@ -4,6 +4,7 @@ import { Contract, ethers } from "ethers";
 
 import { EVM_NETWORKS, NETWORK } from "@mybucks/lib/conf";
 import IERC20 from "@mybucks/lib/erc20.json";
+import { isWhitelistedToken } from "@mybucks/lib/tokenWhitelist";
 import {
   getErc20TokenHistory,
   getNativeAndErc20TokenBalances,
@@ -68,9 +69,14 @@ class EvmAccount {
         const isNative = token.native_token || false;
         if (isNative) return true;
 
-        return defaultTokensList.find(
-          ({ address }) =>
-            address.toLowerCase() === token.token_address.toLowerCase(),
+        const tokenAddress = token.token_address;
+        return (
+          isWhitelistedToken(this.chainId, tokenAddress) ||
+          defaultTokensList.some(
+            ({ address, chainId }) =>
+              chainId === this.chainId &&
+              address.toLowerCase() === tokenAddress.toLowerCase(),
+          )
         );
       })
       .map((token) => {
