@@ -2,7 +2,7 @@
   "name": "mybucks-online",
   "description": "Web app for Mybucks.online — a seedless wallet and gifting wallet: disposable gift wallets, fund and share via secure 1-click URL. Browser-only (no servers, database, or install). For airdrops, giveaways, campaigns, and instant onboarding.",
   "private": true,
-  "version": "2.4.2",
+  "version": "2.4.3",
   "type": "module",
   "keywords": [
     "mybucks",
@@ -50,7 +50,7 @@
   },
   "homepage": "https://mybucks.online",
   "resolutions": {
-    "**/axios": "1.15.2"
+    "**/axios": "1.16.0"
   },
   "scripts": {
     "dev": "vite",
@@ -62,7 +62,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@mybucks.online/core": "^3.0.1",
+    "@mybucks.online/core": "^3.0.3",
     "@uniswap/default-token-list": "^13.5.0",
     "buffer": "^6.0.3",
     "clipboard-copy": "^4.0.1",
