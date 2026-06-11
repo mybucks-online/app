@@ -63,7 +63,7 @@
   },
   "dependencies": {
     "@mybucks.online/core": "^3.0.4",
-    "@uniswap/default-token-list": "^13.5.0",
+    "@uniswap/default-token-list": "^22.0.0",
     "buffer": "^6.0.3",
     "clipboard-copy": "^4.0.1",
     "date-fns": "^4.1.0",
