@@ -73,6 +73,15 @@ export const EVM_NETWORKS = [
       import.meta.env.VITE_INFURA_API_KEY,
     scanner: "https://basescan.org",
   },
+  {
+    chainId: 143,
+    name: "monad",
+    label: "Monad",
+    provider:
+      "https://monad-mainnet.infura.io/v3/" +
+      import.meta.env.VITE_INFURA_API_KEY,
+    scanner: "https://monadscan.com",
+  },
 ];
 
 export const findNetworkByName = (networkName) => {

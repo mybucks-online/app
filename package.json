@@ -62,7 +62,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@mybucks.online/core": "^3.0.3",
+    "@mybucks.online/core": "^3.0.4",
     "@uniswap/default-token-list": "^13.5.0",
     "buffer": "^6.0.3",
     "clipboard-copy": "^4.0.1",
