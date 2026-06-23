@@ -36,10 +36,10 @@ export default defineConfig({
         "pwa/screenshot-narrow.png",
       ],
       manifest: {
-        name: "Mybucks.online | Seedless, Disposable Crypto Wallet with 1-Click Gifting",
+        name: "Mybucks.online | Digital Cash Envelope — Seedless Crypto Gifting",
         short_name: "Mybucks.online",
         description:
-          "Mybucks.online is a seedless wallet and gifting wallet: create a disposable gift wallet, fund it, and share a secure 1-click URL. Browser-only—no servers, database, or install. Ideal for airdrops, giveaways, campaigns, and instant onboarding.",
+          "Digital cash envelope for crypto gifting: create or claim a seedless, disposable crypto wallet, fund it, and share a 1-click URL. Browser-only—no servers or install.",
         start_url: "/",
         scope: "/",
         display: "standalone",
