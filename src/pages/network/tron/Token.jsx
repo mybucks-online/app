@@ -126,22 +126,28 @@ const InvalidTransfer = styled.div`
   border-radius: ${({ theme }) => theme.sizes.x3s};
   color: ${({ theme }) => theme.colors.error};
   border: 1px solid ${({ theme }) => theme.colors.error};
-  margin-bottom: ${({ theme }) => theme.sizes.x2l};
   font-weight: ${({ theme }) => theme.weights.base};
   font-size: ${({ theme }) => theme.sizes.xs};
   line-height: 180%;
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.sizes.x2s};
-
-  ${media.sm`
-    margin-bottom: ${({ theme }) => theme.sizes.xl};
-  `}
 `;
 
 const EstimatedGasFee = styled(InvalidTransfer)`
   color: ${({ theme }) => theme.colors.success};
   border: 1px solid ${({ theme }) => theme.colors.success};
+`;
+
+const Alerts = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.sizes.x2s};
+  margin-bottom: ${({ theme }) => theme.sizes.x2l};
+
+  ${media.sm`
+    margin-bottom: ${({ theme }) => theme.sizes.xl};
+  `}
 `;
 
 const Submit = styled(Button)`
@@ -207,11 +213,6 @@ const Token = () => {
     try {
       const isActivated = await account.isActivated(recipient);
       setRecipientActivated(isActivated);
-      // trc20 can't be transferred to inactivated account
-      if (!token.native && !isActivated) {
-        setHasErrorInput(true);
-        return;
-      }
 
       const txData = await account.populateTransferToken(
         token.native ? "" : selectedTokenAddress,
@@ -270,6 +271,19 @@ const Token = () => {
       />
     );
   }
+
+  const showInactiveWarning =
+    !invalidRecipientAddress && !recipientActivated && !token.native;
+  const showGasEstimate =
+    !invalidRecipientAddress &&
+    !hasErrorInput &&
+    (bandwidthEstimation > 0 || energyEstimation > 0);
+  const showInvalidTransfer = !invalidRecipientAddress && hasErrorInput;
+  const hasAlerts =
+    invalidRecipientAddress ||
+    showInactiveWarning ||
+    showInvalidTransfer ||
+    showGasEstimate;
 
   return (
     <TokenLayout>
@@ -342,39 +356,48 @@ const Token = () => {
           <MaxButton onClick={() => setAmount(token.balance)}>Max</MaxButton>
         </AmountWrapper>
 
-        {invalidRecipientAddress ? (
-          <InvalidTransfer>
-            <img src={InfoRedIcon} />
-            <span>Invalid address</span>
-          </InvalidTransfer>
-        ) : !recipientActivated && !token.native ? (
-          <InvalidTransfer>
-            <img src={InfoRedIcon} />
-            <span>
-              Recipient is not activated.{" "}
-              <ErrorRefLink
-                href="https://developers.tron.network/docs/account#account-activation"
-                target="_blank"
-              >
-                Learn More.
-              </ErrorRefLink>
-            </span>
-          </InvalidTransfer>
-        ) : hasErrorInput ? (
-          <InvalidTransfer>
-            <img src={InfoRedIcon} />
-            <span>Invalid transfer</span>
-          </InvalidTransfer>
-        ) : bandwidthEstimation || energyEstimation ? (
-          <EstimatedGasFee>
-            <img src={InfoGreenIcon} />
-            <span>
-              Estimated consumption: {bandwidthEstimation} Bandwidth{" "}
-              {energyEstimation > 0 ? `+ ${energyEstimation} Energy` : ""}
-            </span>
-          </EstimatedGasFee>
-        ) : (
-          <></>
+        {hasAlerts && (
+          <Alerts>
+            {invalidRecipientAddress && (
+              <InvalidTransfer>
+                <img src={InfoRedIcon} />
+                <span>Invalid address</span>
+              </InvalidTransfer>
+            )}
+
+            {showInactiveWarning && (
+              <InvalidTransfer>
+                <img src={InfoRedIcon} />
+                <span>
+                  Recipient is not activated. You will be charged account
+                  creation fee.{" "}
+                  <ErrorRefLink
+                    href="https://developers.tron.network/docs/account#account-activation"
+                    target="_blank"
+                  >
+                    Learn More.
+                  </ErrorRefLink>
+                </span>
+              </InvalidTransfer>
+            )}
+
+            {showInvalidTransfer && (
+              <InvalidTransfer>
+                <img src={InfoRedIcon} />
+                <span>Invalid transfer</span>
+              </InvalidTransfer>
+            )}
+
+            {showGasEstimate && (
+              <EstimatedGasFee>
+                <img src={InfoGreenIcon} />
+                <span>
+                  Estimated consumption: {bandwidthEstimation} Bandwidth{" "}
+                  {energyEstimation > 0 ? `+ ${energyEstimation} Energy` : ""}
+                </span>
+              </EstimatedGasFee>
+            )}
+          </Alerts>
         )}
 
         <Submit
