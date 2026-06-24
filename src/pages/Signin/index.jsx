@@ -363,7 +363,7 @@ const SignIn = () => {
             <CompactInput
               id="passphrase"
               type={showPassphrase ? "text" : "password"}
-              placeholder="e.g. My-1st-car-was-a-red-Ford-2005!"
+              placeholder="e.g. kQGe-oTFY-m/1*-Jmhq"
               disabled={disabled}
               value={passphrase}
               maxLength={PASSPHRASE_MAX_LENGTH}
