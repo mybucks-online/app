@@ -207,11 +207,6 @@ const Token = () => {
     try {
       const isActivated = await account.isActivated(recipient);
       setRecipientActivated(isActivated);
-      // trc20 can't be transferred to inactivated account
-      if (!token.native && !isActivated) {
-        setHasErrorInput(true);
-        return;
-      }
 
       const txData = await account.populateTransferToken(
         token.native ? "" : selectedTokenAddress,
@@ -342,16 +337,19 @@ const Token = () => {
           <MaxButton onClick={() => setAmount(token.balance)}>Max</MaxButton>
         </AmountWrapper>
 
-        {invalidRecipientAddress ? (
+        {invalidRecipientAddress && (
           <InvalidTransfer>
             <img src={InfoRedIcon} />
             <span>Invalid address</span>
           </InvalidTransfer>
-        ) : !recipientActivated && !token.native ? (
+        )}
+
+        {!invalidRecipientAddress && !recipientActivated && !token.native && (
           <InvalidTransfer>
             <img src={InfoRedIcon} />
             <span>
-              Recipient is not activated.{" "}
+              Recipient is not activated. You will be charged account creation
+              fee.{" "}
               <ErrorRefLink
                 href="https://developers.tron.network/docs/account#account-activation"
                 target="_blank"
@@ -360,22 +358,23 @@ const Token = () => {
               </ErrorRefLink>
             </span>
           </InvalidTransfer>
-        ) : hasErrorInput ? (
-          <InvalidTransfer>
-            <img src={InfoRedIcon} />
-            <span>Invalid transfer</span>
-          </InvalidTransfer>
-        ) : bandwidthEstimation || energyEstimation ? (
-          <EstimatedGasFee>
-            <img src={InfoGreenIcon} />
-            <span>
-              Estimated consumption: {bandwidthEstimation} Bandwidth{" "}
-              {energyEstimation > 0 ? `+ ${energyEstimation} Energy` : ""}
-            </span>
-          </EstimatedGasFee>
-        ) : (
-          <></>
         )}
+
+        {!invalidRecipientAddress &&
+          (hasErrorInput ? (
+            <InvalidTransfer>
+              <img src={InfoRedIcon} />
+              <span>Invalid transfer</span>
+            </InvalidTransfer>
+          ) : bandwidthEstimation || energyEstimation ? (
+            <EstimatedGasFee>
+              <img src={InfoGreenIcon} />
+              <span>
+                Estimated consumption: {bandwidthEstimation} Bandwidth{" "}
+                {energyEstimation > 0 ? `+ ${energyEstimation} Energy` : ""}
+              </span>
+            </EstimatedGasFee>
+          ) : null)}
 
         <Submit
           onClick={() => setConfirming(true)}
