@@ -17,6 +17,7 @@ export const EVM_NETWORKS = [
     chainId: 1,
     name: "ethereum",
     label: "Ethereum",
+    nativeLogoURI: "/assets/icons/ethereum/0x.png",
     provider:
       "https://mainnet.infura.io/v3/" + import.meta.env.VITE_INFURA_API_KEY,
     scanner: "https://etherscan.io",
@@ -25,6 +26,7 @@ export const EVM_NETWORKS = [
     chainId: 137,
     name: "polygon",
     label: "Polygon",
+    nativeLogoURI: "/assets/icons/polygon/0x.png",
     provider:
       "https://polygon-mainnet.infura.io/v3/" +
       import.meta.env.VITE_INFURA_API_KEY,
@@ -34,6 +36,7 @@ export const EVM_NETWORKS = [
     chainId: 42161,
     name: "arbitrum",
     label: "Arbitrum",
+    nativeLogoURI: "/assets/icons/arbitrum/0x.png",
     provider:
       "https://arbitrum-mainnet.infura.io/v3/" +
       import.meta.env.VITE_INFURA_API_KEY,
@@ -43,6 +46,7 @@ export const EVM_NETWORKS = [
     chainId: 10,
     name: "optimism",
     label: "Optimism",
+    nativeLogoURI: "/assets/icons/optimism/0x.png",
     provider:
       "https://optimism-mainnet.infura.io/v3/" +
       import.meta.env.VITE_INFURA_API_KEY,
@@ -52,6 +56,7 @@ export const EVM_NETWORKS = [
     chainId: 56,
     name: "bsc",
     label: "BNB Chain",
+    nativeLogoURI: "/assets/icons/bsc/0x.png",
     provider: "https://bsc-dataseed.binance.org/",
     scanner: "https://bscscan.com",
   },
@@ -59,6 +64,7 @@ export const EVM_NETWORKS = [
     chainId: 43114,
     name: "avalanche",
     label: "Avalanche",
+    nativeLogoURI: "/assets/icons/avalanche/0x.png",
     provider:
       "https://avalanche-mainnet.infura.io/v3/" +
       import.meta.env.VITE_INFURA_API_KEY,
@@ -68,6 +74,7 @@ export const EVM_NETWORKS = [
     chainId: 8453,
     name: "base",
     label: "Base",
+    nativeLogoURI: "/assets/icons/base/0x.png",
     provider:
       "https://base-mainnet.infura.io/v3/" +
       import.meta.env.VITE_INFURA_API_KEY,
@@ -77,6 +84,7 @@ export const EVM_NETWORKS = [
     chainId: 143,
     name: "monad",
     label: "Monad",
+    nativeLogoURI: "/assets/icons/monad/0x.png",
     provider:
       "https://monad-mainnet.infura.io/v3/" +
       import.meta.env.VITE_INFURA_API_KEY,

@@ -92,7 +92,9 @@ class EvmAccount {
           name: token.name,
           symbol: token.symbol,
           decimals: parseInt(token.decimals),
-          logoURI: token.thumbnail || token.logo,
+          logoURI: isNative
+            ? this.networkInfo.nativeLogoURI
+            : token.thumbnail || token.logo,
           balance,
           rawBalance: token.balance,
           price,
