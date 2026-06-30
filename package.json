@@ -2,7 +2,7 @@
   "name": "mybucks-online",
   "description": "Mybucks.online wallet app — a digital cash envelope for crypto gifting: create or claim a seedless, disposable crypto wallet, fund it, and share a 1-click URL. Browser-only (no servers, database, or install).",
   "private": true,
-  "version": "2.5.4",
+  "version": "2.6.0",
   "type": "module",
   "keywords": [
     "mybucks",
