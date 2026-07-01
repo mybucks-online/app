@@ -164,34 +164,6 @@ const SigninLegalSection = styled.div`
   width: 100%;
 `;
 
-const LegacyWalletCheckboxWrapper = styled.div`
-  display: flex;
-  align-items: flex-start;
-  gap: ${({ theme }) => theme.sizes.xs};
-
-  input[type="checkbox"] {
-    width: 1rem;
-    height: 1rem;
-    margin-top: 0.2rem;
-    flex-shrink: 0;
-    accent-color: ${({ theme }) => theme.colors.primary};
-    cursor: pointer;
-  }
-
-  label {
-    font-size: ${({ theme }) => theme.fontSize.sm};
-    font-weight: ${({ theme }) => theme.weights.regular};
-    color: ${({ theme }) => theme.colors.textMuted};
-    cursor: pointer;
-    user-select: none;
-    line-height: 1.45;
-  }
-
-  a {
-    font-size: inherit;
-  }
-`;
-
 const TermsNotice = styled.p`
   text-align: left;
   font-size: ${({ theme }) => theme.fontSize.sm};
@@ -240,7 +212,6 @@ const SignIn = () => {
   const [showPin, setShowPin] = useState(false);
   const [passphraseFocused, setPassphraseFocused] = useState(false);
   const [pinFocused, setPinFocused] = useState(false);
-  const [legacySelected, setLegacySelected] = useState(false);
 
   const passphraseStrength = useMemo(() => {
     if (!passphrase) return 0;
@@ -298,7 +269,6 @@ const SignIn = () => {
 
       // open wallet
       setDisabled(true);
-      setLegacySelected(lgcy);
       const hash = await generateHash(
         pphrase,
         pn,
@@ -319,9 +289,9 @@ const SignIn = () => {
       passphrase,
       pin,
       (p) => setProgress(Math.floor(p * 100)),
-      legacySelected,
+      false,
     );
-    setup(passphrase, pin, legacySelected, hash);
+    setup(passphrase, pin, false, hash);
     setDisabled(false);
   };
 
@@ -434,27 +404,6 @@ const SignIn = () => {
         </div>
 
         <SigninLegalSection>
-          <LegacyWalletCheckboxWrapper>
-            <input
-              type="checkbox"
-              id="legacy-wallet"
-              checked={legacySelected}
-              onChange={(e) => setLegacySelected(e.target.checked)}
-              disabled={disabled}
-            />
-            <label htmlFor="legacy-wallet">
-              This wallet was created before March 2026.{" "}
-              <Link
-                href="https://docs.mybucks.online/concept/march-2026-security-update"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
-              >
-                Learn more
-              </Link>
-            </label>
-          </LegacyWalletCheckboxWrapper>
-
           <TermsNotice>
             By clicking Open, you agree to our{" "}
             <Link

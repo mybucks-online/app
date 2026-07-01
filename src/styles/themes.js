@@ -24,7 +24,7 @@ const sizes = {
   x4l: "2.5rem",
   shellMax: "72rem",
   cardMaxWidth: "40rem",
-  cardMinHeight: "40rem",
+  cardMinHeight: "36rem",
   cardMinHeightLg: "32rem",
   viewportShort: "720px",
   viewportShorter: "560px",
