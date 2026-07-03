@@ -2,7 +2,7 @@
   "name": "mybucks-online",
   "description": "Mybucks.online wallet app — a digital cash envelope for crypto gifting: create or claim a seedless, disposable crypto wallet, fund it, and share a 1-click URL. Browser-only (no servers, database, or install).",
   "private": true,
-  "version": "2.6.0",
+  "version": "2.6.1",
   "type": "module",
   "keywords": [
     "mybucks",
@@ -50,9 +50,6 @@
     "url": "https://github.com/mybucks-online/app.git"
   },
   "homepage": "https://app.mybucks.online",
-  "resolutions": {
-    "**/axios": "1.16.0"
-  },
   "scripts": {
     "dev": "vite",
     "dev:pwa": "VITE_PWA_DEV=true vite",
@@ -63,12 +60,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@mybucks.online/core": "^3.0.4",
+    "@mybucks.online/core": "^3.0.8",
     "@uniswap/default-token-list": "^22.0.0",
     "buffer": "^6.0.3",
     "clipboard-copy": "^4.0.1",
     "date-fns": "^4.1.0",
-    "ethers": "^6.13.0",
+    "ethers": "^6.17.0",
     "focus-trap-react": "^10.2.3",
     "qrcode.react": "^4.2.0",
     "react": "^18.2.0",
@@ -78,7 +75,7 @@
     "styled-components": "^6.4.1",
     "styled-normalize": "^8.1.1",
     "toflexible": "^1.1.0",
-    "tronweb": "^6.3.0",
+    "tronweb": "^6.4.0",
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
