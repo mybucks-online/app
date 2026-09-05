@@ -41,8 +41,8 @@ jobs:
       - name: Build the project
         env:
           VITE_INFURA_API_KEY: ${{ secrets.VITE_INFURA_API_KEY }}
+          VITE_ALCHEMY_API_KEY: ${{ secrets.VITE_ALCHEMY_API_KEY }}
           VITE_TRONGRID_API_KEY: ${{ secrets.VITE_TRONGRID_API_KEY }}
-          VITE_MORALIS_API_KEY: ${{ secrets.VITE_MORALIS_API_KEY }}
           VITE_COMMIT_HASH: ${{ github.sha }}
         run: yarn build
       - name: Setup Pages
