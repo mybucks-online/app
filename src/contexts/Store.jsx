@@ -31,15 +31,15 @@ export const StoreContext = createContext({
   showBalances: false,
   setShowBalances: () => {},
 
-  nativeTokenSymbol: "",
-  nativeTokenBalance: 0,
+  /** tokenBalances[0] is always the native token when loaded */
   tokenBalances: [],
+  nativeToken: null,
   nftBalances: [],
 
-  nativeTokenPrice: 0,
   tick: 0,
 
   fetchBalances: () => {},
+  fetchPrices: () => {},
 
   selectedTokenAddress: "",
   selectToken: () => {},
@@ -80,17 +80,16 @@ const StoreProvider = ({ children }) => {
   const [inMenu, openMenu] = useState(false);
   const [showBalances, setShowBalances] = useState(false);
 
-  // balances related
-  const [nativeTokenSymbol, setNativeTokenSymbol] = useState("");
-  const [nativeTokenBalance, setNativeTokenBalance] = useState(0);
+  // balances related — native is always tokenBalances[0]
   const [tokenBalances, setTokenBalances] = useState([]);
   const [nftBalances, setNftBalances] = useState([]);
+  const nativeToken = useMemo(
+    () => tokenBalances.find((t) => t.native) ?? tokenBalances[0] ?? null,
+    [tokenBalances],
+  );
 
   // transfers history
   const [transfers, setTransfers] = useState([]);
-
-  // prices related
-  const [nativeTokenPrice, setNativeTokenPrice] = useState(0);
 
   // active token
   const [selectedTokenAddress, selectToken] = useState("");
@@ -102,11 +101,63 @@ const StoreProvider = ({ children }) => {
   // unique counter that increments regularly
   const [tick, setTick] = useState(0);
 
+  const fetchPrices = async (balances) => {
+    if (!account) {
+      return;
+    }
+
+    const source = balances ?? tokenBalances;
+    if (!source.length) {
+      return;
+    }
+
+    try {
+      const pricedBalances = await account.queryPrices(source);
+      if (pricedBalances?.length) {
+        setTokenBalances(pricedBalances);
+      }
+    } catch {
+      // Keep last known balances if price enrichment fails.
+    }
+  };
+
+  const fetchBalances = async () => {
+    if (!account) {
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const nativeBalances = await account.queryTokenBalances(true);
+      const native = nativeBalances?.[0];
+
+      if (!native) {
+        setConnectivity(false);
+        return;
+      }
+
+      // Paint native first for faster UX
+      setTokenBalances(nativeBalances);
+      setConnectivity(true);
+
+      const nonNativeBalances = await account.queryTokenBalances(false);
+      const mergedBalances = [...nativeBalances, ...nonNativeBalances];
+      setTokenBalances(mergedBalances);
+      setLoading(false);
+
+      await fetchPrices(mergedBalances);
+    } catch {
+      setConnectivity(false);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (!account) {
       return;
     }
-    setNativeTokenSymbol("");
     setTokenBalances([]);
     account.getNetworkStatus().then(() => {
       setTick((_tick) => _tick + 1);
@@ -164,8 +215,6 @@ const StoreProvider = ({ children }) => {
     openMenu(false);
     setShowBalances(false);
 
-    setNativeTokenSymbol("");
-    setNativeTokenBalance(0);
     setTokenBalances([]);
     setNftBalances([]);
     setTransfers([]);
@@ -190,24 +239,6 @@ const StoreProvider = ({ children }) => {
   const updateNetwork = (net, id) => {
     setNetwork(net);
     setChainId(id);
-  };
-
-  const fetchBalances = async () => {
-    setLoading(true);
-    const result = await account.queryBalances();
-
-    if (result) {
-      setNativeTokenSymbol(result[0].symbol);
-      setNativeTokenBalance(result[0].balance);
-      setNativeTokenPrice(result[0].price);
-      setTokenBalances(result);
-
-      setConnectivity(true);
-    } else {
-      setConnectivity(false);
-    }
-
-    setLoading(false);
   };
 
   const toggleTheme = () => {
@@ -235,14 +266,13 @@ const StoreProvider = ({ children }) => {
         openMenu,
         showBalances,
         setShowBalances,
-        nativeTokenSymbol,
-        nativeTokenBalance,
         tokenBalances,
+        nativeToken,
         nftBalances,
         transfers,
-        nativeTokenPrice,
         tick,
         fetchBalances,
+        fetchPrices,
         selectedTokenAddress,
         selectToken,
         token,

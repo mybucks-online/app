@@ -3,12 +3,34 @@ import { tokens as defaultTokensList } from "@uniswap/default-token-list";
 import { Contract, ethers } from "ethers";
 
 import { EVM_NETWORKS, NETWORK } from "@mybucks/lib/conf";
-import IERC20 from "@mybucks/lib/erc20.json";
-import { isWhitelistedToken } from "@mybucks/lib/tokenWhitelist";
 import {
-  getErc20TokenHistory,
-  getNativeAndErc20TokenBalances,
-} from "@mybucks/lib/moralis";
+  fetchAlchemyErc20TokenBalances,
+  fetchAlchemyNativeTokenBalance,
+} from "@mybucks/lib/providers/alchemy";
+import { getErc20TokenHistory } from "@mybucks/lib/providers/moralis";
+import { isWhitelistedToken } from "@mybucks/lib/whitelists";
+
+import IERC20 from "./erc20.json";
+
+const erc20TokensByChainAndAddress = new Map(
+  defaultTokensList.map((token) => [
+    `${token.chainId}:${token.address.toLowerCase()}`,
+    token,
+  ]),
+);
+
+function getErc20TokenMetadata(chainId, tokenAddress) {
+  if (!tokenAddress) {
+    return null;
+  }
+  return erc20TokensByChainAndAddress.get(
+    `${chainId}:${tokenAddress.toLowerCase()}`,
+  );
+}
+
+function isKnownErc20Token(chainId, tokenAddress) {
+  return Boolean(getErc20TokenMetadata(chainId, tokenAddress));
+}
 
 class EvmAccount {
   network = NETWORK.EVM;
@@ -58,78 +80,119 @@ class EvmAccount {
     this.gasPrice = gasPrice;
   }
 
-  async queryBalances() {
-    const tokenBalances = await getNativeAndErc20TokenBalances(
-      this.address,
+  async queryTokenBalances(native = false) {
+    if (native) {
+      return [await this.#fetchNativeBalance()];
+    }
+
+    return await this.#fetchErc20Balances();
+  }
+
+  /**
+   * Price enrichment (not implemented yet).
+   * @param {Array} balances
+   */
+  async queryPrices(balances = []) {
+    return balances;
+  }
+
+  async #fetchNativeBalance() {
+    const meta = this.networkInfo?.nativeToken ?? {
+      symbol: "ETH",
+      name: "Native",
+      decimals: 18,
+    };
+    const rawBalance = await this.#fetchNativeRawBalance();
+
+    return this.#formatBalance({
+      address: "0x",
+      name: meta.name,
+      symbol: meta.symbol,
+      decimals: meta.decimals,
+      logoURI: this.networkInfo?.nativeLogoURI ?? "",
+      rawBalance,
+      native: true,
+    });
+  }
+
+  async #fetchNativeRawBalance() {
+    return await fetchAlchemyNativeTokenBalance(this.chainId, this.address);
+  }
+
+  async #fetchErc20Balances() {
+    const tokenBalances = await fetchAlchemyErc20TokenBalances(
       this.chainId,
+      this.address,
     );
 
     const balances = tokenBalances
       .filter((token) => {
-        const isNative = token.native_token || false;
-        if (isNative) return true;
+        const tokenAddress = token.contractAddress;
+        if (!tokenAddress) {
+          return false;
+        }
 
-        const tokenAddress = token.token_address;
+        if (
+          !token.tokenBalance ||
+          token.tokenBalance === "0x" ||
+          BigInt(token.tokenBalance) === 0n
+        ) {
+          return false;
+        }
+
         return (
           isWhitelistedToken(this.chainId, tokenAddress) ||
-          defaultTokensList.some(
-            ({ address, chainId }) =>
-              chainId === this.chainId &&
-              address.toLowerCase() === tokenAddress.toLowerCase(),
-          )
+          isKnownErc20Token(this.chainId, tokenAddress)
         );
       })
       .map((token) => {
-        const isNative = token.native_token || false;
-        const address = isNative ? "0x" : token.token_address;
-        const balance = parseFloat(token.balance_formatted || "0");
-        const price = parseFloat(token.usd_price || "0");
-        const quote = balance * price;
+        const tokenAddress = token.contractAddress;
+        const metadata = getErc20TokenMetadata(this.chainId, tokenAddress);
 
-        return {
-          chainId: this.chainId,
-          address,
-          name: token.name,
-          symbol: token.symbol,
-          decimals: parseInt(token.decimals),
-          logoURI: isNative
-            ? this.networkInfo.nativeLogoURI
-            : token.thumbnail || token.logo,
-          balance,
-          rawBalance: token.balance,
-          price,
-          quote,
-          native: isNative,
-        };
+        if (!metadata) {
+          return null;
+        }
+
+        return this.#formatBalance({
+          address: tokenAddress,
+          name: metadata.name,
+          symbol: metadata.symbol,
+          decimals: metadata.decimals,
+          logoURI: metadata.logoURI,
+          rawBalance: token.tokenBalance,
+          native: false,
+        });
       })
-      .filter((t) => t.native || t.balance > 0);
-
-    // Sort: native token first, then by balance descending
-    balances.sort((a, b) => {
-      if (a.native) return -1;
-      if (b.native) return 1;
-      return b.balance - a.balance;
-    });
+      .filter(Boolean)
+      .sort((a, b) => b.balance - a.balance);
 
     return balances;
+  }
 
-    /**
-     * return format:
-     *
-     * array of
-     *
-     * chainId,
-     * address
-     * name
-     * symbol
-     * decimals
-     * logoURI
-     * balance
-     * rawBalance
-     * price
-     * quote
-     * native (optional)
-     */
+  #formatBalance({
+    address,
+    name,
+    symbol,
+    decimals,
+    logoURI,
+    rawBalance,
+    native,
+  }) {
+    const balance = parseFloat(ethers.formatUnits(rawBalance, decimals));
+
+    return {
+      chainId: this.chainId,
+      address,
+      name,
+      symbol,
+      decimals,
+      logoURI,
+      balance,
+      rawBalance: rawBalance.toString(),
+      price: 0,
+      quote: 0,
+      native,
+    };
   }
 
   async queryTokenHistory(tokenAddress, decimals, maxCount = 5) {

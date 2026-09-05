@@ -99,8 +99,7 @@ const ConfirmTransaction = ({
   onSuccess,
   onReject,
 }) => {
-  const { account, nativeTokenBalance, fetchBalances } =
-    useContext(StoreContext);
+  const { account, nativeToken, fetchBalances } = useContext(StoreContext);
   const [hasError, setHasError] = useState(false);
   const [errorCode, setErrorCode] = useState("");
   const [pending, setPending] = useState(false);
@@ -196,7 +195,7 @@ const ConfirmTransaction = ({
             <span>Please wait while confirming transaction!</span>
           </InvalidTransfer>
         ) : !hasError &&
-          Number(trxBurntEstimation) > Number(nativeTokenBalance) ? (
+          Number(trxBurntEstimation) > Number(nativeToken?.balance ?? 0) ? (
           <InvalidTransfer>
             <img src={InfoRedIcon} />
             <span>

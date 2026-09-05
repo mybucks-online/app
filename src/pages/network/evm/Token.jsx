@@ -172,8 +172,7 @@ const Token = () => {
     token,
     fetchBalances,
     transfers,
-    nativeTokenName,
-    nativeTokenPrice,
+    nativeToken,
     loading,
   } = useContext(StoreContext);
 
@@ -209,7 +208,7 @@ const Token = () => {
 
       const gasAmount = await account.estimateGas(txData);
       const gas = Number(ethers.formatUnits(account.gasPrice * gasAmount, 18));
-      const value = gas * nativeTokenPrice;
+      const value = gas * (nativeToken?.price ?? 0);
       setGasEstimation(gas.toFixed(6));
       setGasEstimationValue(value.toFixed(6));
       setHasErrorInput(false);
@@ -353,7 +352,7 @@ const Token = () => {
           <EstimatedGasFee>
             <img src={InfoGreenIcon} />
             <span>
-              Estimated gas fee: {gasEstimation}&nbsp; {nativeTokenName} / $
+              Estimated gas fee: {gasEstimation}&nbsp; {nativeToken?.symbol} / $
               {gasEstimationValue}
             </span>
           </EstimatedGasFee>
