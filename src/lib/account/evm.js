@@ -7,7 +7,6 @@ import {
   fetchAlchemyErc20TokenBalances,
   fetchAlchemyNativeTokenBalance,
 } from "@mybucks/lib/providers/alchemy";
-import { getErc20TokenHistory } from "@mybucks/lib/providers/moralis";
 import { isWhitelistedToken } from "@mybucks/lib/whitelists";
 
 import IERC20 from "./erc20.json";
@@ -195,41 +194,21 @@ class EvmAccount {
     };
   }
 
-  async queryTokenHistory(tokenAddress, decimals, maxCount = 5) {
-    if (!tokenAddress) {
-      return [];
-    }
-
-    const transfers = await getErc20TokenHistory(
-      this.address,
-      this.chainId,
-      tokenAddress,
-      maxCount,
-    );
-
-    return transfers.map((transfer) => ({
-      hash: transfer.transaction_hash,
-      from: transfer.from_address,
-      to: transfer.to_address,
-      value: parseFloat(
-        ethers.formatUnits(transfer.value, parseInt(transfer.token_decimals)),
-      ),
-      blockNum: transfer.block_number.toString(),
-      blockTimestamp: transfer.block_timestamp,
-    }));
-
-    /**
-     * return format:
-     *
-     * array of
-     *
-     * from
-     * to
-     * value
-     * hash
-     * blockNum
-     * blockTimestamp
-     */
+  /**
+   * Token transfer history (not implemented yet).
+   *
+   * Future return format — array of:
+   * {
+   *   hash: string,
+   *   from: string,
+   *   to: string,
+   *   value: number,
+   *   blockNum: string,
+   *   blockTimestamp: string,
+   * }
+   */
+  async queryTokenHistory(_tokenAddress, _decimals, _maxCount = 5) {
+    return [];
   }
 
   /**

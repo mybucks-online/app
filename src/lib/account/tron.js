@@ -153,8 +153,20 @@ class TronAccount {
     return balances;
   }
 
-  // [TODO] Not implemented yet
-  async queryTokenHistory(contractAddress) {
+  /**
+   * Token transfer history (not implemented yet).
+   *
+   * Future return format — array of:
+   * {
+   *   hash: string,
+   *   from: string,
+   *   to: string,
+   *   value: number,
+   *   blockNum: string,
+   *   blockTimestamp: string,
+   * }
+   */
+  async queryTokenHistory(_contractAddress) {
     return [];
   }
 
