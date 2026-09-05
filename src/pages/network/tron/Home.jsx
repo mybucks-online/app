@@ -173,8 +173,7 @@ const TronHome = () => {
     chainId,
     updateNetwork,
     reset,
-    nativeTokenName,
-    nativeTokenBalance,
+    nativeToken,
     tokenBalances,
     fetchBalances,
     selectToken,
@@ -245,11 +244,11 @@ const TronHome = () => {
             ? LOADING_PLACEHOLDER
             : !showBalances
               ? BALANCE_PLACEHOLDER
-              : nativeTokenBalance > 0
-                ? toFlexible(nativeTokenBalance, 2)
+              : nativeToken?.balance > 0
+                ? toFlexible(nativeToken.balance, 2)
                 : "0"}
           &nbsp;
-          {nativeTokenName}
+          {nativeToken?.symbol}
         </NativeBalance>
 
         <BandwidthAndEnergy>

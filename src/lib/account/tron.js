@@ -2,14 +2,12 @@ import { getEvmPrivateKey } from "@mybucks.online/core";
 import { Buffer } from "buffer";
 import { TronWeb } from "tronweb";
 
-import { NETWORK } from "@mybucks/lib/conf";
-import { queryPrice } from "@mybucks/lib/utils";
-
-const TRC20_USDT_ADDRESS = "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t";
+import { NETWORK, TRON_NETWORK } from "@mybucks/lib/conf";
 
 class TronAccount {
   network = NETWORK.TRON;
   chainId = null;
+  networkInfo = null;
 
   signer = null;
   tronweb = null;
@@ -27,9 +25,12 @@ class TronAccount {
   energyBalance = 0;
 
   constructor(hashKey) {
+    this.chainId = TRON_NETWORK.chainId;
+    this.networkInfo = TRON_NETWORK;
+
     this.signer = getEvmPrivateKey(hashKey);
     this.tronweb = new TronWeb({
-      fullHost: "https://api.trongrid.io",
+      fullHost: this.networkInfo.provider,
       headers: { "TRON-PRO-API-KEY": import.meta.env.VITE_TRONGRID_API_KEY },
       privateKey: this.signer.slice(2),
     });
@@ -44,15 +45,15 @@ class TronAccount {
   }
 
   linkOfAddress(address) {
-    return "https://tronscan.org/#/address/" + address;
+    return this.networkInfo.scanner + "/#/address/" + address;
   }
 
   linkOfContract(address) {
-    return "https://tronscan.org/#/token20/" + address;
+    return this.networkInfo.scanner + "/#/token20/" + address;
   }
 
   linkOfTransaction(txn) {
-    return "https://tronscan.org/#/transaction/" + txn;
+    return this.networkInfo.scanner + "/#/transaction/" + txn;
   }
 
   async isActivated(address) {
@@ -88,52 +89,84 @@ class TronAccount {
     // [TODO] get staked TRX balance
   }
 
-  // [TODO] Now it only returns balance of TRX and USDT
-  async queryBalances() {
-    const nativeTokenName = "TRX";
-    const usdtContract = await this.tronweb.contract().at(TRC20_USDT_ADDRESS);
+  async queryTokenBalances(native = false) {
+    if (native) {
+      return [await this.#fetchNativeBalance()];
+    }
 
-    const [trxRawBalance, nativeTokenPrice, usdtRawBalance, usdtPrice] =
-      await Promise.all([
-        this.tronweb.trx.getBalance(this.address),
-        queryPrice(nativeTokenName),
-        usdtContract.methods.balanceOf(this.address).call(),
-        queryPrice("USDT"),
-      ]);
-
-    const trxBalance = parseFloat(this.tronweb.fromSun(trxRawBalance));
-    const usdtBalance = parseFloat(this.tronweb.fromSun(usdtRawBalance));
-
-    return [
-      {
-        native: true,
-        name: "TRON",
-        symbol: "TRX",
-        address: "41eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
-        decimals: 6,
-        balance: trxBalance,
-        price: nativeTokenPrice,
-        quote: trxBalance * nativeTokenPrice,
-        logoURI:
-          "https://assets.coingecko.com/coins/images/1094/standard/tron-logo.png?1696502193",
-      },
-      {
-        native: false,
-        name: "Tether USD",
-        symbol: "USDT",
-        address: TRC20_USDT_ADDRESS,
-        decimals: 6,
-        balance: usdtBalance,
-        price: usdtPrice,
-        quote: usdtBalance * usdtPrice,
-        logoURI:
-          "https://assets.coingecko.com/coins/images/325/standard/Tether.png",
-      },
-    ];
+    return await this.#fetchTrc20Balances();
   }
 
-  // [TODO] Not implemented yet
-  async queryTokenHistory(contractAddress) {
+  async #fetchNativeBalance() {
+    const { nativeToken, nativeLogoURI } = this.networkInfo;
+    const rawBalance = await this.tronweb.trx.getBalance(this.address);
+    const balance = parseFloat(this.tronweb.fromSun(rawBalance));
+
+    return {
+      native: true,
+      name: nativeToken.name,
+      symbol: nativeToken.symbol,
+      address: nativeToken.address,
+      decimals: nativeToken.decimals,
+      balance,
+      rawBalance: rawBalance.toString(),
+      price: 0,
+      quote: 0,
+      logoURI: nativeLogoURI,
+    };
+  }
+
+  async #fetchTrc20Balances() {
+    const balances = [];
+
+    for (const token of this.networkInfo.tokens) {
+      const contract = await this.tronweb.contract().at(token.address);
+      const rawBalance = await contract.methods.balanceOf(this.address).call();
+      const balance = parseFloat(this.tronweb.fromSun(rawBalance));
+
+      if (balance <= 0) {
+        continue;
+      }
+
+      balances.push({
+        native: false,
+        name: token.name,
+        symbol: token.symbol,
+        address: token.address,
+        decimals: token.decimals,
+        balance,
+        rawBalance: rawBalance.toString(),
+        price: 0,
+        quote: 0,
+        logoURI: token.logoURI,
+      });
+    }
+
+    return balances;
+  }
+
+  /**
+   * Step 3 of balance refresh — price enrichment (not implemented yet).
+   * @param {Array} balances
+   */
+  async queryPrices(balances = []) {
+    return balances;
+  }
+
+  /**
+   * Token transfer history (not implemented yet).
+   *
+   * Future return format — array of:
+   * {
+   *   hash: string,
+   *   from: string,
+   *   to: string,
+   *   value: number,
+   *   blockNum: string,
+   *   blockTimestamp: string,
+   * }
+   */
+  async queryTokenHistory(_contractAddress) {
     return [];
   }
 

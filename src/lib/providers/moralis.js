@@ -1,3 +1,7 @@
+/**
+ * @deprecated Moralis wallet APIs are deprecated for balance queries.
+ * Token history still uses this module until a replacement is added.
+ */
 const moralisApiKey = import.meta.env.VITE_MORALIS_API_KEY;
 
 /**

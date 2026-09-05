@@ -1,5 +1,6 @@
-import whitelists from "@mybucks/lib/whitelists.json";
 import { EVM_NETWORKS } from "@mybucks/lib/conf";
+
+import whitelists from "./whitelists.json";
 
 const networkNameToChainId = Object.fromEntries(
   EVM_NETWORKS.map((n) => [n.name, n.chainId]),

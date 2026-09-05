@@ -97,8 +97,7 @@ const Button = styled(BaseButton)`
 `;
 
 const ConfirmTransaction = ({ to, value = 0, data, onSuccess, onReject }) => {
-  const { account, fetchBalances, nativeTokenName, nativeTokenPrice } =
-    useContext(StoreContext);
+  const { account, fetchBalances, nativeToken } = useContext(StoreContext);
   const [gasOption, setGasOption] = useState(GAS_PRICE.LOW);
 
   const [gasEstimation, setGasEstimation] = useState(0);
@@ -116,7 +115,7 @@ const ConfirmTransaction = ({ to, value = 0, data, onSuccess, onReject }) => {
         ),
       );
 
-      const gasInUsd = gas * nativeTokenPrice;
+      const gasInUsd = gas * (nativeToken?.price ?? 0);
       setGasEstimation(gas.toFixed(6));
       setGasEstimationValue(gasInUsd.toFixed(6));
     };
@@ -222,7 +221,7 @@ const ConfirmTransaction = ({ to, value = 0, data, onSuccess, onReject }) => {
           <EstimatedGasFee>
             <img src={InfoGreenIcon} />
             <span>
-              Estimated gas fee: {gasEstimation}&nbsp; {nativeTokenName} / $
+              Estimated gas fee: {gasEstimation}&nbsp; {nativeToken?.symbol} / $
               {gasEstimationValue}
             </span>
           </EstimatedGasFee>
