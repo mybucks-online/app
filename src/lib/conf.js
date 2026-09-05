@@ -1,6 +1,9 @@
 export const PIN_MAX_TRY = 3;
 
-/** Token activity via Moralis. Default off; set `VITE_ENABLE_TOKEN_HISTORY=true` to enable. */
+/**
+ * Token transfer history flag. History is not implemented yet — implement
+ * `queryTokenHistory` before setting `VITE_ENABLE_TOKEN_HISTORY=true`.
+ */
 export const ENABLE_TOKEN_HISTORY =
   import.meta.env.VITE_ENABLE_TOKEN_HISTORY === "true";
 
