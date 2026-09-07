@@ -1,0 +1,472 @@
+import {
+  type ChangeEvent,
+  type KeyboardEvent,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import { toast } from "react-toastify";
+import {
+  generateHash,
+  parseToken,
+  PASSPHRASE_MAX_LENGTH,
+  PASSPHRASE_MIN_LENGTH,
+  PASSPHRASE_MIN_ZXCVBN_SCORE,
+  PIN_MAX_LENGTH,
+  PIN_MIN_LENGTH,
+  PIN_MIN_ZXCVBN_SCORE,
+  randomPassphrase,
+  randomPIN,
+} from "@mybucks.online/core";
+import styled, { keyframes } from "styled-components";
+import zxcvbn from "zxcvbn";
+
+import Button from "@mybucks/components/Button";
+import { Container } from "@mybucks/components/Containers";
+import Input from "@mybucks/components/Input";
+import { Label } from "@mybucks/components/Label";
+import Link from "@mybucks/components/Link";
+import Modal from "@mybucks/components/Modal";
+import PasswordToggleIcon from "@mybucks/components/PasswordToggleIcon";
+import Progress from "@mybucks/components/Progress";
+import RefreshIconButton from "@mybucks/components/RefreshIconButton";
+import StrengthMeter from "@mybucks/components/StrengthMeter";
+import { StoreContext } from "@mybucks/contexts/Store";
+import {
+  findNetworkByName,
+  TEST_PASSPHRASE,
+  TEST_PIN,
+  WALLET_URL_PARAM,
+} from "@mybucks/lib/conf";
+import { clearQueryParams } from "@mybucks/lib/utils";
+import media from "@mybucks/styles/media";
+
+const SigninContainer = styled(Container)`
+  margin-top: 3rem;
+
+  ${media.md`
+    margin-top: 2rem;
+  `}
+`;
+
+const LogoImage = styled.img`
+  width: calc(${({ theme }) => theme.sizes.x4l} * 1.2);
+  height: calc(${({ theme }) => theme.sizes.x4l} * 1.2);
+  object-fit: contain;
+  flex-shrink: 0;
+
+  ${media.sm`
+    width: ${({ theme }) => theme.sizes.x2l};
+    height: ${({ theme }) => theme.sizes.x2l};
+  `}
+`;
+
+const LogoWrapper = styled.a`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: ${({ theme }) => theme.sizes.base};
+  margin-top: 1rem;
+  margin-bottom: ${({ theme }) => theme.sizes.xl};
+`;
+
+const LogoTitle = styled.h2`
+  font-size: ${({ theme }) => theme.fontSize.x4l};
+  font-weight: ${({ theme }) => theme.weights.bold};
+  color: ${({ theme }) => theme.colors.textStrong};
+  line-height: 150%;
+  margin: 0;
+
+  ${media.sm`
+    font-size: ${({ theme }) => theme.fontSize.x2l};
+  `}
+`;
+
+const PROGRESS_MODAL_SIZE = "10rem";
+
+const ProgressWrapper = styled.div`
+  box-sizing: border-box;
+  width: ${PROGRESS_MODAL_SIZE};
+  height: ${PROGRESS_MODAL_SIZE};
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: ${({ theme }) => theme.sizes.base};
+  padding: ${({ theme }) => theme.sizes.xl};
+  background: ${({ theme }) => theme.colors.card};
+
+  progress {
+    width: 100%;
+    max-width: 100%;
+  }
+`;
+
+const glow = keyframes`
+  0%, 100% { filter: brightness(1) contrast(1); }
+  50% { filter: brightness(1.4) contrast(1.15); }
+`;
+
+const GreetingIcon = styled.img`
+  width: calc(${PROGRESS_MODAL_SIZE} * 0.4);
+  height: calc(${PROGRESS_MODAL_SIZE} * 0.4);
+  object-fit: contain;
+  flex-shrink: 0;
+  animation: ${glow} 1.6s ease-in-out infinite;
+`;
+
+const CredentialInputWrapper = styled.div`
+  position: relative;
+`;
+
+const CompactInput = styled(Input)`
+  margin-bottom: ${({ theme }) => theme.sizes.x3s};
+`;
+
+const RefreshButton = styled.button`
+  position: absolute;
+  right: 2.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+`;
+
+const ToggleButton = styled.button`
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+`;
+
+const SigninLegalSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.sizes.base};
+  width: 100%;
+`;
+
+const TermsNotice = styled.p`
+  text-align: left;
+  font-size: ${({ theme }) => theme.fontSize.sm};
+  font-weight: ${({ theme }) => theme.weights.regular};
+  color: ${({ theme }) => theme.colors.textMuted};
+  margin: 0;
+  line-height: 1.45;
+
+  a {
+    font-size: inherit;
+  }
+`;
+
+const CommitHash = styled.span`
+  display: none;
+`;
+
+const SecurityHint = styled.p`
+  text-align: center;
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  font-weight: ${({ theme }) => theme.weights.regular};
+  color: ${({ theme }) => theme.colors.textMuted};
+  margin: 0;
+  margin-top: ${({ theme }) => theme.sizes.x2l};
+  line-height: 1.45;
+
+  ${media.sm`
+    font-size: ${({ theme }) => theme.fontSize.sm};
+  `}
+
+  a {
+    font-size: inherit;
+  }
+`;
+
+const SignIn = () => {
+  const { setup } = useContext(StoreContext);
+
+  const [passphrase, setPassphrase] = useState(
+    import.meta.env.DEV ? TEST_PASSPHRASE : "",
+  );
+  const [pin, setPin] = useState(import.meta.env.DEV ? TEST_PIN : "");
+  const [disabled, setDisabled] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [showPassphrase, setShowPassphrase] = useState(false);
+  const [showPin, setShowPin] = useState(false);
+  const [passphraseFocused, setPassphraseFocused] = useState(false);
+  const [pinFocused, setPinFocused] = useState(false);
+
+  const passphraseStrength = useMemo(() => {
+    if (!passphrase) return 0;
+    const { score } = zxcvbn(passphrase);
+    if (passphrase.length < PASSPHRASE_MIN_LENGTH) {
+      return Math.min(score, PASSPHRASE_MIN_ZXCVBN_SCORE - 1);
+    }
+    return score;
+  }, [passphrase]);
+
+  const pinStrength = useMemo(() => {
+    if (!pin || pin.length < PIN_MIN_LENGTH) return 0;
+    const { score } = zxcvbn(pin);
+    return score < 2 ? score : 2;
+  }, [pin]);
+
+  const hasInvalidInput = useMemo(
+    () =>
+      disabled ||
+      !passphrase ||
+      !pin ||
+      passphraseStrength < PASSPHRASE_MIN_ZXCVBN_SCORE ||
+      pinStrength < PIN_MIN_ZXCVBN_SCORE,
+    [passphrase, pin, disabled, passphraseStrength, pinStrength],
+  );
+
+  useEffect(() => {
+    const parseTokenAndSubmit = async () => {
+      // get "secret" param from URL hash (#wallet=...)
+      const hashParams = new URLSearchParams(window.location.hash.slice(1));
+      const secret = hashParams.get(WALLET_URL_PARAM);
+      if (!secret) {
+        return;
+      }
+
+      // parse passphrase, PIN, network name from "secret" param
+      const {
+        passphrase: pphrase,
+        pin: pn,
+        network: nn,
+        legacy: lgcy,
+      } = parseToken(secret);
+      // clear URL params immediately so the secret is not left in the address bar
+      clearQueryParams();
+
+      if (!pphrase || !pn || !nn) {
+        toast.error("Invalid wallet link.");
+        return;
+      }
+      const [network, chainId] = findNetworkByName(nn);
+      if (!chainId) {
+        toast.error("Unknown network in link.");
+        return;
+      }
+
+      // open wallet
+      setDisabled(true);
+      const hash = await generateHash(
+        pphrase,
+        pn,
+        (p) => setProgress(Math.floor(p * 100)),
+        lgcy,
+      );
+      setup(pphrase, pn, lgcy, hash, network, chainId);
+      setDisabled(false);
+    };
+
+    parseTokenAndSubmit();
+  }, []);
+
+  const onSubmit = async () => {
+    navigator.clipboard.writeText("");
+    setDisabled(true);
+    const hash = await generateHash(
+      passphrase,
+      pin,
+      (p) => setProgress(Math.floor(p * 100)),
+      false,
+    );
+    setup(passphrase, pin, false, hash);
+    setDisabled(false);
+  };
+
+  const onRandomPassphrase = () => {
+    const value = randomPassphrase();
+    setPassphrase(value);
+    setShowPassphrase(true);
+    navigator.clipboard.writeText(value);
+  };
+
+  const onRandomPin = () => {
+    const value = randomPIN(7);
+    setPin(value);
+    setShowPin(true);
+    navigator.clipboard.writeText(value);
+  };
+
+  const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (hasInvalidInput) {
+      return;
+    }
+
+    if (e.key === "Enter") {
+      onSubmit();
+    }
+  };
+
+  return (
+    <>
+      <SigninContainer>
+        <LogoWrapper href="https://mybucks.online">
+          <LogoImage src="/logo-72x72.png" alt="mybucks.online" />
+          <LogoTitle>mybucks.online</LogoTitle>
+        </LogoWrapper>
+
+        <div>
+          <Label htmlFor="passphrase">Passphrase</Label>
+          <CredentialInputWrapper>
+            <CompactInput
+              id="passphrase"
+              type={showPassphrase ? "text" : "password"}
+              placeholder="e.g. kQGe-oTFY-m/1*-Jmhq"
+              disabled={disabled}
+              value={passphrase}
+              maxLength={PASSPHRASE_MAX_LENGTH}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setPassphrase(e.target.value)
+              }
+              onKeyDown={onKeyDown}
+              onFocus={() => setPassphraseFocused(true)}
+              onBlur={() => setPassphraseFocused(false)}
+            />
+            <RefreshButton
+              type="button"
+              disabled={disabled}
+              aria-label="Generate passphrase"
+              onClick={onRandomPassphrase}
+            >
+              <RefreshIconButton focused={passphraseFocused} />
+            </RefreshButton>
+            <ToggleButton
+              type="button"
+              disabled={disabled}
+              onClick={() => setShowPassphrase(!showPassphrase)}
+              aria-label={
+                showPassphrase ? "Hide passphrase" : "Show passphrase"
+              }
+            >
+              <PasswordToggleIcon
+                show={showPassphrase}
+                focused={passphraseFocused}
+              />
+            </ToggleButton>
+          </CredentialInputWrapper>
+          <StrengthMeter level={passphraseStrength} maxLevel={4} />
+        </div>
+
+        <div>
+          <Label htmlFor="pin">PIN</Label>
+          <CredentialInputWrapper>
+            <CompactInput
+              id="pin"
+              type={showPin ? "text" : "password"}
+              placeholder="e.g. 202w875"
+              disabled={disabled}
+              value={pin}
+              maxLength={PIN_MAX_LENGTH}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setPin(e.target.value)
+              }
+              onKeyDown={onKeyDown}
+              autoComplete="off"
+              onFocus={() => setPinFocused(true)}
+              onBlur={() => setPinFocused(false)}
+            />
+            <RefreshButton
+              type="button"
+              disabled={disabled}
+              aria-label="Generate PIN"
+              onClick={onRandomPin}
+            >
+              <RefreshIconButton focused={pinFocused} />
+            </RefreshButton>
+            <ToggleButton
+              type="button"
+              disabled={disabled}
+              onClick={() => setShowPin(!showPin)}
+              aria-label={showPin ? "Hide PIN" : "Show PIN"}
+            >
+              <PasswordToggleIcon show={showPin} focused={pinFocused} />
+            </ToggleButton>
+          </CredentialInputWrapper>
+          <StrengthMeter level={pinStrength} maxLevel={2} />
+        </div>
+
+        <SigninLegalSection>
+          <TermsNotice>
+            By clicking Open, you agree to our{" "}
+            <Link
+              href="https://docs.mybucks.online/more/terms-of-use"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Terms of Use
+            </Link>
+            .
+          </TermsNotice>
+        </SigninLegalSection>
+
+        <Button onClick={onSubmit} disabled={hasInvalidInput} $size="block">
+          Open
+        </Button>
+
+        <SecurityHint>
+          To stay safe, review our{" "}
+          <Link
+            href="https://docs.mybucks.online/user-guide/security-notice"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            security notice
+          </Link>
+          .
+        </SecurityHint>
+      </SigninContainer>
+
+      {import.meta.env.VITE_COMMIT_HASH && (
+        <CommitHash data-commit={import.meta.env.VITE_COMMIT_HASH} />
+      )}
+
+      <Modal show={!!progress} width={PROGRESS_MODAL_SIZE}>
+        <ProgressWrapper>
+          <GreetingIcon
+            src="/logo-72x72.png"
+            alt="mybucks.online"
+            loading="lazy"
+          />
+          <Progress value={progress} max="100" />
+        </ProgressWrapper>
+      </Modal>
+    </>
+  );
+};
+
+export default SignIn;
