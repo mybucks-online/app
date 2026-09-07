@@ -228,7 +228,7 @@ const ConfirmTransaction = ({ to, value = 0, data, onSuccess, onReject }) => {
         )}
 
         <ButtonsWrapper>
-          <Button onClick={confirm} disabled={pending | hasError}>
+          <Button onClick={confirm} disabled={pending}>
             Confirm
           </Button>
           <Button onClick={onReject} disabled={pending} $variant="secondary">

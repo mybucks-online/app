@@ -214,7 +214,7 @@ const ConfirmTransaction = ({
         )}
 
         <ButtonsWrapper>
-          <Button onClick={confirm} disabled={pending | hasError}>
+          <Button onClick={confirm} disabled={pending}>
             Confirm
           </Button>
           <Button onClick={onReject} disabled={pending} $variant="secondary">

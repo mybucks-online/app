@@ -164,6 +164,7 @@ const Token = () => {
 
   const [gasEstimation, setGasEstimation] = useState(0);
   const [gasEstimationValue, setGasEstimationValue] = useState(0);
+  const [gasFeeInWei, setGasFeeInWei] = useState(0n);
 
   const {
     account,
@@ -181,6 +182,7 @@ const Token = () => {
     setInvalidRecipientAddress(false);
     setGasEstimation(0);
     setGasEstimationValue(0);
+    setGasFeeInWei(0n);
     setTransaction(null);
     setHasErrorInput(false);
 
@@ -207,8 +209,10 @@ const Token = () => {
       setTransaction(txData);
 
       const gasAmount = await account.estimateGas(txData);
-      const gas = Number(ethers.formatUnits(account.gasPrice * gasAmount, 18));
+      const nextGasFeeInWei = account.gasPrice * gasAmount;
+      const gas = Number(ethers.formatUnits(nextGasFeeInWei, 18));
       const value = gas * (nativeToken?.price ?? 0);
+      setGasFeeInWei(nextGasFeeInWei);
       setGasEstimation(gas.toFixed(6));
       setGasEstimationValue(value.toFixed(6));
       setHasErrorInput(false);
@@ -348,7 +352,7 @@ const Token = () => {
             <img src={InfoRedIcon} />
             <span>Invalid transfer</span>
           </InvalidTransfer>
-        ) : gasEstimationValue > 0 ? (
+        ) : gasFeeInWei > 0n ? (
           <EstimatedGasFee>
             <img src={InfoGreenIcon} />
             <span>
@@ -362,7 +366,7 @@ const Token = () => {
 
         <Submit
           onClick={() => setConfirming(true)}
-          disabled={hasErrorInput || gasEstimation === 0}
+          disabled={hasErrorInput || gasFeeInWei === 0n}
         >
           Submit
         </Submit>
