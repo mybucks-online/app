@@ -1,14 +1,18 @@
 import Select from "@mybucks/components/Select";
 import { EVM_NETWORKS, NETWORK } from "@mybucks/lib/conf";
 
-const NetworkSelector = ({ network, chainId, updateNetwork }) => {
+const NetworkSelector = ({ network, chainId, updateNetwork, disabled }) => {
   const onChange = (e) => {
     const [n, cid] = e.target.value.split(".");
     updateNetwork(n, parseInt(cid));
   };
 
   return (
-    <Select onChange={onChange} value={network + "." + chainId}>
+    <Select
+      onChange={onChange}
+      value={network + "." + chainId}
+      disabled={disabled}
+    >
       {EVM_NETWORKS.map(({ chainId: cid, label }) => (
         <option key={cid} value={NETWORK.EVM + "." + cid}>
           {label}

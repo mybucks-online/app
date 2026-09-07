@@ -29,7 +29,15 @@ export default [
     rules: {
       "react/react-in-jsx-scope": "off",
       "react/jsx-no-target-blank": "off",
-      "no-unused-vars": "warn",
+      "no-unused-vars": [
+        "warn",
+        {
+          args: "after-used",
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+        },
+      ],
       "react/prop-types": "off",
       "react-hooks/set-state-in-effect": "off",
       "react-hooks/immutability": "off",

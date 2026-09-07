@@ -97,13 +97,16 @@ const Button = styled(BaseButton)`
 `;
 
 const ConfirmTransaction = ({ to, value = 0, data, onSuccess, onReject }) => {
-  const { account, fetchBalances, nativeToken } = useContext(StoreContext);
+  const { account, fetchBalances, nativeToken, getTokenPrice } =
+    useContext(StoreContext);
   const [gasOption, setGasOption] = useState(GAS_PRICE.LOW);
 
   const [gasEstimation, setGasEstimation] = useState(0);
-  const [gasEstimationValue, setGasEstimationValue] = useState(0);
+  const [gasEstimationValue, setGasEstimationValue] = useState(null);
   const [hasError, setHasError] = useState(false);
   const [pending, setPending] = useState(false);
+
+  const nativePrice = getTokenPrice(nativeToken);
 
   useEffect(() => {
     const estimateGas = async () => {
@@ -115,13 +118,14 @@ const ConfirmTransaction = ({ to, value = 0, data, onSuccess, onReject }) => {
         ),
       );
 
-      const gasInUsd = gas * (nativeToken?.price ?? 0);
+      const gasInUsd =
+        nativePrice == null ? null : (gas * nativePrice).toFixed(6);
       setGasEstimation(gas.toFixed(6));
-      setGasEstimationValue(gasInUsd.toFixed(6));
+      setGasEstimationValue(gasInUsd);
     };
 
     estimateGas();
-  }, [gasOption]);
+  }, [gasOption, nativePrice]);
 
   const confirm = async () => {
     setPending(true);
@@ -138,7 +142,7 @@ const ConfirmTransaction = ({ to, value = 0, data, onSuccess, onReject }) => {
       // update balances
       fetchBalances();
       onSuccess(txn);
-    } catch (e) {
+    } catch {
       setHasError(true);
     }
 
@@ -221,8 +225,8 @@ const ConfirmTransaction = ({ to, value = 0, data, onSuccess, onReject }) => {
           <EstimatedGasFee>
             <img src={InfoGreenIcon} />
             <span>
-              Estimated gas fee: {gasEstimation}&nbsp; {nativeToken?.symbol} / $
-              {gasEstimationValue}
+              Estimated gas fee: {gasEstimation}&nbsp; {nativeToken?.symbol}
+              {gasEstimationValue != null ? ` / $${gasEstimationValue}` : ""}
             </span>
           </EstimatedGasFee>
         )}

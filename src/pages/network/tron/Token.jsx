@@ -13,16 +13,16 @@ import { Container } from "@mybucks/components/Containers";
 import Input from "@mybucks/components/Input";
 import { Label } from "@mybucks/components/Label";
 import { BackButton, RefreshButton } from "@mybucks/components/NavButtons";
+import Skeleton from "@mybucks/components/Skeleton";
 import { H3 } from "@mybucks/components/Texts";
 import { StoreContext } from "@mybucks/contexts/Store";
 import useDebounce from "@mybucks/hooks/useDebounce";
-import { LOADING_PLACEHOLDER } from "@mybucks/lib/conf";
 import { formatBalance, formatCurrency } from "@mybucks/lib/utils";
 import ActivityTable from "@mybucks/pages/network/common/ActivityTable";
+import MinedTransaction from "@mybucks/pages/network/common/MinedTransaction";
 import media from "@mybucks/styles/media";
 
 import ConfirmTransaction from "./ConfirmTransaction";
-import MinedTransaction from "./MinedTransaction";
 
 const TokenLayout = styled(Container)`
   display: flex;
@@ -184,8 +184,11 @@ const Token = () => {
     token,
     fetchBalances,
     transfers,
+    getTokenQuote,
     loading,
   } = useContext(StoreContext);
+
+  const tokenQuote = getTokenQuote(token);
 
   const { debounce } = useDebounce();
   const estimateGas = debounce(async () => {
@@ -229,7 +232,7 @@ const Token = () => {
       setBandwidthEstimation(bandwidth);
       setEnergyEstimation(energy);
       setHasErrorInput(false);
-    } catch (e) {
+    } catch {
       setHasErrorInput(true);
     }
   }, 500);
@@ -322,14 +325,16 @@ const Token = () => {
         </LogoAndLink>
 
         <TokenBalance>
-          {loading ? LOADING_PLACEHOLDER : formatBalance(token.balance, 2)}
+          {loading ? (
+            <Skeleton $width="5rem" $height="1.4rem" />
+          ) : (
+            formatBalance(token.balance, 2)
+          )}
           &nbsp;
           {token.symbol}
         </TokenBalance>
 
-        {!!token.quote && (
-          <TokenValue>{formatCurrency(token.quote)}</TokenValue>
-        )}
+        {!!tokenQuote && <TokenValue>{formatCurrency(tokenQuote)}</TokenValue>}
       </TokenDetails>
 
       <div style={{ alignSelf: "stretch" }}>

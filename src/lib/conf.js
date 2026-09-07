@@ -25,6 +25,7 @@ export const EVM_NETWORKS = [
     provider:
       "https://mainnet.infura.io/v3/" + import.meta.env.VITE_INFURA_API_KEY,
     alchemyBaseUrl: "https://eth-mainnet.g.alchemy.com/v2",
+    alchemyNetworkId: "eth-mainnet",
     scanner: "https://etherscan.io",
   },
   {
@@ -37,6 +38,7 @@ export const EVM_NETWORKS = [
       "https://polygon-mainnet.infura.io/v3/" +
       import.meta.env.VITE_INFURA_API_KEY,
     alchemyBaseUrl: "https://polygon-mainnet.g.alchemy.com/v2",
+    alchemyNetworkId: "polygon-mainnet",
     scanner: "https://polygonscan.com",
   },
   {
@@ -49,6 +51,7 @@ export const EVM_NETWORKS = [
       "https://arbitrum-mainnet.infura.io/v3/" +
       import.meta.env.VITE_INFURA_API_KEY,
     alchemyBaseUrl: "https://arb-mainnet.g.alchemy.com/v2",
+    alchemyNetworkId: "arb-mainnet",
     scanner: "https://arbiscan.io",
   },
   {
@@ -61,6 +64,7 @@ export const EVM_NETWORKS = [
       "https://optimism-mainnet.infura.io/v3/" +
       import.meta.env.VITE_INFURA_API_KEY,
     alchemyBaseUrl: "https://opt-mainnet.g.alchemy.com/v2",
+    alchemyNetworkId: "opt-mainnet",
     scanner: "https://optimistic.etherscan.io",
   },
   {
@@ -71,6 +75,7 @@ export const EVM_NETWORKS = [
     nativeLogoURI: "/assets/icons/bsc/0x.png",
     provider: "https://bsc-dataseed.binance.org/",
     alchemyBaseUrl: "https://bnb-mainnet.g.alchemy.com/v2",
+    alchemyNetworkId: "bnb-mainnet",
     scanner: "https://bscscan.com",
   },
   {
@@ -83,6 +88,7 @@ export const EVM_NETWORKS = [
       "https://avalanche-mainnet.infura.io/v3/" +
       import.meta.env.VITE_INFURA_API_KEY,
     alchemyBaseUrl: "https://avax-mainnet.g.alchemy.com/v2",
+    alchemyNetworkId: "avax-mainnet",
     scanner: "https://snowtrace.io",
   },
   {
@@ -95,6 +101,7 @@ export const EVM_NETWORKS = [
       "https://base-mainnet.infura.io/v3/" +
       import.meta.env.VITE_INFURA_API_KEY,
     alchemyBaseUrl: "https://base-mainnet.g.alchemy.com/v2",
+    alchemyNetworkId: "base-mainnet",
     scanner: "https://basescan.org",
   },
   {
@@ -107,6 +114,7 @@ export const EVM_NETWORKS = [
       "https://monad-mainnet.infura.io/v3/" +
       import.meta.env.VITE_INFURA_API_KEY,
     alchemyBaseUrl: "https://monad-mainnet.g.alchemy.com/v2",
+    alchemyNetworkId: "monad-mainnet",
     scanner: "https://monadscan.com",
   },
 ];
@@ -135,6 +143,15 @@ export const TRON_NETWORK = {
     },
   ],
 };
+
+/** Symbols fetched once on wallet mount via Alchemy Prices By Symbol. */
+export const PRICE_SYMBOLS = Object.freeze([
+  ...new Set([
+    ...EVM_NETWORKS.map((n) => n.nativeToken.symbol),
+    TRON_NETWORK.nativeToken.symbol,
+    "USDT",
+  ]),
+]);
 
 export const findNetworkByName = (networkName) => {
   if (networkName === NETWORK.TRON) {
@@ -173,10 +190,6 @@ export const IDLE_DURATION = 900_000;
 
 // in every 30 seconds, it refreshes gas price or network status
 export const REFRESH_STATUS_DURATION = 30_000;
-
-// The hidden balances will be displayed as shown below
-export const BALANCE_PLACEHOLDER = "*****";
-export const LOADING_PLACEHOLDER = "-----";
 
 export const UNKNOWN_FACTS = [
   "Each credential creates a unique account.",

@@ -17,10 +17,12 @@ import { Container } from "@mybucks/components/Containers";
 import { Label } from "@mybucks/components/Label";
 import Link from "@mybucks/components/Link";
 import NetworkSelector from "@mybucks/components/NetworkSelector";
+import Skeleton from "@mybucks/components/Skeleton";
 import { StoreContext } from "@mybucks/contexts/Store";
-import { BALANCE_PLACEHOLDER, LOADING_PLACEHOLDER } from "@mybucks/lib/conf";
 import { clearQueryParams, truncate } from "@mybucks/lib/utils";
 import TokenBalanceRow from "@mybucks/pages/network/common/TokenBalanceRow";
+import TokenBalanceRowSkeleton from "@mybucks/pages/network/common/TokenBalanceRowSkeleton";
+import { blurWhenHidden } from "@mybucks/styles/effects";
 import media from "@mybucks/styles/media";
 
 const NetworkAndFeatures = styled.div`
@@ -126,6 +128,10 @@ const NativeBalance = styled.h3`
   `}
 `;
 
+const BalanceValue = styled.span`
+  ${blurWhenHidden}
+`;
+
 const BandwidthAndEnergy = styled.div`
   display: flex;
   align-items: center;
@@ -175,6 +181,7 @@ const TronHome = () => {
     reset,
     nativeToken,
     tokenBalances,
+    getTokenQuote,
     fetchBalances,
     selectToken,
   } = useContext(StoreContext);
@@ -201,6 +208,7 @@ const TronHome = () => {
             network={network}
             chainId={chainId}
             updateNetwork={updateNetwork}
+            disabled={loading}
           />
         </NetworkWrapper>
 
@@ -240,13 +248,15 @@ const TronHome = () => {
         </AddressWrapper>
 
         <NativeBalance>
-          {loading
-            ? LOADING_PLACEHOLDER
-            : !showBalances
-              ? BALANCE_PLACEHOLDER
-              : nativeToken?.balance > 0
+          {loading ? (
+            <Skeleton $width="6rem" $height="1.7rem" />
+          ) : (
+            <BalanceValue $hidden={!showBalances}>
+              {nativeToken?.balance > 0
                 ? toFlexible(nativeToken.balance, 2)
                 : "0"}
+            </BalanceValue>
+          )}
           &nbsp;
           {nativeToken?.symbol}
         </NativeBalance>
@@ -255,43 +265,56 @@ const TronHome = () => {
           <Bandwidth>
             <BandwidthLabel>Bandwidth:</BandwidthLabel>
             <BandwidthValue>
-              {loading
-                ? LOADING_PLACEHOLDER
-                : account.freeBandwidth.toLocaleString()}{" "}
+              {loading ? (
+                <Skeleton $width="2.5rem" $height="1em" />
+              ) : (
+                account.freeBandwidth.toLocaleString()
+              )}{" "}
               /{" "}
-              {loading
-                ? LOADING_PLACEHOLDER
-                : account.stakedBandwidth.toLocaleString()}
+              {loading ? (
+                <Skeleton $width="2.5rem" $height="1em" />
+              ) : (
+                account.stakedBandwidth.toLocaleString()
+              )}
             </BandwidthValue>
           </Bandwidth>
 
           <Bandwidth>
             <BandwidthLabel>Energy:</BandwidthLabel>
             <BandwidthValue>
-              {loading
-                ? LOADING_PLACEHOLDER
-                : account.energyBalance.toLocaleString()}
+              {loading ? (
+                <Skeleton $width="2.5rem" $height="1em" />
+              ) : (
+                account.energyBalance.toLocaleString()
+              )}
             </BandwidthValue>
           </Bandwidth>
         </BandwidthAndEnergy>
       </PrimaryBox>
 
       <TokensList>
-        {tokenBalances.map((t) => (
-          <TokenBalanceRow
-            key={t.address}
-            token={{
-              symbol: t.symbol,
-              name: t.name,
-              logoURI: t.logoURI,
-              contract: t.address,
-            }}
-            balance={t.balance}
-            showBalance={showBalances}
-            quote={t.quote}
-            onClick={() => selectToken(t.address)}
-          />
-        ))}
+        {loading && !tokenBalances.length ? (
+          <>
+            <TokenBalanceRowSkeleton />
+            <TokenBalanceRowSkeleton />
+          </>
+        ) : (
+          tokenBalances.map((t) => (
+            <TokenBalanceRow
+              key={t.address}
+              token={{
+                symbol: t.symbol,
+                name: t.name,
+                logoURI: t.logoURI,
+                contract: t.address,
+              }}
+              balance={t.balance}
+              showBalance={showBalances}
+              quote={getTokenQuote(t)}
+              onClick={() => selectToken(t.address)}
+            />
+          ))
+        )}
       </TokensList>
     </Container>
   );

@@ -18,10 +18,12 @@ import BaseButton from "@mybucks/components/Button";
 import { Container } from "@mybucks/components/Containers";
 import Link from "@mybucks/components/Link";
 import NetworkSelector from "@mybucks/components/NetworkSelector";
+import Skeleton from "@mybucks/components/Skeleton";
 import { StoreContext } from "@mybucks/contexts/Store";
-import { BALANCE_PLACEHOLDER, LOADING_PLACEHOLDER } from "@mybucks/lib/conf";
 import { clearQueryParams, truncate } from "@mybucks/lib/utils";
 import TokenBalanceRow from "@mybucks/pages/network/common/TokenBalanceRow";
+import TokenBalanceRowSkeleton from "@mybucks/pages/network/common/TokenBalanceRowSkeleton";
+import { blurWhenHidden } from "@mybucks/styles/effects";
 import media from "@mybucks/styles/media";
 
 const NetworkAndFeatures = styled.div`
@@ -142,6 +144,10 @@ const NativeBalance = styled.h3`
   `}
 `;
 
+const BalanceValue = styled.span`
+  ${blurWhenHidden}
+`;
+
 const TokensList = styled.div`
   display: flex;
   flex-direction: column;
@@ -161,6 +167,7 @@ const EvmHome = () => {
     reset,
     tokenBalances,
     nativeToken,
+    getTokenQuote,
     tick,
     fetchBalances,
     selectToken,
@@ -192,6 +199,7 @@ const EvmHome = () => {
             network={network}
             chainId={chainId}
             updateNetwork={updateNetwork}
+            disabled={loading}
           />
           <GasPriceWrapper $show={gasPrice > 0}>
             <img src={GasIcon} /> <span>{gasPrice} GWei</span>
@@ -234,34 +242,43 @@ const EvmHome = () => {
         </AddressWrapper>
 
         <NativeBalance>
-          {loading
-            ? LOADING_PLACEHOLDER
-            : !showBalances
-              ? BALANCE_PLACEHOLDER
-              : nativeToken?.balance > 0
+          {loading ? (
+            <Skeleton $width="6rem" $height="1.7rem" />
+          ) : (
+            <BalanceValue $hidden={!showBalances}>
+              {nativeToken?.balance > 0
                 ? toFlexible(nativeToken.balance, 2)
                 : "0"}
+            </BalanceValue>
+          )}
           &nbsp;
           {nativeToken?.symbol}
         </NativeBalance>
       </PrimaryBox>
 
       <TokensList>
-        {tokenBalances.map((t) => (
-          <TokenBalanceRow
-            key={t.address}
-            token={{
-              symbol: t.symbol,
-              name: t.name,
-              logoURI: t.logoURI,
-              contract: t.address,
-            }}
-            balance={t.balance}
-            showBalance={showBalances}
-            quote={t.quote}
-            onClick={() => selectToken(t.address)}
-          />
-        ))}
+        {loading && !tokenBalances.length ? (
+          <>
+            <TokenBalanceRowSkeleton />
+            <TokenBalanceRowSkeleton />
+          </>
+        ) : (
+          tokenBalances.map((t) => (
+            <TokenBalanceRow
+              key={t.address}
+              token={{
+                symbol: t.symbol,
+                name: t.name,
+                logoURI: t.logoURI,
+                contract: t.address,
+              }}
+              balance={t.balance}
+              showBalance={showBalances}
+              quote={getTokenQuote(t)}
+              onClick={() => selectToken(t.address)}
+            />
+          ))
+        )}
       </TokensList>
     </Container>
   );
