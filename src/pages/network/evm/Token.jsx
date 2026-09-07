@@ -19,10 +19,10 @@ import useDebounce from "@mybucks/hooks/useDebounce";
 import { LOADING_PLACEHOLDER } from "@mybucks/lib/conf";
 import { formatBalance, formatCurrency } from "@mybucks/lib/utils";
 import ActivityTable from "@mybucks/pages/network/common/ActivityTable";
+import MinedTransaction from "@mybucks/pages/network/common/MinedTransaction";
 import media from "@mybucks/styles/media";
 
 import ConfirmTransaction from "./ConfirmTransaction";
-import MinedTransaction from "./MinedTransaction";
 
 const TokenLayout = styled(Container)`
   display: flex;
@@ -163,7 +163,7 @@ const Token = () => {
   const [invalidRecipientAddress, setInvalidRecipientAddress] = useState(false);
 
   const [gasEstimation, setGasEstimation] = useState(0);
-  const [gasEstimationValue, setGasEstimationValue] = useState(0);
+  const [gasEstimationValue, setGasEstimationValue] = useState(null);
   const [gasFeeInWei, setGasFeeInWei] = useState(0n);
 
   const {
@@ -174,14 +174,19 @@ const Token = () => {
     fetchBalances,
     transfers,
     nativeToken,
+    getTokenPrice,
+    getTokenQuote,
     loading,
   } = useContext(StoreContext);
+
+  const tokenQuote = getTokenQuote(token);
+  const nativePrice = getTokenPrice(nativeToken);
 
   const { debounce } = useDebounce();
   const estimateGas = debounce(async () => {
     setInvalidRecipientAddress(false);
     setGasEstimation(0);
-    setGasEstimationValue(0);
+    setGasEstimationValue(null);
     setGasFeeInWei(0n);
     setTransaction(null);
     setHasErrorInput(false);
@@ -211,19 +216,20 @@ const Token = () => {
       const gasAmount = await account.estimateGas(txData);
       const nextGasFeeInWei = account.gasPrice * gasAmount;
       const gas = Number(ethers.formatUnits(nextGasFeeInWei, 18));
-      const value = gas * (nativeToken?.price ?? 0);
       setGasFeeInWei(nextGasFeeInWei);
       setGasEstimation(gas.toFixed(6));
-      setGasEstimationValue(value.toFixed(6));
+      setGasEstimationValue(
+        nativePrice == null ? null : (gas * nativePrice).toFixed(6),
+      );
       setHasErrorInput(false);
-    } catch (e) {
+    } catch {
       setHasErrorInput(true);
     }
   }, 500);
 
   useEffect(() => {
     estimateGas();
-  }, [recipient, amount, token]);
+  }, [recipient, amount, token, nativePrice]);
 
   useEffect(() => {
     if (txnHash) {
@@ -313,9 +319,7 @@ const Token = () => {
           {token.symbol}
         </TokenBalance>
 
-        {!!token.quote && (
-          <TokenValue>{formatCurrency(token.quote)}</TokenValue>
-        )}
+        {!!tokenQuote && <TokenValue>{formatCurrency(tokenQuote)}</TokenValue>}
       </TokenDetails>
 
       <div style={{ alignSelf: "stretch" }}>
@@ -356,8 +360,8 @@ const Token = () => {
           <EstimatedGasFee>
             <img src={InfoGreenIcon} />
             <span>
-              Estimated gas fee: {gasEstimation}&nbsp; {nativeToken?.symbol} / $
-              {gasEstimationValue}
+              Estimated gas fee: {gasEstimation}&nbsp; {nativeToken?.symbol}
+              {gasEstimationValue != null ? ` / $${gasEstimationValue}` : ""}
             </span>
           </EstimatedGasFee>
         ) : (

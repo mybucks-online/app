@@ -110,8 +110,6 @@ class TronAccount {
       decimals: nativeToken.decimals,
       balance,
       rawBalance: rawBalance.toString(),
-      price: 0,
-      quote: 0,
       logoURI: nativeLogoURI,
     };
   }
@@ -136,8 +134,6 @@ class TronAccount {
         decimals: token.decimals,
         balance,
         rawBalance: rawBalance.toString(),
-        price: 0,
-        quote: 0,
         logoURI: token.logoURI,
       });
     }
@@ -146,11 +142,12 @@ class TronAccount {
   }
 
   /**
-   * Step 3 of balance refresh — price enrichment (not implemented yet).
-   * @param {Array} balances
+   * Tron prices come from Store symbol cache (TRX, USDT) — no address API.
+   * @param {string[]} _tokenAddresses
+   * @returns {Promise<Record<string, number>>}
    */
-  async queryPrices(balances = []) {
-    return balances;
+  async queryPrices(_tokenAddresses = []) {
+    return {};
   }
 
   /**

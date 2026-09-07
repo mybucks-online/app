@@ -6,6 +6,7 @@ import { EVM_NETWORKS, NETWORK } from "@mybucks/lib/conf";
 import {
   fetchAlchemyErc20TokenBalances,
   fetchAlchemyNativeTokenBalance,
+  fetchAlchemyTokenPricesByAddress,
 } from "@mybucks/lib/providers/alchemy";
 import { isWhitelistedToken } from "@mybucks/lib/whitelists";
 
@@ -88,11 +89,26 @@ class EvmAccount {
   }
 
   /**
-   * Price enrichment (not implemented yet).
-   * @param {Array} balances
+   * USD prices for ERC-20 contract addresses on this chain.
+   * @param {string[]} tokenAddresses
+   * @returns {Promise<Record<string, number>>} lowercase address -> USD price
    */
-  async queryPrices(balances = []) {
-    return balances;
+  async queryPrices(tokenAddresses = []) {
+    const addresses = [
+      ...new Set(
+        tokenAddresses.filter(Boolean).map((address) => address.toLowerCase()),
+      ),
+    ];
+    if (!addresses.length) {
+      return {};
+    }
+
+    const network = this.networkInfo?.alchemyNetworkId;
+    if (!network) {
+      return {};
+    }
+
+    return await fetchAlchemyTokenPricesByAddress(network, addresses);
   }
 
   async #fetchNativeBalance() {
@@ -188,8 +204,6 @@ class EvmAccount {
       logoURI,
       balance,
       rawBalance: rawBalance.toString(),
-      price: 0,
-      quote: 0,
       native,
     };
   }

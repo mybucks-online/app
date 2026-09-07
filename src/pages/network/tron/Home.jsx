@@ -175,6 +175,7 @@ const TronHome = () => {
     reset,
     nativeToken,
     tokenBalances,
+    getTokenQuote,
     fetchBalances,
     selectToken,
   } = useContext(StoreContext);
@@ -201,6 +202,7 @@ const TronHome = () => {
             network={network}
             chainId={chainId}
             updateNetwork={updateNetwork}
+            disabled={loading}
           />
         </NetworkWrapper>
 
@@ -288,7 +290,7 @@ const TronHome = () => {
             }}
             balance={t.balance}
             showBalance={showBalances}
-            quote={t.quote}
+            quote={getTokenQuote(t)}
             onClick={() => selectToken(t.address)}
           />
         ))}

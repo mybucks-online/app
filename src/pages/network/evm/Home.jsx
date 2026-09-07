@@ -161,6 +161,7 @@ const EvmHome = () => {
     reset,
     tokenBalances,
     nativeToken,
+    getTokenQuote,
     tick,
     fetchBalances,
     selectToken,
@@ -192,6 +193,7 @@ const EvmHome = () => {
             network={network}
             chainId={chainId}
             updateNetwork={updateNetwork}
+            disabled={loading}
           />
           <GasPriceWrapper $show={gasPrice > 0}>
             <img src={GasIcon} /> <span>{gasPrice} GWei</span>
@@ -258,7 +260,7 @@ const EvmHome = () => {
             }}
             balance={t.balance}
             showBalance={showBalances}
-            quote={t.quote}
+            quote={getTokenQuote(t)}
             onClick={() => selectToken(t.address)}
           />
         ))}

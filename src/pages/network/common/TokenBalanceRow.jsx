@@ -98,7 +98,7 @@ const TokenBalanceRow = ({ token, balance, quote, onClick, showBalance }) => (
       <Value>
         {!showBalance
           ? BALANCE_PLACEHOLDER
-          : quote > 0
+          : quote != null && quote > 0
             ? formatCurrency(quote)
             : ""}
       </Value>

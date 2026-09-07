@@ -126,7 +126,7 @@ const ConfirmTransaction = ({
 
       fetchBalances();
       onSuccess(txid);
-    } catch (e) {
+    } catch {
       setHasError(true);
     }
     setPending(false);
