@@ -12,7 +12,7 @@ import {
   randomPassphrase,
   randomPIN,
 } from "@mybucks.online/core";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import zxcvbn from "zxcvbn";
 
 import Button from "@mybucks/components/Button";
@@ -96,11 +96,17 @@ const ProgressWrapper = styled.div`
   }
 `;
 
+const glow = keyframes`
+  0%, 100% { filter: brightness(1) contrast(1); }
+  50% { filter: brightness(1.4) contrast(1.15); }
+`;
+
 const GreetingIcon = styled.img`
   width: calc(${PROGRESS_MODAL_SIZE} * 0.4);
   height: calc(${PROGRESS_MODAL_SIZE} * 0.4);
   object-fit: contain;
   flex-shrink: 0;
+  animation: ${glow} 1.6s ease-in-out infinite;
 `;
 
 const CredentialInputWrapper = styled.div`
