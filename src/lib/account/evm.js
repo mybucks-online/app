@@ -4,9 +4,9 @@ import { Contract, ethers } from "ethers";
 
 import { EVM_NETWORKS, NETWORK } from "@mybucks/lib/conf";
 import {
-  fetchAlchemyErc20TokenBalances,
-  fetchAlchemyNativeTokenBalance,
-  fetchAlchemyTokenPricesByAddress,
+  fetchErc20TokenBalances,
+  fetchNativeTokenBalance,
+  fetchTokenPricesByAddress,
 } from "@mybucks/lib/providers/alchemy";
 import { isWhitelistedToken } from "@mybucks/lib/whitelists";
 
@@ -108,7 +108,7 @@ class EvmAccount {
       return {};
     }
 
-    return await fetchAlchemyTokenPricesByAddress(network, addresses);
+    return await fetchTokenPricesByAddress(network, addresses);
   }
 
   async #fetchNativeBalance() {
@@ -131,11 +131,11 @@ class EvmAccount {
   }
 
   async #fetchNativeRawBalance() {
-    return await fetchAlchemyNativeTokenBalance(this.chainId, this.address);
+    return await fetchNativeTokenBalance(this.chainId, this.address);
   }
 
   async #fetchErc20Balances() {
-    const tokenBalances = await fetchAlchemyErc20TokenBalances(
+    const tokenBalances = await fetchErc20TokenBalances(
       this.chainId,
       this.address,
     );

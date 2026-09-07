@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 import { NETWORK, PRICE_SYMBOLS } from "@mybucks/lib/conf";
-import { fetchAlchemyTokenPricesBySymbol } from "@mybucks/lib/providers/alchemy";
+import { queryGlobalPrices } from "@mybucks/lib/prices";
 
 /** symbol for natives/Tron, else `${chainId}:${address}` */
 function tokenPriceKey(token, network, chainId) {
@@ -28,7 +28,7 @@ const useTokenPrices = (account, network, chainId) => {
 
   const fetchSymbolPrices = async () => {
     try {
-      const prices = await fetchAlchemyTokenPricesBySymbol(PRICE_SYMBOLS);
+      const prices = await queryGlobalPrices(PRICE_SYMBOLS);
       if (Object.keys(prices).length) {
         setTokenPrices((prev) => ({ ...prev, ...prices }));
       }

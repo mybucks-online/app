@@ -33,7 +33,7 @@ async function alchemyRpc(chainId, method, params) {
   return data.result;
 }
 
-export async function fetchAlchemyNativeTokenBalance(chainId, address) {
+export async function fetchNativeTokenBalance(chainId, address) {
   const result = await alchemyRpc(chainId, "alchemy_getTokenBalances", [
     address,
     "NATIVE_TOKEN",
@@ -47,7 +47,7 @@ export async function fetchAlchemyNativeTokenBalance(chainId, address) {
   return tokenBalance.tokenBalance;
 }
 
-export async function fetchAlchemyErc20TokenBalances(chainId, address) {
+export async function fetchErc20TokenBalances(chainId, address) {
   const balances = [];
   let pageKey = undefined;
 
@@ -87,7 +87,7 @@ function extractUsdPrice(item) {
  * @param {string[]} symbols
  * @returns {Promise<Record<string, number>>} symbol -> USD price
  */
-export async function fetchAlchemyTokenPricesBySymbol(symbols = []) {
+export async function fetchTokenPricesBySymbol(symbols = []) {
   if (!ALCHEMY_API_KEY || !symbols.length) {
     return {};
   }
@@ -130,7 +130,7 @@ export async function fetchAlchemyTokenPricesBySymbol(symbols = []) {
  * @param {string[]} addresses
  * @returns {Promise<Record<string, number>>} lowercase address -> USD price
  */
-export async function fetchAlchemyTokenPricesByAddress(
+export async function fetchTokenPricesByAddress(
   network,
   addresses = [],
 ) {
