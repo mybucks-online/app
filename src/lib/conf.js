@@ -191,10 +191,6 @@ export const IDLE_DURATION = 900_000;
 // in every 30 seconds, it refreshes gas price or network status
 export const REFRESH_STATUS_DURATION = 30_000;
 
-// The hidden balances will be displayed as shown below
-export const BALANCE_PLACEHOLDER = "*****";
-export const LOADING_PLACEHOLDER = "-----";
-
 export const UNKNOWN_FACTS = [
   "Each credential creates a unique account.",
   "It runs only in your browser.",
