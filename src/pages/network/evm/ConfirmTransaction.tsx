@@ -9,7 +9,11 @@ import { BackButton } from "@mybucks/components/NavButtons";
 import { H3 } from "@mybucks/components/Texts";
 import { StoreContext } from "@mybucks/contexts/Store";
 import type EvmAccount from "@mybucks/lib/account/evm";
-import { GAS_PRICE, gasMultiplier, type GasPriceOption } from "@mybucks/lib/conf";
+import {
+  GAS_PRICE,
+  gasMultiplier,
+  type GasPriceOption,
+} from "@mybucks/lib/conf";
 import media from "@mybucks/styles/media";
 
 const NavsWrapper = styled.div`

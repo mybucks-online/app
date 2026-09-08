@@ -176,8 +176,7 @@ const Token = () => {
   const [recipient, setRecipient] = useState("");
   const [amount, setAmount] = useState<number | string>(0);
 
-  const [invalidRecipientAddress, setInvalidRecipientAddress] =
-    useState(false);
+  const [invalidRecipientAddress, setInvalidRecipientAddress] = useState(false);
   const [recipientActivated, setRecipientActivated] = useState(true);
 
   const [bandwidthEstimation, setBandwidthEstimation] = useState(0);
@@ -228,20 +227,14 @@ const Token = () => {
       const txData = await account.populateTransferToken(
         token.native ? "" : selectedTokenAddress,
         recipient,
-        ethers.parseUnits(
-          amount.toString(),
-          token.native ? 6 : token.decimals,
-        ),
+        ethers.parseUnits(amount.toString(), token.native ? 6 : token.decimals),
       );
       setTransaction(txData);
 
       const [bandwidth, energy] = await account.estimateGas(
         token.native ? "" : selectedTokenAddress,
         recipient,
-        ethers.parseUnits(
-          amount.toString(),
-          token.native ? 6 : token.decimals,
-        ),
+        ethers.parseUnits(amount.toString(), token.native ? 6 : token.decimals),
       );
       setBandwidthEstimation(bandwidth);
       setEnergyEstimation(energy);

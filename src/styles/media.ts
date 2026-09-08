@@ -11,13 +11,16 @@ export const sizes = {
 type SizeKey = keyof typeof sizes;
 type MediaFn = (...args: Parameters<typeof css>) => RuleSet<object>;
 
-const media = (Object.keys(sizes) as SizeKey[]).reduce((acc, label) => {
-  acc[label] = (...args) => css`
-    @media (max-width: ${sizes[label]}px) {
-      ${css(...args)}
-    }
-  `;
-  return acc;
-}, {} as Record<SizeKey, MediaFn>);
+const media = (Object.keys(sizes) as SizeKey[]).reduce(
+  (acc, label) => {
+    acc[label] = (...args) => css`
+      @media (max-width: ${sizes[label]}px) {
+        ${css(...args)}
+      }
+    `;
+    return acc;
+  },
+  {} as Record<SizeKey, MediaFn>,
+);
 
 export default media;

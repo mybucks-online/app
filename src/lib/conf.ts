@@ -1,4 +1,7 @@
-import type { EvmNetworkConfig, TronNetworkConfig } from "@mybucks/types/network";
+import type {
+  EvmNetworkConfig,
+  TronNetworkConfig,
+} from "@mybucks/types/network";
 
 export const PIN_MAX_TRY = 3;
 
@@ -9,12 +12,10 @@ export const PIN_MAX_TRY = 3;
 export const ENABLE_TOKEN_HISTORY =
   import.meta.env.VITE_ENABLE_TOKEN_HISTORY === "true";
 
-export const NETWORK = Object.freeze({
-  EVM: "ethereum",
-  TRON: "tron",
-} as const);
-
-export type NetworkKind = (typeof NETWORK)[keyof typeof NETWORK];
+export enum NETWORK {
+  EVM = "ethereum",
+  TRON = "tron",
+}
 
 export const DEFAULT_NETWORK = NETWORK.EVM;
 export const DEFAULT_CHAIN_ID = 1;
@@ -159,7 +160,7 @@ export const PRICE_SYMBOLS: readonly string[] = Object.freeze([
 
 export const findNetworkByName = (
   networkName: string,
-): [NetworkKind, number] => {
+): [NETWORK, number] => {
   if (networkName === NETWORK.TRON) {
     return [NETWORK.TRON, TRON_NETWORK.chainId];
   }
@@ -169,7 +170,7 @@ export const findNetworkByName = (
 };
 
 export const findNetworkNameByChainId = (
-  network: NetworkKind,
+  network: NETWORK,
   chainId: number,
 ): string => {
   if (network === NETWORK.TRON) {

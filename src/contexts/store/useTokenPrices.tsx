@@ -1,14 +1,18 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
-import { NETWORK, type NetworkKind, PRICE_SYMBOLS } from "@mybucks/lib/conf";
+import { NETWORK, PRICE_SYMBOLS } from "@mybucks/lib/conf";
 import { queryGlobalPrices } from "@mybucks/lib/prices";
 import type { Account } from "@mybucks/types/account";
-import type { TokenBalance, TokenPrice, TokenPriceMap } from "@mybucks/types/token";
+import type {
+  TokenBalance,
+  TokenPrice,
+  TokenPriceMap,
+} from "@mybucks/types/token";
 
 /** symbol for natives/Tron, else `${chainId}:${address}` */
 function tokenPriceKey(
   token: TokenBalance | null | undefined,
-  network: NetworkKind,
+  network: NETWORK,
   chainId: number,
 ): string | null {
   if (!token) {
@@ -27,7 +31,7 @@ function tokenPriceKey(
  */
 const useTokenPrices = (
   account: Account | null,
-  network: NetworkKind,
+  network: NETWORK,
   chainId: number,
 ) => {
   const [tokenPrices, setTokenPrices] = useState<TokenPriceMap>({});

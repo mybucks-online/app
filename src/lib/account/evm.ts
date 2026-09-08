@@ -144,9 +144,7 @@ class EvmAccount {
   ): Promise<Record<string, number>> {
     const addresses = [
       ...new Set(
-        tokenAddresses
-          .filter(Boolean)
-          .map((address) => address.toLowerCase()),
+        tokenAddresses.filter(Boolean).map((address) => address.toLowerCase()),
       ),
     ];
     if (!addresses.length) {

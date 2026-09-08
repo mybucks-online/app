@@ -1,12 +1,12 @@
 import type { ChangeEvent } from "react";
 
 import Select from "@mybucks/components/Select";
-import { EVM_NETWORKS, NETWORK, type NetworkKind } from "@mybucks/lib/conf";
+import { EVM_NETWORKS, NETWORK } from "@mybucks/lib/conf";
 
 type NetworkSelectorProps = {
-  network: NetworkKind;
+  network: NETWORK;
   chainId: number;
-  updateNetwork: (net: NetworkKind, id: number) => void;
+  updateNetwork: (net: NETWORK, id: number) => void;
   disabled?: boolean;
 };
 
@@ -18,7 +18,7 @@ const NetworkSelector = ({
 }: NetworkSelectorProps) => {
   const onChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const [n, cid] = e.target.value.split(".");
-    updateNetwork(n as NetworkKind, parseInt(cid));
+    updateNetwork(n as NETWORK, parseInt(cid));
   };
 
   return (

@@ -165,8 +165,7 @@ const Token = () => {
 
   const [recipient, setRecipient] = useState("");
   const [amount, setAmount] = useState<number | string>(0);
-  const [invalidRecipientAddress, setInvalidRecipientAddress] =
-    useState(false);
+  const [invalidRecipientAddress, setInvalidRecipientAddress] = useState(false);
 
   const [gasEstimation, setGasEstimation] = useState<number | string>(0);
   const [gasEstimationValue, setGasEstimationValue] = useState<string | null>(

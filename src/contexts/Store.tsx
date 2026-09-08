@@ -1,8 +1,22 @@
-import { createContext, type Dispatch, type ReactNode, type SetStateAction, useState } from "react";
+import {
+  createContext,
+  type Dispatch,
+  type ReactNode,
+  type SetStateAction,
+  useState,
+} from "react";
 
-import { DEFAULT_CHAIN_ID, DEFAULT_NETWORK, type NetworkKind } from "@mybucks/lib/conf";
+import {
+  DEFAULT_CHAIN_ID,
+  DEFAULT_NETWORK,
+  type NETWORK,
+} from "@mybucks/lib/conf";
 import type { Account } from "@mybucks/types/account";
-import type { TokenBalance, TokenPrice, TokenPriceMap } from "@mybucks/types/token";
+import type {
+  TokenBalance,
+  TokenPrice,
+  TokenPriceMap,
+} from "@mybucks/types/token";
 
 import useCredentials from "./store/useCredentials";
 import useTheme, { type Theme } from "./store/useTheme";
@@ -24,15 +38,15 @@ export interface StoreContextValue {
     pc: string,
     lgcy: boolean,
     hsh: string,
-    nw?: NetworkKind,
+    nw?: NETWORK,
     cid?: number,
   ) => void;
 
   // evm | tron
-  network: NetworkKind;
+  network: NETWORK;
   chainId: number;
   account: Account | null;
-  updateNetwork: (net: NetworkKind, id: number) => void;
+  updateNetwork: (net: NETWORK, id: number) => void;
 
   loading: boolean;
   inMenu: boolean;
@@ -115,14 +129,8 @@ const StoreProvider = ({ children }: { children: ReactNode }) => {
     walletAccount.network,
     walletAccount.chainId,
   );
-  const balances = useTokenBalances(
-    walletAccount.account,
-    prices.fetchPrices,
-  );
-  const transfers = useTransfers(
-    walletAccount.account,
-    balances.tokenBalances,
-  );
+  const balances = useTokenBalances(walletAccount.account, prices.fetchPrices);
+  const transfers = useTransfers(walletAccount.account, balances.tokenBalances);
 
   const [inMenu, openMenu] = useState(false);
   const [showBalances, setShowBalances] = useState(false);

@@ -4,7 +4,10 @@ import { ENABLE_TOKEN_HISTORY } from "@mybucks/lib/conf";
 import type { Account } from "@mybucks/types/account";
 import type { TokenBalance } from "@mybucks/types/token";
 
-const useTransfers = (account: Account | null, tokenBalances: TokenBalance[]) => {
+const useTransfers = (
+  account: Account | null,
+  tokenBalances: TokenBalance[],
+) => {
   const [transfers, setTransfers] = useState<unknown[]>([]);
   const [selectedTokenAddress, selectToken] = useState("");
 

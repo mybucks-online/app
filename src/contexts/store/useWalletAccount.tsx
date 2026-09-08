@@ -2,17 +2,12 @@ import { useMemo, useState } from "react";
 
 import EvmAccount from "@mybucks/lib/account/evm";
 import TronAccount from "@mybucks/lib/account/tron";
-import {
-  DEFAULT_CHAIN_ID,
-  DEFAULT_NETWORK,
-  NETWORK,
-  type NetworkKind,
-} from "@mybucks/lib/conf";
+import { DEFAULT_CHAIN_ID, DEFAULT_NETWORK, NETWORK } from "@mybucks/lib/conf";
 import type { Account } from "@mybucks/types/account";
 
 /** Wallet ready only after passphrase+PIN → Scrypt → hash → account. */
 const useWalletAccount = (hash: string) => {
-  const [network, setNetwork] = useState<NetworkKind>(DEFAULT_NETWORK);
+  const [network, setNetwork] = useState<NETWORK>(DEFAULT_NETWORK);
   const [chainId, setChainId] = useState(DEFAULT_CHAIN_ID);
 
   const account: Account | null = useMemo(
@@ -25,7 +20,7 @@ const useWalletAccount = (hash: string) => {
     [hash, network, chainId],
   );
 
-  const updateNetwork = (net: NetworkKind, id: number) => {
+  const updateNetwork = (net: NETWORK, id: number) => {
     setNetwork(net);
     setChainId(id);
   };
