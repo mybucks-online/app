@@ -4,12 +4,6 @@ import styled from "styled-components";
 import { StoreContext } from "@mybucks/contexts/Store";
 import media from "@mybucks/styles/media";
 
-const FooterDocNav = styled.nav`
-  ${media.md`
-    display: none;
-  `}
-`;
-
 const FooterWrapper = styled.footer`
   flex-shrink: 0;
   width: 100%;
@@ -84,8 +78,24 @@ const Footer = () => {
     <FooterWrapper>
       <h5>&copy; 2026 Mybucks.online MIT Licensed</h5>
 
-      <FooterDocNav>
+      <nav>
         <ul>
+          <li>
+            <a
+              href="https://docs.mybucks.online/user-guide/security-notice"
+              target="_blank"
+            >
+              Security Notice
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://docs.mybucks.online/more/security-audits"
+              target="_blank"
+            >
+              Audits
+            </a>
+          </li>
           <li>
             <a
               href="https://docs.mybucks.online/more/whitepaper"
@@ -94,24 +104,8 @@ const Footer = () => {
               Whitepaper
             </a>
           </li>
-          <li>
-            <a
-              href="https://docs.mybucks.online/more/security-audits"
-              target="_blank"
-            >
-              Security Audits
-            </a>
-          </li>
-          <li>
-            <a
-              href="https://codesandbox.io/p/sandbox/mybucks-online-key-generation-sandbox-default-7jktdl"
-              target="_blank"
-            >
-              Play on Sandbox
-            </a>
-          </li>
         </ul>
-      </FooterDocNav>
+      </nav>
 
       <nav>
         <ul>

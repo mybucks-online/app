@@ -44,9 +44,14 @@ import media from "@mybucks/styles/media";
 
 const SigninContainer = styled(Container)`
   margin-top: 3rem;
+  min-height: 35rem;
 
   ${media.md`
     margin-top: 2rem;
+  `}
+
+  ${media.lg`
+    min-height: ${({ theme }) => theme.sizes.cardMinHeightLg};
   `}
 `;
 
@@ -192,24 +197,6 @@ const TermsNotice = styled.p`
 
 const CommitHash = styled.span`
   display: none;
-`;
-
-const SecurityHint = styled.p`
-  text-align: center;
-  font-size: ${({ theme }) => theme.fontSize.xs};
-  font-weight: ${({ theme }) => theme.weights.regular};
-  color: ${({ theme }) => theme.colors.textMuted};
-  margin: 0;
-  margin-top: ${({ theme }) => theme.sizes.x2l};
-  line-height: 1.45;
-
-  ${media.sm`
-    font-size: ${({ theme }) => theme.fontSize.sm};
-  `}
-
-  a {
-    font-size: inherit;
-  }
 `;
 
 const SignIn = () => {
@@ -437,18 +424,6 @@ const SignIn = () => {
         <Button onClick={onSubmit} disabled={hasInvalidInput} $size="block">
           Open
         </Button>
-
-        <SecurityHint>
-          To stay safe, review our{" "}
-          <Link
-            href="https://docs.mybucks.online/user-guide/security-notice"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            security notice
-          </Link>
-          .
-        </SecurityHint>
       </SigninContainer>
 
       {import.meta.env.VITE_COMMIT_HASH && (
