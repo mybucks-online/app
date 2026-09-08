@@ -3,7 +3,7 @@ import toFlexible from "toflexible";
 
 import Avatar from "@mybucks/components/Avatar";
 import { formatCurrency } from "@mybucks/lib/utils";
-import { blurWhenHidden } from "@mybucks/styles/effects";
+import { blurWhenHidden, type HiddenProp } from "@mybucks/styles/effects";
 
 /** Slimmed-down token shape this row actually renders — note `contract`, not `address`. */
 interface RowToken {
@@ -49,7 +49,7 @@ const Name = styled.p`
 
 const BalanceAndValueWrap = styled.div``;
 
-const Balance = styled.p<{ $hidden?: boolean }>`
+const Balance = styled.p<HiddenProp>`
   color: ${({ theme }) => theme.colors.textStrong};
   font-size: ${({ theme }) => theme.sizes.base};
   font-weight: ${({ theme }) => theme.weights.highlight};
@@ -59,7 +59,7 @@ const Balance = styled.p<{ $hidden?: boolean }>`
   ${blurWhenHidden}
 `;
 
-const Value = styled.p<{ $hidden?: boolean }>`
+const Value = styled.p<HiddenProp>`
   color: ${({ theme }) => theme.colors.textStrong};
   font-size: ${({ theme }) => theme.sizes.sm};
   font-weight: ${({ theme }) => theme.weights.regular};

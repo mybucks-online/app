@@ -24,7 +24,7 @@ import type EvmAccount from "@mybucks/lib/account/evm";
 import { clearQueryParams, truncate } from "@mybucks/lib/utils";
 import TokenBalanceRow from "@mybucks/pages/network/common/TokenBalanceRow";
 import TokenBalanceRowSkeleton from "@mybucks/pages/network/common/TokenBalanceRowSkeleton";
-import { blurWhenHidden } from "@mybucks/styles/effects";
+import { blurWhenHidden, type HiddenProp } from "@mybucks/styles/effects";
 import media from "@mybucks/styles/media";
 
 const NetworkAndFeatures = styled.div`
@@ -145,7 +145,7 @@ const NativeBalance = styled.h3`
   `}
 `;
 
-const BalanceValue = styled.span<{ $hidden?: boolean }>`
+const BalanceValue = styled.span<HiddenProp>`
   ${blurWhenHidden}
 `;
 

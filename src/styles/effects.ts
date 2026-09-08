@@ -1,6 +1,6 @@
 import { css } from "styled-components";
 
-type HiddenProp = {
+export type HiddenProp = {
   $hidden?: boolean;
 };
 
