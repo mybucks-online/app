@@ -3,11 +3,12 @@ import { Buffer } from "buffer";
 import { TronWeb, type Types } from "tronweb";
 
 import { NETWORK, TRON_NETWORK } from "@mybucks/lib/conf";
+import type { AccountBase } from "@mybucks/types/account";
 import type { TronNetworkConfig } from "@mybucks/types/network";
 import type { TokenBalance } from "@mybucks/types/token";
 
-class TronAccount {
-  network = NETWORK.TRON;
+class TronAccount implements AccountBase {
+  readonly network = NETWORK.TRON;
   chainId: number;
   networkInfo: TronNetworkConfig;
 

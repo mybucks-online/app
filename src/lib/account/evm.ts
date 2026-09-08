@@ -9,6 +9,7 @@ import {
   fetchTokenPricesByAddress,
 } from "@mybucks/lib/providers/alchemy";
 import { isWhitelistedToken } from "@mybucks/lib/whitelists";
+import type { AccountBase } from "@mybucks/types/account";
 import type { EvmNetworkConfig } from "@mybucks/types/network";
 import type { TokenBalance } from "@mybucks/types/token";
 
@@ -82,8 +83,8 @@ interface ExecuteParams {
   gasLimit?: bigint | null;
 }
 
-class EvmAccount {
-  network = NETWORK.EVM;
+class EvmAccount implements AccountBase {
+  readonly network = NETWORK.EVM;
   chainId: number;
   networkInfo: EvmNetworkConfig;
 

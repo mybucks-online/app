@@ -9,11 +9,7 @@ import { BackButton } from "@mybucks/components/NavButtons";
 import { H3 } from "@mybucks/components/Texts";
 import { StoreContext } from "@mybucks/contexts/Store";
 import type EvmAccount from "@mybucks/lib/account/evm";
-import {
-  GAS_PRICE,
-  gasMultiplier,
-  type GasPriceOption,
-} from "@mybucks/lib/conf";
+import { GAS_PRICE, gasMultiplier } from "@mybucks/lib/conf";
 import media from "@mybucks/styles/media";
 
 const NavsWrapper = styled.div`
@@ -125,7 +121,7 @@ const ConfirmTransaction = ({
   // Only rendered on the EVM network — account is always an EvmAccount here.
   const account = rawAccount as EvmAccount;
 
-  const [gasOption, setGasOption] = useState<GasPriceOption>(GAS_PRICE.LOW);
+  const [gasOption, setGasOption] = useState<GAS_PRICE>(GAS_PRICE.LOW);
 
   const [gasEstimation, setGasEstimation] = useState<number | string>(0);
   const [gasEstimationValue, setGasEstimationValue] = useState<string | null>(

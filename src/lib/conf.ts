@@ -158,9 +158,7 @@ export const PRICE_SYMBOLS: readonly string[] = Object.freeze([
   ]),
 ]);
 
-export const findNetworkByName = (
-  networkName: string,
-): [NETWORK, number] => {
+export const findNetworkByName = (networkName: string): [NETWORK, number] => {
   if (networkName === NETWORK.TRON) {
     return [NETWORK.TRON, TRON_NETWORK.chainId];
   }
@@ -181,20 +179,18 @@ export const findNetworkNameByChainId = (
   return name;
 };
 
-export const GAS_PRICE = Object.freeze({
-  HIGH: "high",
-  AVERAGE: "average",
-  LOW: "low",
-} as const);
-
-export type GasPriceOption = (typeof GAS_PRICE)[keyof typeof GAS_PRICE];
+export enum GAS_PRICE {
+  HIGH = "high",
+  AVERAGE = "average",
+  LOW = "low",
+}
 
 // https://developers.tron.network/docs/resource-model#bandwidth
 export const TRON_BANDWIDTH_PRICE = 1000; // 1000 Sun
 export const TRON_ENERGY_PRICE = 210; // 210 Sun
 
 // Do not forget dividing by 100n in gas price calculation
-export const gasMultiplier = (option: GasPriceOption): bigint =>
+export const gasMultiplier = (option: GAS_PRICE): bigint =>
   option === GAS_PRICE.HIGH ? 175n : option === GAS_PRICE.AVERAGE ? 150n : 100n;
 
 // 15 minutes, after this period, wallet will be locked.
