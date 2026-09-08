@@ -19,11 +19,11 @@ const CheckboxLabel = styled.label`
   user-select: none;
 `;
 
-interface CheckboxProps {
+type CheckboxProps = {
   children?: ReactNode;
   value?: unknown;
   id: string;
-}
+};
 
 const Checkbox = ({ children, value, id }: CheckboxProps) => (
   <CheckboxWrapper>

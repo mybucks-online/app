@@ -97,13 +97,13 @@ const Button = styled(BaseButton)`
   `}
 `;
 
-interface ConfirmTransactionProps {
+type ConfirmTransactionProps = {
   to: string;
   value?: bigint | number;
   data?: string | null;
   onSuccess: (txn: ethers.TransactionReceipt | null) => void;
   onReject: () => void;
-}
+};
 
 const ConfirmTransaction = ({
   to,

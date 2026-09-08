@@ -2,10 +2,10 @@ import styled, { css } from "styled-components";
 
 import media from "@mybucks/styles/media";
 
-interface ButtonProps {
+type ButtonProps = {
   $variant?: "primary" | "secondary" | "outline" | "danger";
   $size?: "small" | "normal" | "block";
-}
+};
 
 const Button = styled.button<ButtonProps>`
   ${({ $size }) =>

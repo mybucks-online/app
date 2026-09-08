@@ -28,12 +28,12 @@ const Segment = styled.div<{ $filled: boolean; $tier: Tier }>`
   transition: background 0.15s ease;
 `;
 
-interface StrengthMeterProps {
+type StrengthMeterProps = {
   /** Current strength 0..maxLevel */
   level?: number;
   /** Number of segments (e.g. 4 for passphrase, 2 for PIN) */
   maxLevel?: number;
-}
+};
 
 /**
  * Horizontal strength meter bar. Full width, narrow height.

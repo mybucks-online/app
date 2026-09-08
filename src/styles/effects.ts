@@ -1,8 +1,8 @@
 import { css } from "styled-components";
 
-interface HiddenProp {
+type HiddenProp = {
   $hidden?: boolean;
-}
+};
 
 /** Blurs a value in place instead of swapping it for placeholder text — apply via the `$hidden` transient prop. */
 export const blurWhenHidden = css<HiddenProp>`

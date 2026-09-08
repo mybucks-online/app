@@ -74,10 +74,10 @@ const CopyButton = styled.img.attrs({
   width: ${({ theme }) => theme.sizes.sm};
 `;
 
-interface ActivityTableProps {
+type ActivityTableProps = {
   account: Account;
   history: HistoryItem[];
-}
+};
 
 const ActivityTable = ({ account, history }: ActivityTableProps) => (
   <div style={{ alignSelf: "stretch" }}>

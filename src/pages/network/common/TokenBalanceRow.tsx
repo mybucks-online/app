@@ -69,13 +69,13 @@ const Value = styled.p<{ $hidden?: boolean }>`
   ${blurWhenHidden}
 `;
 
-interface TokenBalanceRowProps {
+type TokenBalanceRowProps = {
   token: RowToken;
   balance: number;
   quote?: number | null;
   onClick: (token: RowToken) => void;
   showBalance: boolean;
-}
+};
 
 const TokenBalanceRow = ({
   token,

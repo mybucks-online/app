@@ -91,7 +91,7 @@ const ErrorRefLink = styled.a`
   text-decoration: underline;
 `;
 
-interface ConfirmTransactionProps {
+type ConfirmTransactionProps = {
   token: TokenBalance;
   recipient: string;
   amount: number | string;
@@ -101,7 +101,7 @@ interface ConfirmTransactionProps {
   energy: number;
   onSuccess: (txid: string) => void;
   onReject: () => void;
-}
+};
 
 const ConfirmTransaction = ({
   token,

@@ -34,11 +34,11 @@ const Hash = styled.p`
   margin: ${({ theme }) => theme.sizes.x2l} 0;
 `;
 
-interface MinedTransactionProps {
+type MinedTransactionProps = {
   txnHash: string;
   txnLink: string;
   back: () => void;
-}
+};
 
 const MinedTransaction = ({
   txnHash,

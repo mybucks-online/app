@@ -17,11 +17,11 @@ const LetterWrap = styled.div`
   font-size: ${({ theme }) => theme.sizes.x2l};
 `;
 
-interface AvatarProps {
+type AvatarProps = {
   uri?: string;
   symbol: string;
   fallbackColor?: string;
-}
+};
 
 const Avatar = ({ uri, symbol, fallbackColor }: AvatarProps) =>
   uri ? (

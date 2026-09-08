@@ -3,12 +3,12 @@ import type { ChangeEvent } from "react";
 import Select from "@mybucks/components/Select";
 import { EVM_NETWORKS, NETWORK, type NetworkKind } from "@mybucks/lib/conf";
 
-interface NetworkSelectorProps {
+type NetworkSelectorProps = {
   network: NetworkKind;
   chainId: number;
   updateNetwork: (net: NetworkKind, id: number) => void;
   disabled?: boolean;
-}
+};
 
 const NetworkSelector = ({
   network,

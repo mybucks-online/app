@@ -30,11 +30,11 @@ const InvalidPin = styled.div`
   margin-bottom: ${({ theme }) => theme.sizes.xs};
 `;
 
-interface ConfirmPinModalProps {
+type ConfirmPinModalProps = {
   show: boolean;
   onSuccess: () => void;
   onFailed: () => void;
-}
+};
 
 const ConfirmPinModal = ({
   show,

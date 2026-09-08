@@ -20,9 +20,9 @@ const IconWrapper = styled.div<{ $focused: boolean }>`
   }
 `;
 
-interface RefreshIconButtonProps extends ComponentPropsWithoutRef<"div"> {
+type RefreshIconButtonProps = ComponentPropsWithoutRef<"div"> & {
   focused?: boolean;
-}
+};
 
 const RefreshIconButton = ({
   focused = false,

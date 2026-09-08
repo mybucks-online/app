@@ -156,12 +156,12 @@ const Footer = styled.footer`
   `}
 `;
 
-interface ContentProps {
+type ContentProps = {
   account: Account | null;
   selectedTokenAddress: string;
   inMenu: boolean;
   network: NetworkKind;
-}
+};
 
 function Content({
   account,

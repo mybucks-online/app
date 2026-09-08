@@ -34,7 +34,7 @@ export const CloseButton = styled.img`
   position: absolute;
 `;
 
-interface ModalProps {
+type ModalProps = {
   children?: ReactNode;
   className?: string;
   show: boolean;
@@ -43,7 +43,7 @@ interface ModalProps {
   focusTrap?: boolean;
   width?: string;
   centered?: boolean;
-}
+};
 
 const Modal = ({
   children,

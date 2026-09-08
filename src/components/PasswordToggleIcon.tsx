@@ -20,10 +20,10 @@ const IconWrapper = styled.div<{ $focused: boolean }>`
   }
 `;
 
-interface PasswordToggleIconProps extends ComponentPropsWithoutRef<"div"> {
+type PasswordToggleIconProps = ComponentPropsWithoutRef<"div"> & {
   show: boolean;
   focused?: boolean;
-}
+};
 
 const PasswordToggleIcon = ({
   show,

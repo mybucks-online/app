@@ -5,10 +5,10 @@ const pulse = keyframes`
   50% { opacity: 0.16; }
 `;
 
-interface SkeletonProps {
+type SkeletonProps = {
   $width?: string;
   $height?: string;
-}
+};
 
 const Skeleton = styled.span<SkeletonProps>`
   display: inline-block;
