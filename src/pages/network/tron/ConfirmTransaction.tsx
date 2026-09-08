@@ -1,0 +1,251 @@
+import { useContext, useMemo, useState } from "react";
+import styled from "styled-components";
+import type { Types } from "tronweb";
+
+import { InfoRedIcon } from "@mybucks/assets/icons";
+import BaseButton from "@mybucks/components/Button";
+import { Container } from "@mybucks/components/Containers";
+import Link from "@mybucks/components/Link";
+import { BackButton } from "@mybucks/components/NavButtons";
+import { H3 } from "@mybucks/components/Texts";
+import { StoreContext } from "@mybucks/contexts/Store";
+import type TronAccount from "@mybucks/lib/account/tron";
+import { TRON_BANDWIDTH_PRICE, TRON_ENERGY_PRICE } from "@mybucks/lib/conf";
+import media from "@mybucks/styles/media";
+import type { TokenBalance } from "@mybucks/types/token";
+
+const NavsWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  margin-bottom: ${({ theme }) => theme.sizes.xl};
+`;
+
+const TransactionDetails = styled.div`
+  word-break: break-all;
+  margin-bottom: ${({ theme }) => theme.sizes.xs};
+  font-size: ${({ theme }) => theme.sizes.sm};
+  font-weight: ${({ theme }) => theme.weights.base};
+  line-height: 140%;
+  color: ${({ theme }) => theme.colors.textMuted};
+`;
+
+const TransactionItem = styled.span`
+  font-weight: ${({ theme }) => theme.weights.highlight};
+  color: ${({ theme }) => theme.colors.textStrong};
+`;
+
+const ResourcesWarning = styled.div`
+  word-break: break-word;
+  border-radius: ${({ theme }) => theme.sizes.x3s};
+  margin-bottom: ${({ theme }) => theme.sizes.x2l};
+  font-size: ${({ theme }) => theme.sizes.sm};
+  font-weight: ${({ theme }) => theme.weights.base};
+  line-height: 160%;
+  color: ${({ theme }) => theme.colors.textMuted};
+`;
+
+const InvalidTransfer = styled.div`
+  padding: 0.25rem 0.625rem;
+  border-radius: ${({ theme }) => theme.sizes.x3s};
+  color: ${({ theme }) => theme.colors.error};
+  border: 1px solid ${({ theme }) => theme.colors.error};
+  margin-bottom: ${({ theme }) => theme.sizes.base};
+  font-weight: ${({ theme }) => theme.weights.base};
+  font-size: ${({ theme }) => theme.sizes.xs};
+  line-height: 180%;
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.sizes.x2s};
+
+  ${media.sm`
+    margin-bottom: ${({ theme }) => theme.sizes.xl};
+  `}
+`;
+
+const ButtonsWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.sizes.xl};
+
+  ${media.sm`
+    flex-direction: column;
+    gap: ${({ theme }) => theme.sizes.xs};
+  `}
+`;
+
+const Button = styled(BaseButton)`
+  width: 17rem;
+
+  ${media.sm`
+    width: 100%;
+  `}
+`;
+
+const LearnMoreLink = styled(Link)`
+  font-size: ${({ theme }) => theme.sizes.sm};
+  font-weight: ${({ theme }) => theme.weights.base};
+  line-height: 140%;
+`;
+
+const ErrorRefLink = styled.a`
+  text-decoration: underline;
+`;
+
+type ConfirmTransactionProps = {
+  token: TokenBalance;
+  recipient: string;
+  amount: number | string;
+  recipientActivated: boolean;
+  transaction: Types.Transaction<Types.ContractParamter>;
+  bandwidth: number;
+  energy: number;
+  onSuccess: (txid: string) => void;
+  onReject: () => void;
+};
+
+const ConfirmTransaction = ({
+  token,
+  recipient,
+  amount,
+  recipientActivated,
+  transaction,
+  bandwidth,
+  energy,
+  onSuccess,
+  onReject,
+}: ConfirmTransactionProps) => {
+  const {
+    account: rawAccount,
+    nativeToken,
+    fetchBalances,
+  } = useContext(StoreContext);
+  // Only rendered on the Tron network — account is always a TronAccount here.
+  const account = rawAccount as TronAccount;
+
+  const [hasError, setHasError] = useState(false);
+  const [errorCode, setErrorCode] = useState("");
+  const [pending, setPending] = useState(false);
+
+  const trxBurntEstimation = useMemo(
+    () =>
+      account.tronweb.fromSun(
+        bandwidth * TRON_BANDWIDTH_PRICE + energy * TRON_ENERGY_PRICE,
+      ),
+    [bandwidth, energy],
+  );
+
+  const confirm = async () => {
+    setPending(true);
+    setHasError(false);
+    setErrorCode("");
+
+    try {
+      const { result, code, txid } = await account.execute(transaction);
+      if (!result) {
+        setErrorCode(String(code));
+        throw new Error("");
+      }
+
+      fetchBalances();
+      onSuccess(txid);
+    } catch {
+      setHasError(true);
+    }
+    setPending(false);
+  };
+
+  return (
+    <Container>
+      <NavsWrapper>
+        <BackButton onClick={onReject} disabled={pending} />
+      </NavsWrapper>
+
+      <div>
+        <H3>Confirm transaction</H3>
+        <TransactionDetails>
+          <p>
+            <TransactionItem>To:</TransactionItem> {recipient}
+          </p>
+
+          <p>
+            <TransactionItem>Value:</TransactionItem> {amount} {token.symbol}
+          </p>
+        </TransactionDetails>
+        <TransactionDetails>
+          <p>
+            <TransactionItem>Consumption:</TransactionItem> {bandwidth}{" "}
+            Bandwidth + {energy} Energy, ≈ {trxBurntEstimation.toString()} TRX
+          </p>
+        </TransactionDetails>
+        <ResourcesWarning>
+          - If your bandwidth or energy is insufficient, the remaining fee
+          should be paid in TRX.&nbsp;
+          <LearnMoreLink
+            href="https://developers.tron.network/docs/resource-model"
+            target="_blank"
+          >
+            Learn More.
+          </LearnMoreLink>
+          <br />- Staking TRX will provide you with free bandwidth and
+          energy.&nbsp;
+          <LearnMoreLink
+            href="https://developers.tron.network/docs/staking-on-tron-network"
+            target="_blank"
+          >
+            Learn More.
+          </LearnMoreLink>
+        </ResourcesWarning>
+
+        {!recipientActivated && (
+          <InvalidTransfer>
+            <img src={InfoRedIcon} />
+            <span>
+              Recipient is not activated. You will be charged account creation
+              fee.{" "}
+              <ErrorRefLink
+                href="https://developers.tron.network/docs/account#account-activation"
+                target="_blank"
+              >
+                Learn More.
+              </ErrorRefLink>
+            </span>
+          </InvalidTransfer>
+        )}
+
+        {pending ? (
+          <InvalidTransfer>
+            <span>Please wait while confirming transaction!</span>
+          </InvalidTransfer>
+        ) : !hasError &&
+          Number(trxBurntEstimation) > Number(nativeToken?.balance ?? 0) ? (
+          <InvalidTransfer>
+            <img src={InfoRedIcon} />
+            <span>
+              The transaction may fail due to insufficient TRX balance.
+            </span>
+          </InvalidTransfer>
+        ) : hasError ? (
+          <InvalidTransfer>
+            <img src={InfoRedIcon} />
+            <span>
+              Failed to execute! {errorCode && <strong>{errorCode}</strong>}
+            </span>
+          </InvalidTransfer>
+        ) : (
+          ""
+        )}
+
+        <ButtonsWrapper>
+          <Button onClick={confirm} disabled={pending}>
+            Confirm
+          </Button>
+          <Button onClick={onReject} disabled={pending} $variant="secondary">
+            Reject
+          </Button>
+        </ButtonsWrapper>
+      </div>
+    </Container>
+  );
+};
+
+export default ConfirmTransaction;

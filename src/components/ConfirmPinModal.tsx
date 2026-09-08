@@ -1,0 +1,117 @@
+import { type KeyboardEvent, useContext, useState } from "react";
+import { toast } from "react-toastify";
+import { PIN_MAX_LENGTH, PIN_MIN_LENGTH } from "@mybucks.online/core";
+import styled from "styled-components";
+
+import Button from "@mybucks/components/Button";
+import Input from "@mybucks/components/Input";
+import Modal from "@mybucks/components/Modal";
+import { H3 } from "@mybucks/components/Texts";
+import { StoreContext } from "@mybucks/contexts/Store";
+import { PIN_MAX_TRY } from "@mybucks/lib/conf";
+
+const Wrap = styled.div`
+  display: flex;
+  max-width: 20rem;
+  flex-direction: column;
+  padding: ${({ theme }) => theme.sizes.xl};
+`;
+
+const Title = styled(H3)`
+  margin-bottom: ${({ theme }) => theme.sizes.xs};
+  text-align: center;
+`;
+
+const InvalidPin = styled.div`
+  color: ${({ theme }) => theme.colors.error};
+  font-weight: ${({ theme }) => theme.weights.base};
+  font-size: ${({ theme }) => theme.sizes.xs};
+  line-height: 180%;
+  margin-bottom: ${({ theme }) => theme.sizes.xs};
+`;
+
+type ConfirmPinModalProps = {
+  show: boolean;
+  onSuccess: () => void;
+  onFailed: () => void;
+};
+
+const ConfirmPinModal = ({
+  show,
+  onSuccess,
+  onFailed,
+}: ConfirmPinModalProps) => {
+  const [counter, setCounter] = useState(0);
+  const [value, setValue] = useState("");
+  const [invalid, setInvalid] = useState(false);
+  const { pin } = useContext(StoreContext);
+
+  const confirmPin = () => {
+    if (value.length < PIN_MIN_LENGTH) {
+      return;
+    }
+
+    setInvalid(pin !== value);
+
+    if (pin !== value) {
+      setCounter(counter + 1);
+      if (counter + 1 >= PIN_MAX_TRY) {
+        toast("Wrong PIN!");
+        onFailed();
+      } else {
+        return;
+      }
+    } else {
+      onSuccess();
+    }
+
+    setValue("");
+    setInvalid(false);
+    setCounter(0);
+  };
+
+  const onClose = () => {
+    setValue("");
+    setInvalid(false);
+    setCounter(0);
+    onFailed();
+  };
+
+  const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    setInvalid(false);
+
+    if (e.key === "Enter") {
+      confirmPin();
+    }
+  };
+
+  return (
+    <Modal
+      focusTrap={true}
+      show={show}
+      close={onClose}
+      showCloseIcon={false}
+      width="20rem"
+    >
+      <Wrap>
+        <Title>Confirm PIN</Title>
+        <Input
+          type="password"
+          placeholder="PIN"
+          minLength={PIN_MIN_LENGTH}
+          maxLength={PIN_MAX_LENGTH}
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          onKeyDown={onKeyDown}
+          onPaste={(e) => e.preventDefault()}
+        />
+        {invalid && <InvalidPin>Wrong PIN!</InvalidPin>}
+        <Button onClick={confirmPin} disabled={value.length < PIN_MIN_LENGTH}>
+          Confirm
+        </Button>
+      </Wrap>
+    </Modal>
+  );
+};
+
+export default ConfirmPinModal;
