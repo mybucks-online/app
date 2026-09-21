@@ -32,6 +32,8 @@ export interface StoreContextValue {
   pin: string;
   hash: string;
   legacy: boolean;
+  /** true when the wallet was opened via a one-time URL link (hash fragment) */
+  isOneTime: boolean;
   reset: () => void;
   setup: (
     pw: string,
@@ -84,6 +86,7 @@ export const StoreContext = createContext<StoreContextValue>({
   pin: "",
   hash: "",
   legacy: false,
+  isOneTime: false,
   setup: () => {},
   reset: () => {},
 
@@ -134,6 +137,7 @@ const StoreProvider = ({ children }: { children: ReactNode }) => {
 
   const [inMenu, openMenu] = useState(false);
   const [showBalances, setShowBalances] = useState(false);
+  const [isOneTime, setIsOneTime] = useState(false);
 
   const setup: StoreContextValue["setup"] = (pw, pc, lgcy, hsh, nw, cid) => {
     credentials.setup(pw, pc, lgcy, hsh);
@@ -143,6 +147,8 @@ const StoreProvider = ({ children }: { children: ReactNode }) => {
     if (cid) {
       walletAccount.setChainId(cid);
     }
+    // wallet opened via a one-time URL link always carries its network/chainId
+    setIsOneTime(!!nw && !!cid);
   };
 
   const reset = () => {
@@ -154,6 +160,7 @@ const StoreProvider = ({ children }: { children: ReactNode }) => {
 
     openMenu(false);
     setShowBalances(false);
+    setIsOneTime(false);
   };
 
   const value: StoreContextValue = {
@@ -162,6 +169,7 @@ const StoreProvider = ({ children }: { children: ReactNode }) => {
     pin: credentials.pin,
     hash: credentials.hash,
     legacy: credentials.legacy,
+    isOneTime,
     reset,
     setup,
 
