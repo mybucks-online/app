@@ -179,6 +179,7 @@ const TronHome = () => {
     network,
     chainId,
     updateNetwork,
+    isOneTime,
     reset,
     nativeToken,
     tokenBalances,
@@ -211,7 +212,7 @@ const TronHome = () => {
             network={network}
             chainId={chainId}
             updateNetwork={updateNetwork}
-            disabled={loading}
+            disabled={loading || isOneTime}
           />
         </NetworkWrapper>
 

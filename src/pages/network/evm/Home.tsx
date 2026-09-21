@@ -165,6 +165,7 @@ const EvmHome = () => {
     network,
     chainId,
     updateNetwork,
+    isOneTime,
     reset,
     tokenBalances,
     nativeToken,
@@ -203,7 +204,7 @@ const EvmHome = () => {
             network={network}
             chainId={chainId}
             updateNetwork={updateNetwork}
-            disabled={loading}
+            disabled={loading || isOneTime}
           />
           <GasPriceWrapper $show={Number(gasPrice) > 0}>
             <img src={GasIcon} /> <span>{gasPrice} GWei</span>
