@@ -1465,16 +1465,16 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@mybucks.online/core@^3.0.9":
-  version "3.0.9"
-  resolved "https://registry.yarnpkg.com/@mybucks.online/core/-/core-3.0.9.tgz#1bfa04495c8b1a94ea72447bcf6b0ee3d81bd3f6"
-  integrity sha512-wmq3gdoLLj1EdYcf42icY9X6PE657nZQKXAk+Mw4SsIXjMFEzRcW1WiCR3xoDIWE2EdQTBTiSVhac4qRaFlTfw==
+"@mybucks.online/core@^3.0.10":
+  version "3.0.10"
+  resolved "https://registry.yarnpkg.com/@mybucks.online/core/-/core-3.0.10.tgz#5ef93669f18c69fd06debeddee2c2b76b06b9be2"
+  integrity sha512-4TeWKCq308NIAclpV3xVfokJgLy69+zoas53+MLHbBLCF4jyKPWYgF1A3F23IdNCEpXF7rADwB8moQk+2QuVgA==
   dependencies:
     buffer "^6.0.3"
     ethers "^6.17.0"
     nanoid "^6.0.1"
     scrypt-js "^3.0.1"
-    tronweb "^6.4.0"
+    tronweb "^6.5.1"
     zxcvbn "^4.4.2"
 
 "@noble/curves@1.2.0":
@@ -3481,7 +3481,7 @@ ethers@6.13.5:
     tslib "2.7.0"
     ws "8.17.1"
 
-ethers@^6.17.0:
+ethers@6.17.0, ethers@^6.17.0:
   version "6.17.0"
   resolved "https://registry.yarnpkg.com/ethers/-/ethers-6.17.0.tgz#ad85ee1fc45fe2d95cb1e21c4e3ff9f7f1b093cc"
   integrity sha512-BpyrpIPJ3ydEVow8zGaz1DuPS7YU8DcWxuBnY9a0UA/lvAPwrMr+EPXsfrul628SRaekPNeIM4UFh/91GWZang==
@@ -5696,6 +5696,21 @@ tronweb@^6.4.0:
     eventemitter3 "5.0.1"
     google-protobuf "3.21.4"
     semver "7.7.1"
+    validator "13.15.23"
+
+tronweb@^6.5.1:
+  version "6.5.1"
+  resolved "https://registry.yarnpkg.com/tronweb/-/tronweb-6.5.1.tgz#040a7ff065eac45fb4492e17c88371a553038604"
+  integrity sha512-mqa3WIBq7sYtkkIywa2Jop3UwJX6EgIrBkFpm3sSjppStTOTtYeMJyeIHJVvFFCaYN4vjU1FDjQPSvHFTcuzEw==
+  dependencies:
+    axios "1.18.0"
+    bignumber.js "9.1.2"
+    ethereum-cryptography "2.2.1"
+    ethers "6.17.0"
+    eventemitter3 "5.0.1"
+    google-protobuf "3.21.4"
+    semver "7.7.1"
+    tslib "2.7.0"
     validator "13.15.23"
 
 ts-api-utils@^2.5.0:
