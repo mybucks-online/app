@@ -76,7 +76,7 @@
     "styled-components": "^6.4.1",
     "styled-normalize": "^8.1.1",
     "toflexible": "^1.1.0",
-    "tronweb": "^6.4.0",
+    "tronweb": "^6.5.1",
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
