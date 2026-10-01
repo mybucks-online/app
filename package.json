@@ -62,7 +62,8 @@
   },
   "resolutions": {
     "fast-uri": "3.1.7",
-    "nanoid": "3.3.12"
+    "nanoid": "3.3.19",
+    "axios": "1.20.0"
   },
   "dependencies": {
     "@mybucks.online/core": "^3.0.10",
