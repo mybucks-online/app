@@ -19,6 +19,7 @@ import Link from "@mybucks/components/Link";
 import NetworkSelector from "@mybucks/components/NetworkSelector";
 import Skeleton from "@mybucks/components/Skeleton";
 import { StoreContext } from "@mybucks/contexts/Store";
+import useCooldown from "@mybucks/hooks/useCooldown";
 import type TronAccount from "@mybucks/lib/account/tron";
 import { clearQueryParams, truncate } from "@mybucks/lib/utils";
 import TokenBalanceRow from "@mybucks/pages/network/common/TokenBalanceRow";
@@ -189,6 +190,19 @@ const TronHome = () => {
   } = useContext(StoreContext);
   // Only rendered on the Tron network — account is always a TronAccount here.
   const account = rawAccount as TronAccount;
+  const {
+    run: refresh,
+    pending: refreshing,
+    coolingDown: refreshCooldown,
+  } = useCooldown(fetchBalances, 15_000);
+
+  const refreshBalances = async () => {
+    if (loading) {
+      return;
+    }
+
+    await refresh();
+  };
 
   const copyAddress = () => {
     copy(account.address);
@@ -242,7 +256,17 @@ const TronHome = () => {
           </AddressAndCopy>
 
           <RefreshAndEyeballs>
-            <button onClick={fetchBalances}>
+            <button
+              onClick={refreshBalances}
+              disabled={loading || refreshing || refreshCooldown}
+              title={
+                refreshCooldown
+                  ? "Wait 15 seconds before refreshing again"
+                  : "Refresh balances"
+              }
+              aria-label="Refresh balances"
+              aria-busy={refreshing}
+            >
               <img src={RefreshIcon2} />
             </button>
             <button onClick={toggleBalancesVisible}>
