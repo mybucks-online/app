@@ -104,6 +104,24 @@ const Footer = () => {
               Whitepaper
             </a>
           </li>
+          <li>
+            <a
+              href="https://docs.mybucks.online/more/terms-of-use"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Terms of Use
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://docs.mybucks.online/more/privacy-policy"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Privacy Policy
+            </a>
+          </li>
         </ul>
       </nav>
 
